@@ -1,0 +1,111 @@
+<!-- Disclaimer Modal -->
+<div class="modal fade" id="showcaseProductModalDisclaimer" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h1 class="icon"><span class="icon icon-no-ip-o"></span></h1>
+        <h1 class="modal-title text-center" id="submit-capability-disclaimer">Capability Listing Notice</h1>
+          <p class="text-center">Please do not submit or include proprietary data within the Capabilities Catalog. The Capabilities Catalog is considered public and viewable to everyone visiting this website. If you are looking to submit a private Solution, please visit the <a href="/problems">Problem Center</a>.</p>
+      </div>
+<!--
+      <div class="modal-body">
+
+      </div>
+-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="capabilitySubmissionModalShow()">Continue</button>
+<!--        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="showcaseProductModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title" id="showcaseproduct_modal">List Your Capability</h3>
+      </div>
+      <div class="modal-body">
+        {{> product_create}}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor "pageCSS"}}
+  <style type="text/css">
+    #avatar_dealio {
+      width: 324px;
+      margin: 0;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    });
+
+    var capabilitySubmissionModalShow = function () {
+      $('#showcaseProductModalDisclaimer').modal('hide');
+      $('#showcaseProductModal').modal('show');
+    };
+
+    var showProblemsCenterTab = function () {
+      $('#showcaseProductModalDisclaimer').modal('hide');
+      $('.nav-tabs li:eq(3) a').tab('show');
+    };
+  </script>
+{{/contentFor}}

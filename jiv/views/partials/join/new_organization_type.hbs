@@ -1,0 +1,69 @@
+<div id="formPage1" class="formPage">
+
+  <div id="formContainer" class="signup">
+
+    <h3>{{{strings.Join.newOrganization.Messages.OrganizationNotFound}}}</h3>
+
+    <div class="form-group">
+      <h1>{{{strings.Join.newOrganization.Title}}}</h1>
+    </div>
+
+    <div class="form-group">
+      <h3>{{{strings.Join.newOrganization.Radios.RadiosLabel}}}</h3>
+    
+      <input type="radio" name="orgType" value="government">
+
+      <p class="signupOrgType signupOrgTypeGrp">Government</p>
+      <input type="radio" name="orgType" value="industry">
+
+      <p class="signupOrgType signupOrgTypeGrp">Industry</p>
+      <input type="radio" name="orgType" value="academia">
+
+      <p class="signupOrgType signupOrgTypeGrp">Academia</p>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group" id="dunsEntry">
+
+        <input type="text" id="dunsEntry-input" name="duns" class="big-orange-field"
+               placeholder="{{{strings.Join.newOrganization.Fields.Duns.Placeholder}}}">
+        <span id="duns-input-overlay">Optional</span>
+        <!--<span id="duns-input-overlay" class="input-group-addon">Optional</span>-->
+      </div>
+
+      <div>
+        <input type="text" name="govEmail" id="govEmail" class="big-orange-field"
+               placeholder="{{{strings.Join.newOrganization.Fields.GovEmail.Placeholder}}}"><br><br>
+        <input type="text" name="govEmailRepeat" id="govEmailRepeat" class="big-orange-field"
+               placeholder="{{{strings.Join.newOrganization.Fields.GovEmailRepeat.Placeholder}}}">
+      </div>
+    </div>
+
+    {{> message}}
+    <div class="form-group">
+
+      <div class="row">
+          <input type="button" class="big-orange-btn" value="{{{strings.Join.newOrganization.Buttons.Submit}}}">
+          <a href="#" id="skip-duns-check" class="btn big-orange-btn"
+             style="display: none;">{{{strings.Join.newOrganization.Buttons.DoNotHaveDunsLink}}}</a>
+      </div>
+
+      <br><br>
+
+      <p id="spinnerOrgTypeLookup"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+    </div>
+  </div>
+  <div id="signupFormSidebarRight" class="dunsSidebar col-md-3">
+    {{{strings.Join.newOrganization.SidebarRight.DunsText}}}
+  </div>
+  <div id="signupFormSidebarRight" class="emailSidebar">
+    {{{strings.Join.newOrganization.SidebarRight.EmailText}}}
+  </div>
+</div>
+
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/sign-up-form.js"></script>
+{{/contentFor}}

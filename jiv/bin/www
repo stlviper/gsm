@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+var app = require('../app');
+var http = require('http');
+var cfg = require('../config');
+var logger = require('../utils/logger');
+
+
+app.set('port', cfg.port);
+var server = http.createServer(app);
+var ioSocket = require('socket.io')(server);
+
+require('../controllers/socketEvents');
+
+server.listen(cfg.port, cfg.hostname);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error('Port ' + cfg.port + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error('Port ' + cfg.port + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  if(cfg.enableNotifier){
+    var notifier = require('../utils/notifier');
+    if(notifier.cron){
+      notifier.cron.start();
+    }
+  }
+
+  var msg = {
+    env: cfg.env,
+    port: server.address().port,
+    notifier: cfg.enableNotifier,
+    database_location: cfg.mongo.uri,
+    database_name: cfg.mongo.db
+  };
+  logger.info(msg);
+}

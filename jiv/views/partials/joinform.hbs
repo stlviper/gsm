@@ -1,0 +1,209 @@
+<form id="new-org-form" class="form-horizontal" action="/join" method="post" enctype="application/x-www-form-urlencoded">
+    <h3>Sign Up Form</h3>
+    <hr>
+
+  {{#if error}}
+      <div class="alert alert-danger" id="joinErrorMessage" >{{error}}</div>
+  {{/if}}
+
+    <h3><u>User Information</u></h3>
+
+    <div class="form-group">
+        <label class="col-sm-12">First Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="firstName" id="first-name" value="{{formValues.firstName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Last Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="lastName" id="last-name" value="{{formValues.lastName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Email</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="email" id="email" value="{{formValues.email}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Phone Number</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="phoneNumber" id="phone-number" value="{{formValues.phoneNumber}}"/>
+        </div>
+    </div>
+
+    <h3><u>Organization Information</u></h3>
+
+    <div class="form-group">
+        <label class="col-sm-12">Organization Type</label>
+        <div class="col-sm-12">
+            <select class="col-sm-12" name="orgType" id="org-type">
+                <option value="Government"> Government</option>
+                <option value="Industry"selected='selected'> Industry</option>
+                <option value="Academic"> Academic</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Role</label>
+        <div class="col-sm-12">
+            <select class="col-sm-12" name="orgRole" id="org-role">
+                <option value="Provider"{{#equalsTo formValues.orgRole 'Provider'}}selected='selected'{{/equalsTo}}> Provider — I have a capability</option>
+                <option value="Client"{{#equalsTo formValues.orgRole 'Client'}}selected='selected'{{/equalsTo}}> Client — I have a challenge/need</option>
+                <option value="Both"{{#equalsTo formValuse.orgRole 'Both'}}selected='selected'{{/equalsTo}}> Both — I have capabilities and challenges</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12" id="org-duns-label">DUNS Number (9 digits)</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="orgRouteId" id="org-duns" value="{{formValues.orgRouteId}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="orgName" id="org-name" value="{{formValues.orgName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Address</label>
+        <div class="col-sm-12">
+            <textarea class="form-control" rows="2" name="orgAddress" id="org-address" >{{formValues.orgAddress}}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Website</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="orgWebsite" id="org-website" value="{{formValues.orgWebsite}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12" id="org-naics-label">NAICS Code (Optional, 6 digits)</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="orgNaics" id="org-naics" value="{{formValues.orgNaics}}" />
+        </div>
+    </div>
+
+    <h3><u>Business Point of Contact Information</u></h3>
+
+    <div class="form-group">
+        <label class="col-sm-12">First Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="businessPocFirstName" id="business-poc-first-name" value="{{formValues.businessPocFirstName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Last Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="businessPocLastName" id="business-poc-last-name" value="{{formValues.businessPocLastName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Email</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="businessPocEmail" id="business-poc-email"value="{{formValues.businessPocEmail}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Phone Number</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="businessPocPhone" id="business-poc-phone-number"value="{{formValues.businessPocPhone}}" />
+        </div>
+    </div>
+
+    <h3><u>Technical Point of Contact Information</u></h3>
+
+    <div class="form-group">
+        <label class="col-sm-12">First Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="technicalPocFirstName" id="technical-poc-first-name" value="{{formValues.technicalPocFirstName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Last Name</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="technicalPocLastName" id="technical-poc-last-name" value="{{formValues.technicalPocLastName}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Email</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="technicalPocEmail" id="technical-poc-email" value="{{formValues.technicalPocEmail}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-12">Phone Number</label>
+        <div class="col-sm-12">
+            <input class="form-control" type="text" name="technicalPocPhone" id="technical-poc-phone-number" value="{{formValues.technicalPocPhone}}" />
+        </div>
+    </div>
+
+    <br />
+
+    <div class="form-group">
+        <label class="col-sm-12">Which POC should GSM contact to validate their identity?</label>
+        <div class="col-sm-12">
+            <select class="col-sm-12" name="primaryPoc" id="primary-contact">
+                <option value="Business" {{#equalsTo formValues.primaryPoc 'Business'}}selected='selected'{{/equalsTo}}> Business</option>
+                <option value="Technical" {{#equalsTo formValues.primaryPoc 'Technical'}}selected='selected'{{/equalsTo}}> Technical</option>
+            </select>
+        </div>
+    </div>
+
+    <br />
+
+    <div>
+        <input type="checkbox" name="cb_TOS" value="" required> I acknowledge that I have read and agree to the <a href="/tos">Terms of Service.</a>
+    </div>
+
+    <br /><br />
+
+    <input type="submit" id="new-orgsubmit" value="Submit" />
+</form>
+
+{{#contentFor "pageCSS"}}
+    <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('select').change(function(){
+                $( 'select option:selected').each(function(){
+                    if($(this).attr('value')=='Government'){
+                        $('#org-duns-label').hide();
+                        $('#org-duns').hide();
+                        $('#org-naics-label').hide();
+                        $('#org-naics').hide();
+                    }
+                    if($(this).attr('value')=='Industry'){
+                        $('#org-duns-label').show();
+                        $('#org-duns').show();
+                        $('#org-naics-label').show();
+                        $('#org-naics').show();
+                    }
+                    if($(this).attr('value')=='Academic'){
+                        $('#org-duns-label').show();
+                        $('#org-duns').show();
+                        $('#org-naics-label').show();
+                        $('#org-naics').show();
+                    }
+                });
+            }).change();
+        });
+    </script>
+{{/contentFor}}

@@ -1,0 +1,198 @@
+ <html><head> 
+ <style>
+ @media print {
+  body {
+	  background-color: #fff !important;
+	  font-size: 9pt !important;
+	  font-family: Helvetica, Arial, sans-serif !important;
+  }
+  h1 {
+	  font-size: 22pt !important;
+	  margin-left: 3pt !important;
+	  margin-bottom: 20pt !important;
+  }
+  h4 {
+	  font-size: 12pt !important;
+	  margin-left: 3pt !important;
+  }
+  h1, h2, h3, h4, h5 {
+  color: #6d6e70 !important;
+  font-family: "Oswald",Helvetica,Arial,sans-serif !important;
+  font-weight: 400 !important;
+  margin-top: -5px !important;
+  }
+  
+  h3.logo img {
+	  width: 145pt !important;
+	  height: 46pt !important;
+  }
+  h3.logo {
+  margin-bottom: 5px;
+  margin-right: 20px;
+  margin-top: 2px;
+  }
+  .maincontent-container {
+	  padding: 0 !important;
+	  padding-top: 20pt !important;
+  }
+  .form-control {
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  color: #555;
+  display: block;
+  height: 34px;
+  line-height: 1.42857;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  }
+  .form-control {
+	  background-color: #fff !important;
+	  box-shadow: none !important;
+	  border-color: #6d6e70 !important;
+	  border: none !important;
+	  font-size: 9pt !important;
+      padding: 0 !important;	  
+	  height: auto !important;
+	  padding-bottom: 2pt !important;
+  }
+  .alert {
+	  display: none !important;
+  }
+  .copyright {
+	  margin-left: -5pt !important;
+	  font-size: 5pt !important !important;
+  }
+  .footer p {
+  font-size: 12px;
+  margin-top: 5px;
+  }
+  .text-muted {
+  color: #777;
+  }
+  p {
+  color: #404041;
+  font-size: 14px;
+  line-height: 1.5em;
+  margin-bottom: 1.3em;
+  }
+  .footer {
+  position: absolute !important;
+  }
+  .footer {
+  bottom: 0;
+  font-size: 12px;
+  height: 60px;
+  position: absolute;
+  width: 100%;
+  }
+  article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+  }
+  .col-sm-12 {
+  width: 100%;
+  }
+  .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9 {
+  float: left;
+  }
+  .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+  min-height: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  position: relative;
+  }
+  label {
+  color: #6d6e70;
+  }
+  label {
+  display: inline-block;
+  font-weight: 500;
+  margin-bottom: 1px;
+  max-width: 100%;
+  }
+  
+  }
+  </style>
+  </head>
+  <body>
+
+<div id="main-content" class="container maincontent-container">
+  <h4>Solution Submission for</h4>
+  <h1>{{registration.challengeName}}</h1>
+
+  <div class="form-horizontal form-padding container">
+    {{#with registration}}
+      {{#each ../challenge.customRegistrationFields}}
+        <div class="form-group">
+          <label
+            class="col-sm-12">{{label}}</label>
+
+          <div class="col-sm-12">
+            {{#inArray field_type 'paragraph'}}
+			<div class="form-control" style="padding-bottom:12pt !important;" type="text" name="pocName" id="pocName">{{getResponseForCustomField _id ../customFieldResponse}}</div>
+            {{else}}
+			<div class="form-control" style="padding-bottom:12pt !important;" type="text" name="pocName" id="pocName">{{getResponseForCustomField _id ../customFieldResponse}}</div>
+            {{/inArray}}
+          </div>
+        </div>
+      {{/each}}
+
+
+      {{#if whitepaper}}
+        <div class="form-group">
+          <label class="col-sm-12">Attachment:</label>
+          <div class="col-sm-12">
+            <div id="whitepaperContainer" class="form-control">
+              {{#with whitepaper}}
+            <div class="btn-sm btn-default" href="{{path}}" style="padding-bottom:12pt !important;">{{name}}</div>
+              {{/with}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{#if productID}}
+        <div class="form-group">
+          <label class="col-sm-12">Capability Name</label>
+
+          <div class="col-sm-12">
+            <div class="form-control" type="text" name="pocEmail" id="pocEmail" style="padding-bottom:12pt !important;">{{getProductName productID ../products}}</div>
+          </div>
+        </div>
+
+        <div id="productDescFields">
+          <div class="form-group">
+            <label class="col-sm-12">Capability Access Instructions:</label>
+
+            <div class="col-sm-12">
+      <div rows="2" class="form-control" id="accessInstructions" style="padding-bottom:12pt !important;"
+                name="accessInstructions">{{accessInstructions}}</div>
+            </div>
+          </div>
+
+          {{#if otherDocuments}}
+            <div class="form-group">
+              <label class="col-sm-12">Other Documents</label>
+              <div class="col-sm-12">
+                <div id="documentContainer">
+                  {{#each otherDocuments}}
+                    <div class="form-control" href="{{path}}" style="padding-bottom:12pt !important;">{{name}}</div>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
+    {{/with}}
+
+  </div>
+</div>
+<footer class="footer">
+
+</footer>
+</body>
+</html>

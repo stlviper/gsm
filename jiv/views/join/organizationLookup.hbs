@@ -1,0 +1,49 @@
+<div id="main-content" class="container maincontent-container">
+    
+    <div class="col-md-8 signup">
+        <h1>{{{strings.Join.Lookup.Title}}}</h1>
+        <p>{{{strings.Join.Lookup.Caption}}}</p>
+        {{>message}}
+    </div>
+
+
+
+
+
+
+  <div id="signupFormSearchOrg" class="col-md-12">
+    <form action="/join/check-organization-name" method="post" enctype="application/x-www-form-urlencoded">
+      <input type="text" id="searchOrg" name="orgName" class="combined-field-btn big-orange-field"
+             placeholder="{{{strings.Join.Lookup.Fields.Search.Placeholder}}}" autocomplete="off"/>
+      <input type="hidden" name="orgID" id="orgID" value="">
+      <input type="submit" id="enterButton" class="big-orange-btn" value="{{{strings.Join.Lookup.Buttons.Submit}}}"/>
+    </form>
+  </div>
+</div>
+
+{{#contentFor "pageScripts"}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-typeahead.js" type="text/javascript"></script>
+  <script type="application/javascript">
+    $(document).ready(function () {
+      $('#searchOrg').typeahead({
+        onSelect: function (item) {
+          $('#orgID').val(item.id);
+          console.log(item);
+        },
+        ajax: {
+          url: '/join/get-all-organizations',
+          // Time between database queries (ms)
+          timeout: 100,
+          // The field you want to show up in the search results
+          displayField: 'orgName',
+          triggerLength: 1,
+          method: 'get',
+          scrollBar: true,
+          loadingClass: 'loading-circle'
+        },
+        // Max items in the results list
+        items: 100
+      });
+    });
+  </script>
+{{/contentFor}}

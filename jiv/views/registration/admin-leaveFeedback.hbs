@@ -1,0 +1,93 @@
+<div id="main-content" class="container maincontent-container">
+  {{>message}}
+  <h4 style="margin-bottom: 5px;">Feedback for</h4>
+  <h1>{{registration.challengeName}}</h1>
+  <div class="container">
+    <form method="post" action="/admin/solutions/{{registration.id}}/leavefeedback" enctype="multipart/form-data" class="form-horizontal form-padding check-dirty">
+      <div class="row">
+        <div class="col-sm-12">
+
+          <div class="alert alert-info">
+            Leave a Comment here but for more detailed feedback please attach a feedback document with the "Feedback" field.
+            If additional documents are needed outside of the feedback or summary use the "other documents".
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label>Feedback Overview</label>
+        </div>
+
+        {{#greaterThan registration.feedback.length 0}}
+          {{#isAFeedbackInDraft registration.feedback}}
+            {{#each registration.feedback}}
+              {{#if this.isDraft}}
+                <div class="col-sm-10">
+                  <textarea class="form-control ckeditor" type="text" name="summary">{{this.summary}}</textarea>
+                </div>
+              {{/if}}
+            {{/each}}
+          {{else}}
+            <div class="col-sm-10">
+              <textarea class="form-control ckeditor" type="text" name="summary"></textarea>
+            </div>
+          {{/isAFeedbackInDraft}}
+        {{else}}
+          <div class="col-sm-10">
+            <textarea class="form-control ckeditor" type="text" name="summary"></textarea>
+          </div>
+        {{/greaterThan}}
+      </div>
+      {{#each challenge.feedbackArea}}
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label>Feedback Criteria:</label>
+          </div>
+          <div class="col-sm-10">
+            {{{this.description}}}
+          </div>
+
+
+          <div class="col-sm-2 control-label">
+            <label>Feedback Response:</label>
+          </div>
+          <div class="col-sm-10">
+            <textarea class="form-control ckeditor" type="text" name="feedbackArea-{{this._id}}"></textarea>
+          </div>
+        </div>
+      {{/each}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Feedback</label>
+
+        <div class="col-sm-10">
+          <input type="file" name="feedbackDoc" id="feedbackDoc" class="form-control"/>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Other Documents</label>
+
+        <div class="col-sm-10" style="margin-bottom: 10px;">
+          <input type="file" name="otherDocuments" id="otherDocuments" class="form-control" multiple/>
+        </div>
+      </div>
+
+      <div class="col-sm-2 hidden-xs"></div>
+      <div class="col-sm-10">
+        <label for="saveDraftBtn" class="btn btn-warning" style="margin-bottom: 10px;"><i class="glyphicon glyphicon-hdd"></i> Save Draft</label>
+        <input type="submit" name="operation" value="Save Draft" class="hidden" id="saveDraftBtn"/>
+          <label for="submitBtn" class="btn btn-success" style="margin-bottom: 10px;"><i class="fa fa-comment"></i> Submit Feedback</label>
+          <input type="submit" name="operation" value="Submit Feedback" class="hidden" id="submitBtn"/>
+
+        <a class="btn btn-info" href="/profile/{{userinfo.username}}/manage/solutions/{{registration.id}}">
+          <span class="glyphicon glyphicon-eye-open"></span> View Solution Details
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-form-v3.51.0.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+{{/contentFor}}

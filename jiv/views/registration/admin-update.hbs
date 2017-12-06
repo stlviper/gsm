@@ -1,0 +1,166 @@
+<div id="main-content" class="container maincontent-container">
+  <h4 style="margin-bottom: 5px;">Solution Submission for</h4>
+
+  <h1>{{registration.challengeName}}</h1>
+
+  <form id="registrationUpdate" method="POST"
+        action="/admin/solutions/{{registration.id}}/update"
+        class="form-horizontal form-padding check-dirty"
+        enctype="multipart/form-data">
+    {{>message}}
+
+    <div class="form-group">
+      <div class="col-sm-12">
+        <p class="alert alert-info">All information provided here is protected and will only be directly shared with
+          the
+          Problem owner.
+        </p>
+      </div>
+    </div>
+
+    {{#if customFields}}
+      {{#each customFields}}
+        {{> customField}}
+      {{/each}}
+    {{/if}}
+
+    {{#with registration}}
+      <input type="hidden" name="challengeID" value="{{challengeID}}"/>
+      <input type="hidden" name="oldCapabilityId" value="{{productID}}"/>
+
+      {{#if ../challenge.addWhitepaper}}
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Attachment (if applicable)</label>
+
+          <div class="col-sm-9" style="margin-bottom: 10px;">
+            <input type="file" name="whitepaper" id="whitepaper" class="form-control"/>
+          </div>
+          <div class="col-sm-3 hidden-xs"></div>
+          {{#if ../whitepaper}}
+            <div class="col-sm-9">
+              <div id="whitepaperContainer">
+                {{#with ../whitepaper}}
+                  <span class="documentContainer">
+                <a class="btn-sm btn-danger" href="/admin{{path}}" style="color: #fff">{{name}}</a>
+                <a class="glyphicon glyphicon-remove" onclick="registration_edit.removeWhitepaper(event)"></a>
+              </span>
+                {{/with}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{#if ../challenge.addProduct}}
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Capability Name</label>
+
+          <div class="col-sm-9">
+            <select name="capabilityId" id="productDrpDwn" class="form-control" data-toggle="tooltip"
+                    data-placement="top"
+                    data-original-title="{{#unless ../products}}{{../../strings.Solutions.Messages.NoCapabilities}}{{else}}Only approved capabilities are available to select.  If you would like yours added, please submit a capability request.{{/unless}}"
+            >
+              <option value="">-</option>
+              {{#each ../../products}}
+                <option value="{{id}}" {{#equalsTo id ../productID}}selected{{/equalsTo}}>{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <div id="productDescFields" style="display: none;">
+          <div class="form-group">
+            <br/>
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+              <p class="alert alert-info">
+                Please provide instructions with how the Problem owner should <u><i>access</i></u> your capability. An
+                example
+                could be a
+                URL with username and password, a link to the Google Play Store for a free trial, or that someone will
+                contact
+                them directly to get setup.
+              </p>
+            </div>
+            <label class="col-sm-3">
+              <span class="required-field">*</span>
+              Capability Access Instructions (less than 200 words):
+            </label>
+
+            <div class="col-sm-9">
+              <div class="">
+          <textarea rows="2" class="form-control" id="accessInstructions" style="margin-bottom: 10px;"
+                    name="accessInstructions">{{../accessInstructions}}</textarea>
+              </div>
+              <div class="errorTxt"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+              <p class="alert alert-info">
+                Please provide a description to guide the Problem owner on how to USE your capability. Attach any
+                supporting
+                documentation that could include screenshots with instructions or other training related guidance.
+              </p>
+            </div>
+            <label class="col-sm-3">Other Documentation: </label>
+
+            <div class="col-sm-9">
+              <div class="">
+                <input type="file" name="otherDocumentation" id="otherDocumentation" class="form-control" multiple/>
+              </div>
+              <div class="errorTxt"></div>
+            </div>
+            <div class="col-sm-12"><br/></div>
+            <div class="col-sm-3 hidden-xs"></div>
+            <div class="col-sm-9">
+              <div id="documentContainer">
+                {{#each otherDocuments}}
+                  <span class="documentContainer">
+                    <a class="btn-sm btn-danger" href="/admin{{path}}" style="color: #fff">{{name}}</a>
+                    <a class="glyphicon glyphicon-remove" onclick="registration_edit.removeDocument(event, '{{name}}')"></a>
+                  </span>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    {{/with}}
+
+    <div class="col-sm-2 hidden-xs"></div>
+    <div class="col-sm-10" style="margin-top:15px;">
+      <button class="btn btn-primary" id="submitChallengeBtn" type="submit"
+              style="margin-left: -10px;">
+        Update
+      </button>
+      <a class="btn btn-default" href="/admin/solutions">
+        Back
+      </a>
+    </div>
+  </form>
+</div>
+
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <style>
+    .ui-datepicker {
+      z-index: 9001 !important;
+    }
+  </style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js" type="application/javascript"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js" type="application/javascript"></script>
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/registration/user-form.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/registration/user-edit.js"></script>
+  <script type="application/javascript">
+    registrationForm.init({formSltr: '#registrationUpdate', whitepaperContainer: '#whitepaperContainer'});//Init Validation
+    registration_edit.init('{{userinfo.username}}', '{{registration.id}}');
+    registration_edit.productDescFields();
+  </script>
+{{/contentFor}}

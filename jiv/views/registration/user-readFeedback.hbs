@@ -1,0 +1,73 @@
+<div id="main-content" class="container maincontent-container">
+{{> message}}
+    <h4 style="margin-bottom: 5px;">Feedback for</h4>
+    <h1>{{registration.challengeName}}</h1>
+<div class="container">
+    <div class="form-horizontal form-padding">
+      {{#with feedback}}
+        {{#if summary}}
+          <div class="form-group">
+            <label class="col-sm-2">Feedback Overview</label>
+			</div>
+			<div class="form-group">
+
+            <div class="col-sm-10" style="margin-top:8px;">
+              {{{summary}}}
+            </div>
+          </div>
+        {{/if}}
+  {{#each ../challenge.feedbackArea}}
+  
+    <div class="form-group">
+	<label class="col-sm-2">Feedback Criteria:</label>
+	</div>
+	<div class="form-group">
+	    <div class="col-sm-10">
+      <span>{{{this.description}}}</span>
+    </div>
+	</div>
+    
+
+	{{#each ../../feedback.feedbackAreas}}
+	{{#idEqualsTo this.feedbackRef ../this._id}}
+	<div class="form-group">
+	<label class="col-sm-2">Feedback Response:</label>
+	</div>
+	<div class="form-group">
+	<div class="col-sm-10">
+      <span>{{{this.response}}}</span>
+	  </div>
+	  </div>
+	  {{/idEqualsTo}}
+	  
+	  {{/each}}
+
+	 
+    
+  
+  {{/each}}
+        {{#if otherDocuments}}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Other Documents</label>
+
+            <div class="col-sm-10">
+              <div id="documentContainer">
+                {{#each otherDocuments}}
+                  <span class="documentContainer">
+                  <a class="btn-sm btn-default" href="{{path}}" style="color:#fff;">{{name}}</a>
+                </span>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      {{/with}}
+
+<div class="col-sm-12">
+  <a class="btn btn-info" href="/profile/{{userinfo.username}}/manage/problems/{{challenge.id}}/view" style="margin-left:-10px;">
+    <span class="glyphicon glyphicon-arrow-left"></span> Return to Solution Details
+  </a>
+</div>
+    </div>
+</div>
+</div>

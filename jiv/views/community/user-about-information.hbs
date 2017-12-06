@@ -1,0 +1,168 @@
+<div id="" class="container communityprofile-container tab-content">
+
+  <div id='about' class="tab-pane active" role="tabpanel">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/gsm-about.png" alt="" class="img-responsive gsm-header"/>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+
+          <div id="sidebar" class="sidebar-header" data-spy="affix" data-offset-top="340">
+            <div class="list-group my-communities">
+
+              <p class="list-group-item">
+                <strong>Quick Links</strong>
+              </p>
+
+              <a href="/members"><p onClick="" class="list-group-item linked">
+                <i class="fa fa-institution fa-fw"></i> Members <span class="label label-default pull-right">{{community.members.length}}</span>
+              </p></a>
+
+              <a href="/capabilities"><p onClick="" class="list-group-item linked">
+                <i class="fa fa-puzzle-piece fa-fw"></i> Capabilities <span class="label label-default pull-right">{{community.productLength}}</span>
+                  </p></a>
+
+              <a href="/problems"><p onClick="" class="list-group-item linked">
+                <i class="fa fa-bullhorn fa-fw"></i> Problems <span
+                class="label label-default pull-right">{{community.discoveryLength}}</span>
+                  </p></a>
+            </div>
+          </div>
+
+        </div>
+        
+        <div class="col-md-9 col-sm-12 page-title">
+          <h1>About GEOINT Solutions Marketplace</h2>
+        </div>
+      <div class="row">
+ 
+        <div class="col-sm-12 col-md-8">
+          {{#if editMode}}
+            <div class="editIcon" style="color: #f16521; position: absolute; right: 0px; padding-right: 5px"><i
+              class="glyphicon glyphicon-edit"></i></div>
+          {{/if}}
+          <div id="communityAbout" {{#if editMode}}contenteditable="true" spellcheck="false"
+               style="border: 1px #a9a9a9 dashed;"{{/if}}>
+            {{#if community.description.length}}
+              {{{community.description}}}
+            {{else}}
+              <p>{{{strings.Community.AboutPage.About}}}</p>
+            {{/if}}
+          </div>
+        </div>
+        <div class="col-xs-8">
+          <br/>
+            {{#if canEdit}}
+              {{#if editMode}}
+                <a href="/about" id="editDoneTag" class="btn btn-primary btn-lg">Return
+                  to Normal View</a>
+              {{/if}}
+              {{#unless editMode}}
+                <a href="/about/edit" id="editTag" class="btn btn-primary btn-lg">Edit
+                  This Page</a>
+              {{/unless}}
+            {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <!--[if lt IE 9]>
+  <link rel="stylesheet"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+        media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+<style>
+.navbar-default .navbar-toggle {
+    position: absolute;
+    left: 300px;
+}
+</style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+<!--
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.menu.min.js"></script>
+-->
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dirty-forms-settings.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+  <script type="application/javascript">
+
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+      {{#if editMode}}
+        CKEDITOR.disableAutoInline = true;
+        CKEDITOR.inline('communityAbout', {
+          //toolbar: 'Basic',
+          on: {
+            save: function (evt) {
+              $.post('/about/update', {description: evt.editor.getData()})
+                .done(function (data) {
+                  var notificationType = 'danger';
+                  if (!data.error) {
+                    notificationType = 'success'
+                  }
+                  $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+                });
+            }
+          }
+        });
+
+        $.post('/about/update', uploadObj)
+          .done(function (data) {
+            var notificationType = 'danger';
+            if (!data.error) {
+              notificationType = 'success'
+            }
+            $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+          });
+
+      {{/if}}
+
+    });
+
+//    setTimeout(function () {
+//      var s = skrollr.init({
+//        forceHeight: false
+//      });
+//    }, 500);
+  </script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-multiselect.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list-v1.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list.pagination-v0.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.simplePagination.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.matchHeight-min.js"></script>
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+{{/contentFor}}

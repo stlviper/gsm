@@ -1,0 +1,159 @@
+<div id="main-content" class="container maincontent-container" >
+  <h2>{{title}}</h2>
+
+  <form name="communitycreate_form" id="communitycreate" class="form-horizontal" action="/community/create"
+        method="post" enctype="multipart/form-data">
+
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="name" id="name" value="{{name}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-2">
+        <label class="control-label" for="organizationLogo">
+          Change Logo:
+        </label>
+        {{> help_modal id='organizationLogo' message='2MB File size restriction for the organization logo' }}
+      </div>
+      <div class="col-sm-7">
+        <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+
+        <div id="avatar_dealio">
+          <button type="button" id="crop-button" class="aui-button aui-button-primary">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Type</label>
+
+      <div class="col-sm-7">
+        <select class="form-control" name="type" id="type">
+          <option value="">-</option>
+          <option value="open">Open</option>
+          <option value="open">Private</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="description">
+        Description
+      </label>
+
+      <div class="col-sm-7">
+        <textarea rows="4" class="form-control" id="description" name="description"
+                  value="">{{trim description}}</textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Categories</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="category" id="category" value="{{category}}"/>
+      </div>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Create"/>
+  </form>
+</div>
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <style type="text/css">
+    #main-content {
+      margin-top: 50px
+    }
+
+    #avatar_dealio {
+      width: 324px;
+      margin: 0 auto;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+{{/contentFor}}
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css" media="all">
+  <!--[if lt IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie.css" media="all"><![endif]-->
+  <!--[if IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]><script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}js/libs/avatar-picker/aui/js/aui-ie.js"></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+  <script type="application/javascript">
+    $(window).load(function () {
+      $('#category').tokenfield({
+        autocomplete: {
+          source: [],
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+      });
+    });
+    (function ($) {
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    })(AJS.$);
+  </script>
+{{/contentFor}}

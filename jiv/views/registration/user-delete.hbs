@@ -1,0 +1,16 @@
+<div id="main-content" class="container maincontent-container">
+<div class="form-horizontal form-padding">
+  {{#if registration}}
+  <h3>Are you sure you want to delete your solution submission?</h3>
+  {{else}}
+    <h3>Your Solution has been removed.</h3>
+  {{/if}}
+  <form method="POST" action="/profile/{{userinfo.username}}/manage/solutions/{{registration.id}}/delete">
+    {{#if registration}}
+      <button type="submit" class="btn btn-danger">Unregister</button>
+    {{/if}}
+    <a class="btn btn-info" href="/profile/{{userinfo.username}}/manage">Back to Dashboard</a>
+  </form>
+
+</div>
+</div>

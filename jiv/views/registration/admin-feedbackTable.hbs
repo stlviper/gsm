@@ -1,0 +1,56 @@
+<div id="main-content" class="container maincontent-container">
+  {{#with registration}}
+    {{#isAnyFeedbackComplete feedback}}
+      <div class="row">
+        <br>
+        <div class="col-sm-10">
+          <h2>Explorer Feedback</h2>
+        </div>
+        <div class="col-sm-2">
+
+          <a href="/admin/solutions/{{id}}/leavefeedback" class="btn btn-success" style="margin-top: 20px; margin-bottom: 10px;">
+            <i class="fa fa-comments"></i>Leave Feedback
+          </a>
+        </div>
+        <div class="col-sm-12">
+          <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+              <td>Create Date</td>
+              <td>Actions</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each feedback}}
+              {{#unless this.isDraft}}
+                <tr>
+                  <td> {{dateFormatter date_created 'short'}}</td>
+                  <td>
+                    <a href="/admin/solutions/{{../../id}}/feedback/{{id}}/" class="btn btn-info">
+                      <span class="glyphicon glyphicon-eye-open"></span> Read
+                    </a>
+                  </td>
+                </tr>
+              {{/unless}}
+            {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {{else}}
+      <br>
+
+      <div class="col-sm-10">
+        <h3>No feedback has been submitted yet. You will see it displayed here when it is officially submitted back to
+          you.</h3>
+      </div>
+    {{/isAnyFeedbackComplete}}
+  {{/with}}
+  <div class="col-sm-10">
+    <a class="btn btn-info"
+       href="/admin/problems/{{registration.challengeID}}/solutions"
+       style="margin-left:-10px;">
+      <span class="glyphicon glyphicon-arrow-left"></span> Return to Solutions
+    </a>
+  </div>
+</div>

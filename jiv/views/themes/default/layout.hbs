@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Fix the responsiveness -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- /Fix the responsiveness -->
+  <title>{{#if title}}{{title}} - {{/if}}{{{strings.SiteTitle}}}</title>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/fontawesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jquery.bxslider.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/icomoon.css"/>
+
+  <!-- Favicon -->
+    <link rel="shortcut icon" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/favicon.ico">
+  <!-- /Favicon-->
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/bootstrap-theme.min.css">
+<!--  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jumbotron.css">-->
+  <!-- Custom styles for this template -->
+  <!-- Multiselect dropdown -->
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/bootstrap-multiselect.css"
+        type="text/css"/>
+  <!--<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/socket.io/socket.io.js"></script>-->
+  <!--<script>-->
+  <!--var socket = io.connect('{{config.externalHostname}}:{{config.port}}');-->
+  <!--</script>-->
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,700,700italic'
+        rel='stylesheet' type='text/css'>
+    <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-theme.css" rel="stylesheet">
+    <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/gsm-theme.css" rel="stylesheet">
+  <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/gsm-overwrites.css" rel="stylesheet">
+    {{#if config.chat.enabled}}
+    <link href="{{strings.chatClient}}status_icon/application.css" rel="stylesheet">
+  {{/if}}
+  <!--[if IE 9]>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}            "/>
+  <![endif]-->
+<!--
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-print.css"
+        type="text/css" media="print"/>
+-->
+
+  {{{block "pageCSS"}}}
+  {{#equalsTo hostname "https://www.geoint.community"}}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-76801506-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+{{/equalsTo}}
+</head>
+
+<body>
+<div id="contactPopup" style="display:none;"></div>
+<div id="clientPopup" style="display:none;"></div>
+{{> default/header }}
+{{{body}}}
+{{> default/footer }}
+
+{{{block "preJqueryScripts"}}}
+<script type="application/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-2.1.4.min.js"></script>
+<script type="application/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.js"></script>
+<script type="application/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
+<script type="text/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/dirtyforms/jquery.dirtyforms.min.js"></script>
+<script type="text/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/dirtyforms/jquery.dirtyforms.helpers.ckeditor.min.js"></script>
+<script type="text/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/dirtyforms/jquery.dirtyforms.dialogs.bootstrap.min.js"></script>
+<script type="application/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dirty-forms-settings.js"></script>
+<script type="application/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/script.js"></script>
+<script type="application/javascript"
+        src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ie10-viewport-bug-workaround.js"></script>
+
+{{{block "postJqueryScripts"}}}
+
+{{#orCond config.chat.enabled isAdmin}}
+  <script src="{{strings.chatClient}}js/libs.js?{{siteConfig.chatVersion}}"></script>
+  <script src="{{strings.chatClient}}app/config.js?{{siteConfig.chatVersion}}"></script>
+  <script src="{{strings.chatClient}}app/auth.js?{{siteConfig.chatVersion}}"></script>
+  <script src="{{strings.chatClient}}app/web_socket.js?{{siteConfig.chatVersion}}"></script>
+  <script src="{{strings.chatClient}}status_icon/application.js?{{siteConfig.chatVersion}}"></script>
+{{/orCond}}
+
+{{{block "pageScripts"}}}
+{{{javascripts}}}
+</body>
+
+</html>

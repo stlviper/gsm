@@ -1,0 +1,94 @@
+<div id="main-content" class="container maincontent-container">
+  <div class="container">
+    <h1 class="pull-left">News Admin</h1>
+  </div>
+  <div class="container">
+    <table id="news-list" class="table table-striped table-bordered table-hover">
+      <thead>
+      <tr>
+        <td>Headline</td>
+        <td>Published By</td>
+        <td>Organization</td>
+        <td>Published On</td>
+        <td>Community</td>
+        <td>Summary</td>
+        <td>Action</td>
+      </tr>
+      </thead>
+      <tbody>
+      {{debug news}}
+      {{#each news}}
+        <tr data-news-id="{{newsUrlFriendlyID}}">
+          <td>{{headline}}</td>
+          <td>{{publishedBy}}</td>
+          <td>{{getOrgName owner ../orgs}}</td>
+          <td>{{dateFormatter releaseDate 'short'}}</td>
+          <td>{{communityName}}</td>
+          <td>
+            <div style="word-break: break-all;">
+              {{{onlyTakeNCharacters content 100}}}
+            </div>
+          </td>
+          <td>
+            <a class="btn btn-success" style="margin-bottom: 5px;"
+               href="/admin/news/{{communityUrlFriendlyID}}/{{newsUrlFriendlyID}}">
+              <span class="glyphicon glyphicon-edit"></span> Edit
+            </a>
+            <a href="#" class="btn btn-danger" onclick="deleteNewsClick(this);" data-news-id="{{newsUrlFriendlyID}}"
+               data-community-id="{{communityUrlFriendlyID}}">
+              <span class="glyphicon glyphicon-trash"></span>
+              Delete
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          
+<h1 class="icon"><span class="icon icon-warning-o"></span></h1>
+<p class="text-center">Are you sure you want to delete this news post?</p>
+            
+          <form id="newsDeleteForm" method="post" onsubmit="event.preventDefault(); deleteNewsPost(event);"
+                enctype="multipart/form-data"
+                action="/admin/news/remove-post">
+            <input type="hidden" id="communityFriendlyURL" value=""/>
+            <input type="hidden" id="newsFriendlyURL" value=""/>
+
+            <div class="container" style="min-height: 50px;padding-top: 10px; display: none;">
+              <span id="deleteModalWarning" class="alert alert-danger"></span>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-trash"></span> Delete
+              </button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css">
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+  <script type="application/javascript">
+    $(document).ready(function(){
+      adminNewsListInit();
+    });
+  </script>
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/news/admin-list.js"></script>
+{{/contentFor}}

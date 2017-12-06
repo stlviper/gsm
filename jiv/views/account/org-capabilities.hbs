@@ -1,0 +1,398 @@
+{{> dashboard_sidebar_header activeId="id-org-mgmnt" activeSubId="id-org-capabilities"}}
+<!-- Modal for Delete Capability Warning -->
+<div id="deleteCapability" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1><span class="icon icon-warning-o"></span></h1>
+                <h3>Are you sure you want to delete this capability from your portfolio?</h3>
+            </div>
+            <div class="modal-body text-center hidden">
+            </div>
+            <div class="modal-footer actions">
+                <button id="deleteBtn" type="button" class="btn btn-primary" ><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editCapability" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="edit-capability-form" id="capabilityEdit" class="form-horizontal"
+                  enctype="multipart/form-data"
+                  method="POST" action="">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Edit Capability</h2>
+                    <span class="orange">Required fields*</span>
+                </div>
+                <div class="modal-body">
+
+                    <!-- LOGO THUMB & LOGO UPLOADER -->
+                    <div class="row logo-uploader">
+                        <div class="col-md-4">
+                            <div class="crop-wrapper">
+                                <div class="crop">
+                                    <div id="output">
+                                        <div class="aui-avatar-inner thumb">
+                                            <div class="crop"><img id="capabilityImg" src="" alt="" class="timeline-thumb"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+                            <div id="avatar_dealio">
+
+                                <button type="button" id="crop-button" class="image-upload-field-replacement aui-button">
+                                    Crop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="capabilityName">Capability Name<span class="orange">*</span></label>
+                            <input class="form-control" id="capabilityName" name="capabilityName" placeholder="Capability Name" value="{{name}}">
+                            <div class="error-message orange hidden">This field is required.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="pocName">Point of Contact Name<span class="orange">*</span></label>
+                            <input class="form-control" id="pocName" name="pocName" placeholder="Point of Contact Name" value="{{pocName}}">
+                            <div class="error-message orange hidden">This field is required.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="pocEmail">Point of Contact Email<span class="orange">*</span></label>
+                            <input class="form-control" id="pocEmail" name="pocEmail" placeholder="Point of Contact Email" value="{{pocEmail}}">
+                            <div class="error-message orange hidden">This field is required.</div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="webLink">Website<span class="orange">*</span></label>
+                            <input class="form-control" id="webLink" name="webLink" placeholder="Website" value="">
+                            <div class="error-message orange hidden">This field is required.</div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="category" data-original-title="Start typing any tag you wish and press 'Enter' or 'Tab' to save it. Enter as many as you like." data-placement="right"
+                                   data-toggle="tooltip">Category Tags<span class="glyphicon glyphicon-question-sign"></span></label>
+                            <input class="form-control" id="category" name="category" placeholder="Add tags to help categorize your capability">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="capabilityDescription">Description<span class="orange">*</span></label>
+                            <textarea class="form-control" id="capabilityDescription" name="capabilityDescription" placeholder="Add a description for your capability" rows="4"></textarea>
+                            <div class="error-message orange hidden">This field is required.</div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer actions">
+                    <p id="spinnerCapability" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{> list_capability}}
+
+<!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+<div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+        <h1>Organization Management <small>Capabilities Portfolio</small></h1>
+
+    </section>
+    <!-- Widgets content -->
+    <section class="content">
+        <div class="row">
+            
+            <section class="col-lg-12 connectedSortable organization-management">
+                
+                <div class="box box-orange" id="capabilities">
+                    
+                    <div class="box-body">
+                        
+                        <div class="row">
+                            <div class="actions pull-right">
+                                <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#addCapability"><i class="fa fa-plus"></i> List a Capability</a>
+                                <a href="#" data-toggle="tooltip" title="Public" class="panel-tooltip"><span class="icon icon-globe"></span></a>
+                            </div>
+                        </div>
+                        
+                        <div class="row" id="capabilityTiles">
+                            {{#if products}}
+                            {{#each products}}
+                            <!-- Start tile -->
+                            <div id="capabilityID_{{_id}}" class="col-lg-3 col-md-4 col-sm-6 col-xs-12 template">
+                                <div class="well">
+                                    <div class="crop-wrapper">
+                                        <div class="crop"><a data-toggle="modal" data-target="#editCapability"><img id="capabilityCardLogo_{{_id}}" src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" alt="{{name}}" class="timeline-thumb"></a></div>
+                                    </div>
+                                    <h4 id="capabilityName_{{_id}}" style="font-weight: 400;margin-bottom: 0.5em;margin-top: 0;">{{name}}</h4>
+                                    <div class="actions">
+                                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editCapability" onclick="getEditData('{{_id}}')"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteCapability" onclick="getDeleteID('{{_id}}')">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End tile -->
+                            {{/each}}
+                            {{else}}
+                            <div id="capabilityEmpty" class="row empty-state">
+                                <div class="col-lg-12 text-center">
+                                    <h1><i class="fa fa-puzzle-piece"></i></h1>
+                                    <h3>Your portfolio is empty. You should <a href="" data-toggle="modal" data-target="#addCapability">list a capability</a>.</h3>
+                                </div>
+                            </div>
+                            {{/if}}
+                        </div>
+                        
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </section><!-- ./col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+</div>
+
+<!-- /.content-wrapper -->
+
+{{> dashboard_sidebar_footer}}
+{{#contentFor "pageCSS"}}
+<link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css" />
+<link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css" />
+<style type="text/css">
+    #crop-button2 {
+        display: none;
+        float: right;
+        position: relative;
+        margin-top: -30px;
+    }
+</style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+<script type="application/javascript">
+    $(document).ready(function () {
+    $("#capabilityEdit").submit(function(e){
+    e.preventDefault()
+});
+    
+    $('#category')
+    .on('tokenfield:createdtoken', function(e) {
+      console.log("token created");
+      $('#category-tokenfield').attr('placeholder', '');
+    })
+    .on('tokenfield:removedtoken', function(e) {
+      if($('#category').tokenfield('getTokens').length === 0) {
+        $('#category-tokenfield').attr('placeholder', 'Categories');
+      }
+    });
+    $('#capabilityEdit').validate({
+    rules: {
+      capabilityName: {
+        required: true
+      },
+      pocEmail: {
+        required: true,
+        email: true
+      },
+      pocName: {
+        required: true
+      },
+      webLink: {
+        required: true,
+        url: true
+      },
+      uploadLogoURI: {
+        required: false
+      },
+      capabilityDescription: {
+        required: true
+      }
+    },
+    ignore: ":hidden:not(#uploadLogoURI)",
+    highlight: function (element) {
+      $(element).closest('.control-group').removeClass('success').addClass('error');
+    },
+    submitHandler: function (form) {
+
+
+      var form = $("#capabilityEdit");
+      var $spinner = $('#spinnerCapability');
+	  $spinner.show();
+      $.ajax({
+        url: form.attr("action"),
+        type: "POST",
+        dataType: 'json',
+        data: form.serialize(),
+
+        success: function (data) {
+
+          $spinner.hide();
+          $('#capabilityName_' + data._id).text(data.name);
+          $('#capabilityCardLogo_' + data._id).attr('src', data.logoUrl);
+          $('#editCapability').modal('hide');
+
+        },
+        error: function (xhr, status, error) {
+          var alertDiv = document.createElement('div');
+          $(alertDiv).attr('class', 'alert alert-danger');
+          $(alertDiv).text('There was an error with your request, please try again.');
+        }
+
+      });
+
+    }
+  });
+
+
+ });
+    function getEditData(id){
+     $.ajax({
+        url: "/capability-edit/" + id + "",
+        type: "GET",
+        success: function (data, jqXHR) {
+          $('#capabilityEdit').attr("action", "/capabilitiesUpdate/" + id + "");
+          if(data.logoUrl){
+          $('#capabilityImg').attr("src", data.logoUrl);
+          }else{
+          $('#capabilityImg').attr('src', '{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png');
+          }
+          $('#capabilityName').val(data.name);
+          $('#pocName').val(data.pocName);
+          $('#pocEmail').val(data.pocEmail);
+          $('#webLink').val(data.webLink);
+          $('#category').val(data.category);
+          $('#capabilityDescription').val(data.description);
+          $('#category').tokenfield({
+        autocomplete: {
+          source: [
+            '{{strings.Capabilities.Filters.Analytics}}',
+            '{{strings.Capabilities.Filters.Collaboration}}',
+            '{{strings.Capabilities.Filters.CyberSecurity}}',
+            '{{strings.Capabilities.Filters.GIS}}',
+            '{{strings.Capabilities.Filters.Imaging}}',
+            '{{strings.Capabilities.Filters.Infrastructure}}',
+            '{{strings.Capabilities.Filters.Modeling}}',
+            '{{strings.Capabilities.Filters.RemoteSensing}}',
+            '{{strings.Capabilities.Filters.Search}}',
+            '{{strings.Capabilities.Filters.Visualization}}'
+          ],
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+      });
+
+        },
+        error: function (jqXHR, errorThrown) {
+
+        }
+      });
+
+    }
+    function getDeleteID(id){
+    $('#deleteBtn').attr('onclick', "deleteCapability('" + id + "')");
+    }
+    function deleteCapability(id){
+    $.ajax({
+        url: "/deleteCapability/" + id + "",
+        type: "POST",
+        success: function (data, jqXHR) {
+          $('#capabilityID_' + id).remove();
+          $('#deleteCapability').modal('hide');
+        },
+        error: function (jqXHR, errorThrown) {
+
+        }
+      });
+    }
+</script>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+<link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css"
+      media="all">
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+      media="all"><![endif]-->
+<!--[if IE 9]>
+<link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                          "
+      media="all"><![endif]-->
+<link rel="stylesheet" type="text/css"
+      href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+<link rel="stylesheet" type="text/css"
+      href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+<link rel="stylesheet" type="text/css"
+      href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+<!--[if lt IE 9]>
+<script
+  src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+<script type="application/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+<script type="application/javascript"
+        src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+<!-- Logo cropper -->
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+<!-- CK Editor -->
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+<!-- Bootstrap Switch for nice toggle checkboxes -->
+<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+
+<script type="application/javascript">
+
+    (function ($) {
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+      
+    })(AJS.$);
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+</script>
+{{/contentFor}}

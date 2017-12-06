@@ -1,0 +1,326 @@
+<div id="main-content" class="container maincontent-container">
+  {{#unless discovery.approved}}
+    <div class="container">
+      <div class="alert alert-info">
+        NOTE: This Problem is not approved and will not appear on the marketspace until it is marked approved.
+      </div>
+    </div>
+  {{/unless}}
+  <div class="container">
+     <div id="output" class="aui-avatar aui-avatar-standard pull-left" style="margin: 0 10px 10px 0;">
+         <div class="aui-avatar-inner thumb">
+             {{#if discovery.thumbnail.name}}
+                <img src="/images/community/{{discovery.thumbnail.name}}" class="test img-responsive logo" alt="{discovery.{name}}"/>
+             {{else}}
+                <img src="{{getOrgLogoURL orgRef ../../members}}" class="img-responsive logo" alt="{{discovery.name}}">
+             {{/if}}
+         </div>
+     </div>      
+     <h4 style="font-size:18px;margin:0 0 .5em 0;">View Problem:</h4>
+     <h1 style="font-size:36px;margin:0 0 .5em 0;">{{discovery.name}}</h1>
+  </div>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="discoveryEdit">
+      <form method="POST" class="form-horizontal form-padding indent"
+            action="/profile/{{userinfo.username}}/manage/problems/{{discovery.id}}"
+            enctype="multipart/form-data" id="discoveryViewForm">
+        {{#with discovery}}
+          <input type="hidden" id="challengeID" value="{{id}}">
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Problem Title</label>
+
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="name" id="name" value="{{name}}" readonly/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Stage</label>
+
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="orgName" id="orgName" value="{{getFriendlyStage stage}}"
+                     readonly/>
+            </div>
+          </div>
+        {{debug managers}}
+          {{#each managers}}
+            <h1>
+              {{this}}
+            </h1>
+          {{/each}}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Problem Managers</label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="discoveryManagers" id="discoveryManagers"
+                     value="{{#each ../managers}}{{this.firstName}} {{this.lastName}} ({{this.email}})  {{/each}}"
+                     readonly/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Problem Evaluators</label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="discoveryEvaluators" id="discoveryEvaluators"
+                     value="{{#each ../evaluators}}{{this.firstName}} {{this.lastName}} ({{this.email}})  {{/each}}"
+                     readonly/>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Problem Manager Organization</label>
+
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="orgName" id="orgName" value="{{orgName}}" readonly/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Categories</label>
+
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="categories" id="categories" value="{{categories}}"
+                     readonly/>
+            </div>
+          </div>
+
+          {{#if scoringScale}}
+            <div class="form-group">
+              <label class="col-sm-2 control-label" data-placement="right">Scoring</label>
+              <div class="col-sm-10">
+
+                <div class="collapse {{#if scoringScale}}in {{/if}}scoring" id="scoring">
+                  Selected rating scale:<br />
+                  {{#equalsTo scoringScale 'categories'}}
+                    <label>
+                      <span class="label score score-black">Unsatisfactory</span>
+                      <span class="label score score-red">Poor</span>
+                      <span class="label score score-yellow">Fair</span>
+                      <span class="label score score-green">Good</span>
+                      <span class="label score score-blue">Excellent</span>
+                    </label>
+                  {{/equalsTo}}
+                  {{#equalsTo scoringScale 'stars'}}
+                    <label>
+                      <i class="fa fa-star fa-2x"></i>
+                      <i class="fa fa-star fa-2x"></i>
+                      <i class="fa fa-star fa-2x"></i>
+                      <i class="fa fa-star fa-2x"></i>
+                      <i class="fa fa-star fa-2x"></i>
+                    </label>
+                  {{/equalsTo}}
+                  {{#equalsTo scoringScale 'passfail'}}
+                    <label>
+                      <span class="label score score-green">Acceptable</span>
+                      <span class="label score score-red">Needs Improvement</span>
+                    </label>
+                  {{/equalsTo}}
+                </div>
+
+              </div>
+            </div>
+          {{/if}}
+
+          <hr/>
+          <h2><i class="fa fa-list fa-fw jivango-dkgray"></i> Description</h2>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Summary<br><span class="muted small" style="font-weight: normal">(Provide a short description for the Problem listing page.)</span></label>
+
+            <div class="col-sm-10">
+              <textarea rows="4" class="form-control" id="summary" name="summary" readonly>{{trim summary}}</textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Full Description</label>
+
+            <div class="col-sm-10">
+              <div class="boxed-input">{{{trim description}}}</div>
+            </div>
+          </div>
+
+          <hr/>
+          <h2><i class="fa fa-calendar fa-fw baseline-shift jivango-dkgray"></i> Event Schedule</h2>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Start and End Dates</label>
+
+            <div class="col-sm-4">
+              <div class="input-group add-date">
+                <input class="form-control" type="text" name="startDate" id="startDate"
+                       value="{{dateFormatter startDate 'short'}}" readonly/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+            <label class="col-sm-1 control-label" style="text-align: center;"> to </label>
+
+            <div class="col-sm-4">
+              <div class="input-group add-date">
+                <input class="form-control" type="text" name="endDate" id="endDate"
+                       value="{{dateFormatter endDate 'short'}}" readonly/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-left: -5px;">
+            <div class="col-sm-12">
+              <ul id="scheduleDates" class="list-group">
+                {{#if schedule}}
+                  {{#each schedule}}
+                    <li class="list-group-item" style="background-color: #eee;">
+                      <div class="row">
+                        <span class="mark">{{dateFormatter startDate 'short'}}{{#if endDate}}
+                          &ndash; {{dateFormatter endDate 'short'}}{{/if}}:</span>
+                        <span>{{description}}</span>
+                      </div>
+                    </li>
+                  {{/each}}
+                {{else}}
+                  <li class="list-group-item" style="background-color: #eee;">
+                    <div class="row">
+                      <span>No events have been entered.</span>
+                    </div>
+                  </li>
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+
+          <hr/>
+          <h2><i class="fa fa-comment fa-flip-horizontal fa-fw baseline-shift jivango-dkgray"></i> Feedback Criteria
+          </h2>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Feedback Overview </label>
+
+            <div class="col-sm-10">
+              <div class="boxed-input">{{{trim evaluationCriteria}}}</div>
+            </div>
+          </div>
+
+          {{#if feedbackArea}}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Feedback Criteria</label>
+
+              <div class="col-sm-10">
+                <ol id="feedbackInputs" class="list-group">
+                  {{#each feedbackArea}}
+                    <li class="list-group-item" style="background-color: #eee;">
+                      <div class="row">
+                        <span>{{{description}}}</span>
+                      </div>
+                    </li>
+                  {{/each}}
+                </ol>
+              </div>
+            </div>
+          {{/if}}
+
+          <hr/>
+          <h2><i class="fa fa-file-text fa-fw jivango-dkgray"></i> Supporting Documents</h2>
+
+          <div class="form-group" style="margin-left: -5px;">
+            <div class="col-sm-12">
+              <ul class="list-group">
+                {{#if documents}}
+                  {{#each documents}}
+                    <li class="list-group-item" style="background-color: #eee;">
+                      <a href="{{path}}"><i class="fa fa-file-text-o"></i>  {{name}}</a>
+                    </li>
+                  {{/each}}
+                {{else}}
+                  <li class="list-group-item" style="background-color: #eee;">
+                    No documents have been added.
+                  </li>
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+        {{/with}}
+        <hr/>
+        <a class="btn btn-info" href="javascript:history.back()"><span
+          class="glyphicon glyphicon-arrow-left"></span> Back</a>
+        <br/><br/>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/formbuilder/dist/formbuilder.css"/>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-scoring.css" type="text/css" media="screen"/>
+  <style type="text/css">
+
+    .ui-widget-header {
+      border: 1px solid #2e6da4;
+      background: #337ab7 url({{strings.PublicStaticContentDirectoryFullPrefixPath}}) 50% 50% repeat-x;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .ui-datepicker {
+      background: white;
+      border: 1px solid #555;
+      color: white;
+    }
+
+    .fb-save-wrapper {
+      position: relative;
+      right: 0;
+      top: 0;
+      float: right;
+    }
+
+    .fb-main {
+      background-color: #fff;
+      border-radius: 5px;
+      min-height: 500px;
+      border: 1px solid #ddd;
+    }
+
+    .fb-main input[type=text] {
+      height: 26px;
+      margin-bottom: 3px;
+    }
+
+    .fb-main select {
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+  </style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.scrollWindowTo/index.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/underscore/underscore.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/underscore.mixin.deepExtend/index.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/backbone/backbone.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/backbone-deep-model/distribution/deep-model.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/rivets/dist/rivets.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/formbuilder/dist/formbuilder.js"></script>
+{{/contentFor}}
+

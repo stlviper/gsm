@@ -1,0 +1,112 @@
+<div id="newCapabilityMessage" style="display: none;" hidden>
+  <div class="modal-body capabilityAlert indent">
+    <h1 class="icon"><span class="icon icon-thank-you-o"></span></h1>
+    <p class="errorText text-center">{{{strings.Capabilities.Messages.NewCapability}}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  </div>
+</div>
+
+<div id="capabilitiesFieldset" class="fieldset">
+
+  <form name="create-capability-form" id="capabilityCreate" class="form-horizontal"
+        enctype="multipart/form-data"
+        method="POST">
+    {{#unless userinfo.orgRef}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="orgName">Organization</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="orgName" name="orgName"
+                 value="{{capabilityFormData.orgName}}">
+        </div>
+      </div>
+    {{/unless}}
+    <div class="container">
+      <p class="text-muted"><span class="small required-field">*Required fields</span></p>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label" for="capabilityName">Capability Name<span class="required-field">*</span></label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="capabilityName" name="capabilityName" placeholder="Capability Name"
+               value="{{#if capabilityFormData.name}}{{capabilityFormData.name}}{{else}}{{capabilityFormData.productName}}{{/if}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label" for="pocName">POC Name<span class="required-field">*</span></label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="pocName" name="pocName" placeholder="Point of Contact Name"
+               value="{{capabilityFormData.pocName}}">
+      </div>
+    </div>
+
+    <div class=" form-group">
+      <label class="col-sm-3 control-label" for="pocEmail">POC Email<span class="required-field">*</span></label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="pocEmail" name="pocEmail" placeholder="Point of Contact Email"
+               value="{{capabilityFormData.pocEmail}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label" for="webLink">Website URL<span class="required-field">*</span></label>
+
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="webLink" name="webLink"
+               value="http://{{capabilityFormData.webLink}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label" data-original-title="Start typing any tag you wish and press 'Enter' or 'Tab' to save it. Enter as many as you like." data-placement="right"
+             data-toggle="tooltip">Category Tags <span class="glyphicon glyphicon-question-sign"></span></label>
+
+      <div class="col-sm-9">
+        <input class="form-control" type="text" name="category" id="category" placeholder="Categories"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label" data-original-title="10MB file restriction" data-placement="right"
+             data-toggle="tooltip">
+        Upload Logo: <span class="glyphicon glyphicon-question-sign" data-toggle="modal"
+                           data-target=".organizationLogo"></span>
+      </label>
+
+      <div class="col-sm-9" id="avatarDiv">
+        <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+
+        <div id="avatar_dealio">
+          <button type="button" id="crop-button" class="aui-button aui-button-primary">Save Image
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label" for="capabilityDescription">Capability Description<span class="required-field">*</span><br><span style="font-weight:normal;">(200 words or less)</span></label>
+
+      <div class="col-sm-9">
+      <textarea rows="4" class="form-control" id="capabilityDescription" placeholder="Capability Description (200 words or less)"
+                name="capabilityDescription">{{#if description}} {{capabilityFormData.description}} {{else}} {{capabilityFormData.capabilityDescription}} {{/if}}</textarea>
+      </div>
+    </div>
+
+    <input type="text" class="form-control hidden" text="{{community._id}}" id="communityID"
+           name="communityID" value="{{community._id}}">
+    <div class="modal-footer">
+        
+      <button class="btn btn-primary" id="submit_new_product_btn" type="submit">
+        <Submit>Submit</Submit>
+      </button>
+		  <p id="" style="display:none;"> </p>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </form>
+</div>
+
+
+

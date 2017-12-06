@@ -1,0 +1,78 @@
+<div id="main-content" class="container maincontent-container">
+  <h1>{{title}} Admin</h1>
+  <table id="community-list" class="jiv-table table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <td>Name</td>
+      <td>Owner</td>
+      <td>Actions</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each communities}}
+      <tr>
+        <td>{{name}}</td>
+        <td>{{getOrgName owner ../organizations}}</td>
+        <td>
+          <a href="/admin/communities/{{id}}/update" class="btn btn-default">Edit</a>
+          <a href="#" onclick="toggleActivateStatus(this)" data-community-id="{{_id}}"
+             class="btn {{#if approved}}btn-success{{else}}btn-danger{{/if}}">
+            {{#if approved}}
+              Deactivate
+            {{else}}
+              Activate
+            {{/if}}
+          </a>
+          <a href="#" class="btn btn-danger" onclick="deleteCommunityClick(this)" data-community-id="{{_id}}">Delete</a>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="deactivateModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Are you sure</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="deactivateID"/>
+        <a class="btn btn-lg btn-primary btn-block" href="#" onclick="deactivate(this);">Deactivate</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Are you sure</h4>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="deleteID"/>
+        <a class="btn btn-lg btn-primary btn-block" href="#" onclick="deleteCommunity(this);">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css">
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/admin-community-list.js"></script>
+  <script type="application/javascript">
+    $(function () {
+      $('#community-list').DataTable();
+    });
+  </script>
+{{/contentFor}}

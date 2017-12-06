@@ -1,0 +1,221 @@
+<!-- Modal -->
+<div id="registrationModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Solution Submission</h4>
+      </div>
+      <div class="modal-body form-horizontal form-padding">
+        {{#with registration}}
+          {{#each ../challenge.customRegistrationFields}}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{label}}</label>
+
+              <div class="col-sm-10">
+                {{#inArray field_type 'paragraph'}}
+                  <textarea class="form-control" rows="5"
+                            readonly>{{getResponseForCustomField _id ../../customFieldResponse}}</textarea>
+                {{else}}
+                  <input class="form-control" type="text" name="pocName" id="pocName"
+                         value="{{getResponseForCustomField _id ../../customFieldResponse}}" readonly/>
+                {{/inArray}}
+              </div>
+            </div>
+          {{/each}}
+
+          {{#if whitepaper}}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Attachment (if applicable)</label>
+
+              <div class="col-sm-2"></div>
+              <div class="col-sm-10">
+                <div id="whitepaperContainer">
+                  {{#with whitepaper}}
+                    <span class="documentContainer">
+            <a class="btn-sm btn-default" href="{{path}}" style="color:#fff;">{{name}}</a>
+          </span>
+                  {{/with}}
+                </div>
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if capabilityId}}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Capability Name</label>
+              <div class="col-sm-10">
+                <input class="form-control" type="text" name="pocEmail" id="pocEmail"
+                       value="{{../../product.name}}" readonly/>
+              </div>
+            </div>
+
+            <div id="productDescFields">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Capability Access Instructions[less than 200 words]:</label>
+
+                <div class="col-sm-10" style="padding-top:10px;">
+                <textarea rows="2" class="form-control" id="accessInstructions" style="margin-bottom: 10px;"
+                name="accessInstructions" readonly>{{accessInstructions}}</textarea>
+                </div>
+                <div class="col-sm-2 hidden-xs"></div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Other Documents</label>
+
+                <div class="col-sm-2 hidden-xs"></div>
+                <div class="col-sm-10">
+                  <div id="documentContainer">
+                    {{#each otherDocuments}}
+                      <span class="documentContainer">
+                    <a class="btn-sm btn-danger" href="{{path}}" style="color: #fff">{{name}}</a>
+                  </span>
+                    {{/each}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {{/if}}
+        {{/with}}
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-success" href="/profile/{{userinfo.username}}/manage/solutions/{{registration.id}}/export" style="margin-bottom: 0; margin-right: 0;"><i class="fa fa-file-pdf-o"></i> Export to PDF</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left:0;">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="main-content" class="container maincontent-container internalAssessment">
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="manageRegisterMsg" class="alert alert-info hide">
+
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div id="output" class="aui-avatar aui-avatar-standard pull-left" style="margin: 0 10px 10px 0;">
+      <div class="aui-avatar-inner thumb">
+        <img src="{{organization.logoUrl}}" class="img-responsive logo" alt="{{organization.orgName}}">
+      </div>
+    </div>
+    <h4>Internal Assessment for</h4>
+    <h2>{{organization.orgName}}</h2>
+    <h4>{{registration.challengeName}}</h4>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+    </div>
+    <div class="form-group">
+      &nbsp;
+    </div>
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label>Assessment Overview</label>
+      </div>
+
+      <div class="col-sm-10">
+        <textarea style="height: 300px" class="form-control ckeditor" type="text" name="overview" readonly>{{internalAssessment.overview}}</textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      &nbsp;
+    </div>
+
+    {{#notEqualsTo internalAssessment.attachments.length 0}}
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Attachment(s)</label>
+      <div class="col-sm-10">
+        {{#each internalAssessment.attachments}}
+          <a class="btn btn-default" href="{{this.path}}">{{this.name}}</a>
+        {{/each}}
+      </div>
+    </div>
+    {{/notEqualsTo}}
+
+    {{#equalsTo challenge.scoringScale 'categories'}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Score</label>
+        <div class="col-sm-10" style="margin-bottom: 10px; margin-top:15px;">
+          <span id="unsatisfactory" class="label score score-black {{#notEqualsTo ../internalAssessment.rating 2}}score-default{{/notEqualsTo}}">Unsatisfactory</span>
+          <span id="poor" class="label score score-red {{#notEqualsTo ../internalAssessment.rating 4}}score-default{{/notEqualsTo}}">Poor</span>
+          <span id="fair" class="label score score-yellow {{#notEqualsTo ../internalAssessment.rating 6}}score-default{{/notEqualsTo}}">Fair</span>
+          <span id="good" class="label score score-green {{#notEqualsTo ../internalAssessment.rating 8}}score-default{{/notEqualsTo}}">Good</span>
+          <span id="excellent" class="label score score-blue {{#notEqualsTo ../internalAssessment.rating 10}}score-default{{/notEqualsTo}}">Excellent</span>
+        </div>
+      </div>
+    {{/equalsTo}}
+    {{#equalsTo challenge.scoringScale 'stars'}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Score</label>
+        <div class="col-sm-10" style="margin-bottom: 10px; margin-top:15px;">
+          <input class="star {half:true} required" type="radio" name="ratingRadioBtn" value="1" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 1}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="2" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 2}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="3" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 3}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="4" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 4}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="5" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 5}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="6" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 6}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="7" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 7}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="8" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 8}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="9" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 9}}checked="checked"{{/equalsTo}} />
+          <input class="star {half:true}" type="radio" name="ratingRadioBtn" value="10" disabled="disabled"
+                 {{#equalsTo ../internalAssessment.rating 10}}checked="checked"{{/equalsTo}} />
+        </div>
+      </div>
+    {{/equalsTo}}
+    {{#equalsTo challenge.scoringScale 'passfail'}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Score</label>
+        <div class="col-sm-10" style="margin-bottom: 10px; margin-top:15px;">
+          <span id="needsImprovement" class="label score score-red score-wide {{#notEqualsTo ../internalAssessment.rating 5}}score-default{{/notEqualsTo}}">Needs Improvement</span>
+          <span id="acceptable" class="label score score-green score-wide {{#notEqualsTo ../internalAssessment.rating 10}}score-default{{/notEqualsTo}}">Acceptable</span>
+        </div>
+      </div>
+    {{/equalsTo}}
+    <div class="form-group">
+      &nbsp;
+    </div>
+    <br />
+
+    <div class="col-sm-12 text-center">
+      <a class="btn btn-primary" href="/profile/{{userinfo.username}}/manage/problems/{{challenge.id}}/view"><i class="glyphicon glyphicon-arrow-left"></i> Back to Solutions List</a>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#registrationModal"> <span class="glyphicon glyphicon-eye-open"></span> View Solution</button>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <!-- Scoring  -->
+  <style type="text/css">
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 60px;
+      width: 60px;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-scoring.css" type="text/css" media="screen"/>
+  <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
+{{/contentFor}}
+
+{{#contentFor 'pageScripts'}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/star-rating/jquery.MetaData.js" type="text/javascript" language="javascript"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/star-rating/jquery.rating.js" type="text/javascript" language="javascript"></script>
+{{/contentFor}}

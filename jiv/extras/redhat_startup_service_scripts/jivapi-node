@@ -1,0 +1,92 @@
+#!/bin/sh
+
+NODE_NAME="jivapi"
+NODE_ENV="stljivango"
+NODE_ROOT="/home/ci_user/deploy/jivapi"
+NODE_APP="app.js"
+FOREVER_EXEC=$(which forever)
+SU_EXEC=$(which su)
+RUN_AS_USER="ci_user"
+
+
+#NODE_ENV=global forever start --uid "jivstl" -a bin/www
+
+
+###############
+
+# REDHAT chkconfig header
+
+# chkconfig: - 58 74
+# description: node-app is the script for starting a node app on boot.
+### BEGIN INIT INFO
+# Provides: node
+# Required-Start:    $network $remote_fs $local_fs
+# Required-Stop:     $network $remote_fs $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start and stop node
+# Description: Node process for app
+### END INIT INFO
+
+###############
+
+#USAGE="Usage: $0 {start|stop|restart|status} [--force]"
+USAGE="Usage: $0 {start|stop|restart}"
+FORCE_OP=false
+
+
+start_app() {
+#NODE_ENV=global forever start --uid "jivstl" -a bin/www
+
+$SU_EXEC $RUN_AS_USER <<EOF
+cd "$NODE_ROOT"
+NODE_ENV="$NODE_ENV" "$FOREVER_EXEC" start --uid ""$NODE_NAME"" -a "$NODE_APP"
+EOF
+
+}
+
+stop_app() {
+$SU_EXEC $RUN_AS_USER <<EOF
+cd "$NODE_ROOT"
+"$FOREVER_EXEC" stop ""$NODE_NAME""
+EOF
+}
+
+case "$2" in
+    --force)
+        FORCE_OP=true
+    ;;
+
+    "")
+    ;;
+
+    *)
+        echo $USAGE
+        exit 1
+    ;;
+esac
+
+case "$1" in
+    start)
+        start_app
+    ;;
+
+    stop)
+        stop_app
+    ;;
+
+    restart)
+        stop_app
+        start_app
+    ;;
+
+    status)
+        status_app
+    ;;
+
+    *)
+        echo $USAGE
+        exit 1
+    ;;
+esac
+

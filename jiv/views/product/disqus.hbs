@@ -1,0 +1,58 @@
+<!-- Main content area -->
+<div class="container maincontent-container">
+  <div id="manageMsg" class="alert {{#if isAlert}} alert-danger {{else}} alert-info {{/if}}
+    {{#unless message}} hide {{/unless}}">
+    {{message}}
+  </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <div id="sidebar" class="detail_page" data-spy="affix" data-offset-top="0">
+                    <div class="sidebar thumb"><img src="{{#if product.logoUrl}}{{product.logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" alt="" class="img-responsive"/></div>
+                  </div>
+                </div>
+            <div class="col-sm-12 col-md-9 col-lg-9">
+	  {{#with product}}
+
+                <h1>{{name}}</h1>
+                <h3 class="org-name">{{../organization.orgName}}</h3>
+                <p>
+                    <label>Point of Contact:</label> {{pocName}}<br />
+                    <label>Website:</label> 
+                    <a href="{{webLink}}" target="_blank">{{webLink}}</a><br />
+                      <span class="categories" style="display:none;"> {{#if category}}                          {{category}}
+                          {{else}}
+                       {{/if}}</span>
+                        <span class="category-tag">
+                        {{#each category}}
+                          <span class="label jivango-category-bkgd category-tag">{{this}} </span>
+                        {{/each}}
+                      </span>
+                </p>
+                <p>{{trim description}}</p>
+                
+
+                    
+    {{/with}}
+	  <div class="clearfix"></div>
+
+  <div id="disqus_container" style="" >
+    {{#if userinfo}}
+      {{> disqus}}
+    {{else}}
+	  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h3><i class="fa fa-comments-o fa-2x jivango-ltorange"></i> Have something to say? Sign in to join the discussion.</h3></div>
+					  </div>
+    {{/if}}
+  </div>
+
+            </div>
+        </div><!-- /.row -->
+	</div><!-- /.container -->
+</div><!-- /.maincontent-container -->
+<!-- /Main content area -->
+{{#contentFor "pageScripts"}}
+
+{{/contentFor}}

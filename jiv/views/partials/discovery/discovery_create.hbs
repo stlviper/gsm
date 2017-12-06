@@ -1,0 +1,150 @@
+{{#isIdInArray userinfo.orgRef community.members}}
+  <div id="newProblemMessage" style="display: none;">
+    <div class="modal-body discoveryAlert indent">
+      <h1 class="icon"><i class="fa fa-bullhorn"></i></h1>
+
+      <p class="errorText text-center"><h2>Your Problem has been submitted successfully! However, it will still not appear to GSM users until it has been approved in the Problems section of the site administration area.</h2></p>
+      <div style="text-align: center"><a class="btn btn-info" href="/admin/problems"><span class="glyphicon glyphicon-arrow-left"></span> Back to Problems List</a></div>
+    </div>
+  </div>
+
+  <form name="newDiscovery" id="newDiscovery" class="form-horizontal" action="" enctype="multipart/form-data" method="POST">
+    <div class="modal-body indent">
+      <div class="discoveryAlert">
+      </div>
+      <input type="hidden" name="communityID" value="{{community.id}}"/>
+
+      <div id="required-text" class="container">
+        <p class="text-muted"><span class="small required-field">*Required fields</span></p>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Problem Title<span class="required-field">*</span></label>
+        <div class="col-sm-9 errPlacement">
+          <input class="form-control" type="text" name="name" id="name" value="" placeholder="Problem Title"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Start Date<span class="required-field">*</span></label>
+        <div class="col-sm-3 errPlacement">
+          <div class="input-group add-date">
+            <input type="text" class="form-control" name="startDate" id="startDate"
+                   placeholder="Problem Start Date">
+            <span id="startDateCalendarIcon" class="input-group-addon"><span
+              class="glyphicon glyphicon-calendar"></span></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label">End Date<span class="required-field">*</span></label>
+        <div class="col-sm-3 errPlacement">
+          <div class="input-group add-date">
+            <input type="text" class="form-control" name="endDate" id="endDate"
+                   placeholder="Problem End Date">
+            <span id="endDateCalendarIcon" class="input-group-addon"><span
+              class="glyphicon glyphicon-calendar"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label id="category-tags-label" class="col-sm-3 control-label"
+               data-original-title="Start typing any tag you wish and press the Comma or Tab key to save it."
+               data-placement="right"
+               data-toggle="tooltip">Category Tags <span class="glyphicon glyphicon-question-sign"></span></label>
+        <div class="form-group col-sm-9">
+          <input class="form-control" type="text" name="category"
+                 id="new-discovery-categories" value="" placeholder="Categories (press the comma or tab key after each entry)"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label" data-toggle="tooltip"
+               data-original-title="Problem Managers have the ability to edit the discovery data, view solutions and submit feedback."
+               data-placement="right">Problem Manager(s)<span class="required-field">*</span> <span
+          class="glyphicon glyphicon-question-sign"></span></label>
+        <div id="managerInputs" class="col-sm-9 errPlacement">
+          <input class="form-control col-sm-11" type="text" name="discoveryManagers" id="discoveryManagers" value=""
+                 placeholder="Problem Manager(s), enter at least one"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label" data-toggle="tooltip"
+               data-original-title="Problem Evaluators have the ability to view solutions and save draft feedback, but NOT the ability to edit the problem or submit feedback."
+               data-placement="right">Problem Evaluator(s) <span
+          class="glyphicon glyphicon-question-sign"></span></label>
+        <div id="evaluatorInputs" class="col-sm-9 errPlacement">
+          <input class="form-control" type="text" name="discoveryEvaluators" id="discoveryEvaluators" value=""
+                 placeholder="Problem Evaluator(s)"/>
+        </div>
+      </div>
+
+
+      <div class="form-group col-sm-12">
+        <label class="col-sm-3 control-label" data-original-title="10MB file restriction" data-placement="right"
+               data-toggle="tooltip">
+          Upload Thumbnail <span class="glyphicon glyphicon-question-sign" data-toggle="modal"
+                                 data-target=".organizationLogo"></span>
+        </label>
+
+        <div class="col-sm-9" id="thumbnailDic">
+          <input type="hidden" class="form-control" name="thumbnail" id="thumbnail">
+
+          <div id="thumbnail-dealio">
+            <button type="button" id="thumbnail-crop-button" class="aui-button aui-button-primary">Save Image
+            </button>
+          </div>
+          <div style="margin-top: 5px;"><b>*</b> After selecting a thumbnail image you must click "Save Image" even if no cropping was performed.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Provide a short summary of your Problem:</label>
+
+        <div class="col-sm-9">
+          <textarea rows="4" class="form-control" id="summary" name="summary" value=""></textarea>
+        </div>
+      </div>
+
+      <div class="form-group errPlacement">
+        <label class="col-sm-3 control-label">Describe your Problem:<span class="required-field">*</span></label>
+
+        <div class="col-sm-9"><textarea rows="4" class="form-control ckeditor" id="description"
+                                         name="description"
+                                         value=""></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Do you need help creating content (i.e., graphics, video) to go along with the
+          Problem posting? Please describe if so:</label>
+
+        <div class="col-sm-9">
+          <textarea rows="4" class="form-control" id="requirements" name="requirements" value=""></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3 control-label">Are there any existing documents, datasets, APIs, etc that
+          will be needed to respond to the Problem?</label>
+        <div id="existing-docs-submit-label" class="col-sm-9 errPlacement">
+          <input type="file" class="form-control" name="documents" id="documents"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer indent">
+      <a style="float: left;" class="btn btn-info" href="/admin/problems"><span class="glyphicon glyphicon-arrow-left"></span> Back to Problems List</a>
+      <button class="btn btn-primary" id="submitNewBtn" type="submit">Submit</button>
+      <p id="spinnerDiscovery" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+    </div>
+  </form>
+{{else}}
+  <div class="modal-body indent">
+    <h1 class="icon"><i class="fa fa-bullhorn"></i></h1>
+
+    <p class="text-center">{{strings.Community.Messages.NotMemberProblemAlert}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  </div>
+{{/isIdInArray}}

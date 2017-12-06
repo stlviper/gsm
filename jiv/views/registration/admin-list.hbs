@@ -1,0 +1,80 @@
+<div role="tabpanel" class="maincontent-container container">
+  <h2>{{title}}</h2>
+  <table id="registrationsTbl" class="jiv-table table table-striped table-bordered table-hover">
+    <thead>
+    <tr class="table-title">
+      <td>Problem Title</td>
+      <td>Problem Owner</td>
+      <td>Stage</td>
+      <td>Actions</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each registrations}}
+      <tr data-id="{{id}}">
+        <td>{{challengeName}}</td>
+        <td>{{getChallengeRegistrationOrgName challengeID ../challenges ../organizations}}</td>
+        <td>{{getChallengeStage challengeID ../challenges}}</td>
+        <td>
+          <a href="/admin/solutions/{{id}}" class="btn btn-info">
+            <span class="glyphicon glyphicon-eye-open"></span> View
+          </a>
+          <a class="btn btn-success" href="/admin/solutions/{{id}}/update">
+            <span class="glyphicon glyphicon-edit"></span> Edit
+          </a>
+          <a href="/admin/solutions/{{id}}/leavefeedback" class="btn btn-primary">
+            <i class="fa fa-comments"></i>
+             Add Feedback
+          </a>
+          <a class="btn btn-danger long-btn" onclick="event.preventDefault(); deleteRegistrationClick(event)"
+             data-id="{{id}}"
+             href="/admin/solutions/{{id}}/delete">
+            <span class="glyphicon glyphicon-minus-sign"></span> Delete
+          </a>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">Are you sure you want to delete this community?</h4>
+        </div>
+        <div class="modal-body">
+          <form id="newsDeleteForm" method="post" onsubmit="event.preventDefault(); deleteRegistration(event);"
+                enctype="multipart/form-data"
+                action="/admin/solutions/delete">
+            <input type="hidden" id="registrationID" value=""/>
+
+            <div class="container" style="min-height: 50px;padding-top: 10px; display: none;">
+              <span id="deleteModalWarning" class="alert alert-danger"></span>
+            </div>
+            <div class="container">
+              <button type="submit" class="btn btn-lg btn-primary btn-block">
+                Delete
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css">
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/registration/admin-list.js"></script>
+{{/contentFor}}

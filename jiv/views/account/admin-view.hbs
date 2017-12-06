@@ -1,0 +1,84 @@
+<div id="main-content" class="container maincontent-container">
+  <div id="user-id" class="form-horizontal" style="margin-top: 25px;">
+    <h2 class="text-uppercase">{{username}}</h2>
+    <hr/>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="user-firstname" value="{{accountData.firstName}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="user-firstname" value="{{accountData.lastName}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone Number</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="user-phonenumber" value="{{accountData.phoneNumber}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="user-email" value="{{accountData.email}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Roles</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="user-roles" value="{{accountData.roles}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">POC Type</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="poc-type" value="{{pocData.primaryPoc}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">POC Name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="poc-full-name"
+               value="{{pocData.primaryPocFirstName}} {{pocData.primaryPocLastName}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">POC Phone</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="poc-phone" value="{{pocData.primaryPocPhone}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">POC Email</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" id="poc-email" value="{{pocData.primaryPocEmail}}" readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <a class="btn btn-info" href="/admin/users">Back To List</a>
+      <a class="btn btn-primary" href="/admin/users/{{username}}/update">Edit</a>
+      <a class="btn btn-danger" href="/admin/users/{{username}}/delete">Delete</a>
+    </div>
+  </div>
+</div>

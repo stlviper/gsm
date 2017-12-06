@@ -1,0 +1,34 @@
+{{#if userinfo}}
+<!--  <nav>-->
+<!--    <ul class="nav navbar-nav pull-right">-->
+
+      {{#orCond config.chat.enabled isAdmin}}
+        <li>
+          <div class="chat-container" id="chatstatus">
+            <status-icon></status-icon>
+          </div>
+        </li>
+      {{/orCond}}
+
+      <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <span class="hidden">{{userDisplayName userinfo}} </span>
+          <b class="caret"></b></a>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li><a href="/profile/{{userinfo.username}}">{{{strings.Header.ProfileMenu.Profile}}}</a></li>
+          <li><a href="/profile/{{userinfo.username}}/manage">{{{strings.Header.ProfileMenu.Dashboard}}}</a></li>
+          <li><a href="/logout">{{{strings.Header.ProfileMenu.Logout}}}</a></li>
+        </ul>
+      </li>
+      {{> adminnav }}
+<!--    </ul>-->
+<!--  </nav>-->
+{{else}}
+<!--  <nav>-->
+<!--    <ul class="nav navbar-nav pull-right">-->
+      <li role="presentation" class="join"><a href="/join">{{{strings.Header.Join}}}</a></li>
+      <li role="presentation">{{>modal_login signInLink=true linkText=strings.Header.Login}}</li>
+<!--    </ul>-->
+<!--  </nav>-->
+{{/if}}

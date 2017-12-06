@@ -1,0 +1,104 @@
+<div id="main-content" class="container maincontent-container news-post">
+  <div class="row">
+    <div class="col-sm-12 col-md-3 col-lg-3 col-md-push-9 col-lg-push-9">
+      <div id="sidebar" class="detail_page" data-spy="affix" data-offset-top="0">
+          
+      <label>Top News</label>
+            <ul class="news-categories">
+              {{#each newsTopStories}}
+                <li class="panel">
+                  <a href="/news/{{newsUrlFriendlyID}}"
+                     data-index="{{@index}}"
+                     class="{{#equalsTo newsUrlFriendlyID ../newsArticle.urlFriendlyID}}active{{/equalsTo}}"><i class="fa fa-newspaper-o"></i>
+                      <div class="news-title">{{headline}}</div>
+                  </a>
+                </li>
+              {{/each}}
+          </ul>
+       <label>Filters</label>      
+          <ul>
+          {{#each newsTopCategories}}
+            <li class="news-filters">
+                <input class="news-filter" type="checkbox" value="{{this._id}}">
+                {{this._id}}
+            </li>
+          {{/each}}
+          </ul>
+          
+      </div>
+    </div>
+    <div class="col-md-9 col-md-pull-3">
+     
+      {{#with newsArticle}}
+        <div class="news-item border-bottom">
+
+          <h1>
+            <span class="news-name">{{headline}}</span>
+          </h1>
+
+          <p class="labels">
+            <i class="fa fa-calendar fa-fw fa-lg jivango-dkgray"></i> Published:
+            <span class="label jivango-mdgray-bkgd">{{dateFormatter releaseDate 'short'}}</span><br/>
+            <i class="fa fa-tags fa-fw fa-lg jivango-dkgray"></i> Categories:
+            <span class="categories">
+              {{#each categories}}
+                <span class="label jivango-category-bkgd category-tag">
+                  {{this}} </span>
+              {{/each}}
+            </span>
+          </p>
+            
+          {{#if image.path}}
+              <div class="news-image">
+                <img src="{{image.path}}" class="img-responsive logo" alt="{{headline}}">
+              </div>
+            <br />
+          {{/if}}
+
+          <div style="word-wrap: break-word;">
+            {{{content}}}
+          </div>
+{{#if attachment.path.length}}
+        <h3>News Attachment</h3>
+
+        <div class="challengeContainer supportingDocs" style="padding-top:10px;">
+          <ul class="list-group">
+            
+              <li><a href="{{attachment.path}}"><i class="fa fa-file-text-o"></i> {{attachment.name}}</a></li>
+            
+          </ul>
+        </div>
+      {{/if}}
+        </div>
+      {{/with}}
+      <ul class="pager">
+        <li id="prevBtn" class="previous" style="display: none;"><a href="#">Previous</a></li>
+        <li id="nextBtn" class="next" style="display: none;"><a href="#">Next</a></li>
+      </ul>
+    </div>
+  </div>
+  <!--/row-->
+</div><!--/container-->
+
+
+{{> community/newspost_create_modal modalName="AddNews" formAction="/community/add-news-post" communityID=community.id}}
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <style>
+    #ui-datepicker-div {
+      z-index: 2000 !important;
+    }
+  </style>
+{{/contentFor}}
+{{#contentFor "postJqueryScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+{{/contentFor}}
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community/add-news-post.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community/news-view.js"></script>
+{{/contentFor}}

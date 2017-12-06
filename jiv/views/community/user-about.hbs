@@ -1,0 +1,731 @@
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron community-hero pickgradient about-jumbotron"
+     style="background-image: url({{#if community.jumbotronUrl}}{{community.jumbotronUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/blank.png{{/if}});background-repeat: no-repeat;
+       -webkit-background-size: cover;
+       -moz-background-size: cover;
+       -o-background-size: cover;
+       background-size: cover;"
+     data-0="height: 150px; position: static;"
+     data-15="height: 150px; position: fixed; top:65px;">
+
+  <div class="container community-shares"
+       data-0="display: block;"
+       data-15="display: none;">
+    <ul class="col-xs-4 text-left">
+      <!-- <li><a href=""><i class="fa fa-facebook-square fa-lg"></i></a></li>
+       <li><a href=""><i class="fa fa-twitter-square fa-lg"></i></a></li>
+       <li><a href=""><i class="fa fa-linkedin-square fa-lg"></i></a></li>
+       <li><a href=""><i class="fa fa-share-alt-square fa-lg"></i></a></li>-->
+    </ul>
+    <ul class="col-xs-4 text-center">
+      <li>
+        {{#if canEdit}}
+          {{#if editMode}}
+            <a href="/community/about/{{community.urlFriendlyID}}" id="editDoneTag" class="btn btn-primary btn-lg">Return
+              to Normal View</a>
+          {{/if}}
+          {{#unless editMode}}
+            <a href="/community/about/{{community.urlFriendlyID}}/edit" id="editTag" class="btn btn-primary btn-lg">Edit
+              This Page</a>
+          {{/unless}}
+        {{/if}}
+      </li>
+    </ul>
+    <ul class="col-xs-4 text-right">
+
+      {{#ifIdIn community._id userinfo.userCommunities}}
+        <li id=""><a href="#" onclick="leaveCommunityClick(this, '{{community._id}}');"><span
+          class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span> Leave</a></li>
+      {{else}}
+        <li id=""><a href="#" onclick="joinCommunityClick(this, '{{community._id}}');"><span
+          class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Join</a></li>
+      {{/ifIdIn}}
+
+    </ul>
+  </div>
+  <div class="container community-name"
+       data-0="margin-top: 10px;"
+       data-15="margin-top: 0px;">
+    <div class="thumb" id="communityLogoUrl"
+         data-0="height: 125px; width: 125px;"
+         data-15="height: 90px; width: 90px;"><img
+      src="{{#if community.logoUrl}}{{community.logoUrl}}{{else}}{{#if organization.logoUrl}}{{organization.logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}{{/if}}"
+      class="img-responsive logo" alt="{{organization.orgName}}"/>
+      {{#if editMode}}
+        <button id="changeLogoButton" type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#logoUploader">
+          change logo
+        </button>
+      {{/if}}
+    </div>
+    <h1 data-0="font-size: 54px;"
+        data-15="font-size: 40px;">{{community.name}}</h1>
+
+    {{#if editMode}}
+      <h3 class="editIcon" style="color: #f16521; display: inline-block; float: left; padding-right: 5px"><i
+        class="glyphicon glyphicon-edit"></i></h3>
+    {{/if}}
+    <h3 id="communityCaption" {{#if editMode}}contenteditable="true" spellcheck="false"
+        style="border: 1px #a9a9a9 dashed;"{{/if}}>
+      {{#if community.caption}}
+        {{{community.caption}}}
+      {{else}}
+        {{{strings.Community.AboutPage.Caption}}}
+      {{/if}}
+    </h3>
+
+    {{#if editMode}}
+      <div id="backgroundEditBox">
+        <div>
+          Change Background Image<br><br>
+          <button id="backgroundFileSelectorButton" class="btn btn-primary">Select File</button>
+          <button id="backgroundRemoveButton" class="btn btn-warning">Remove</button>
+          <button id="backgroundSaveButton" class="btn btn-success">Save</button>
+          <!--
+                    <button id="backgroundRestoreButton" class="btn btn-info">Restore</button>
+          -->
+        </div>
+        <input id="backgroundFileSelectorInput" type="file"/>
+        <img
+          src="{{#if community.logoUrl}}{{community.jumbotronUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/blank.png{{/if}}"
+          id="originalJumbotronImage" style="display: none">
+      </div>
+
+    {{/if}}
+
+
+  </div>
+</div>
+
+<div class="container community-nav">
+  <nav role="navigation" class="navbar navbar-default">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <!-- Collection of nav links, forms, and other content for toggling -->
+    <div class="col-lg-12">
+      <div id="navbarCollapse" class="collapse navbar-collapse"
+           data-0="position:relative; top:-2px;"
+           data-14="position:relative; top:-2px;"
+           data-15="position:fixed; top: 168px; z-index: 1000;">
+        <ul class="nav navbar-nav nav-tabs" role="tablist">
+          <li class="active"><a href="#about" role="tab" data-toggle="tab"><i class="fa fa-file-text"></i> About</a>
+          </li>
+          <li><a href="#members" role="tab" data-toggle="tab"><i class="fa fa-institution"></i> Members</a></li>
+          <li><a href="#capabilities" role="tab" data-toggle="tab" onClick="resizeIso();"><i class="fa fa-puzzle-piece"></i></i>
+            Capabilities Catalog</a></li>
+          <li><a href="#problems" role="tab" data-toggle="tab"><i class="fa fa-bullhorn"></i></span> Problem Center</a>
+          </li>
+          <li><a href="#news" role="tab" data-toggle="tab"><i class="fa fa-newspaper-o"></i> News</a></li>
+		  {{#if editMode}}
+		  <li><a href="#customTab" role="tab" data-toggle="tab" id="customTabTab">{{#if community.tabTitle}}<i class="glyphicon glyphicon-edit"></i> Edit {{community.tabTitle}}{{else}}<i class="glyphicon glyphicon-edit"></i> Add Custom Page{{/if}}</a></li>
+          <li><a href="#customTab2" role="tab" data-toggle="tab" id="customTabTab2">{{#if community.tabTitle2}}<i class="glyphicon glyphicon-edit"></i> Edit {{community.tabTitle2}}{{else}}<i class="glyphicon glyphicon-edit"></i> Add Custom Page{{/if}}</a></li>
+		  {{else}}
+		  {{#if ../community.showTab}}<li><a href="#customTab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-pushpin"></span> {{../community.tabTitle}}</a></li>{{/if}}
+            {{#if ../community.showTab2}}<li><a href="#customTab2" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-pushpin"></span> {{../community.tabTitle2}}</a></li>{{/if}}
+		  {{/if}}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div id="" class="container communityprofile-container tab-content">
+
+  <div id='about' class="tab-pane active" role="tabpanel">
+    <div class="container">
+      <div class="row">
+          
+        <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+          <div id="sidebar" data-spy="affix" data-offset-top="0">
+            <div class="list-group my-communities">
+
+              <p class="list-group-item">
+                Community Leader: <br/><strong>{{organization.orgName}}</strong>
+              </p>
+
+              <p class="list-group-item">
+                {{#equalsTo community.type 'private'}}
+                  <span class="icon-key icon-fw"></span> Private Community
+                {{else}}
+                  <span class="icon-globe icon-fw"></span> Public Community
+                {{/equalsTo}}
+              </p>
+
+              <p onClick="changeTab('#members');" class="list-group-item linked">
+                <i class="fa fa-institution fa-fw"></i> Members <span class="badge">{{community.members.length}}</span>
+              </p>
+
+              <p onClick="resizeIso();changeTab('#capabilities');" class="list-group-item linked">
+                <i class="fa fa-puzzle-piece fa-fw"></i> Capabilities <span class="badge">{{community.productLength}}</span>
+              </p>
+
+              <p onClick="changeTab('#problems');" class="list-group-item linked">
+                <i class="fa fa-bullhorn fa-fw"></i> Problems <span
+                class="badge">{{community.discoveryLength}}</span>
+              </p>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-9 col-lg-9">
+          
+          <h2>About this Community</h2>
+          {{#if editMode}}
+            <div class="editIcon" style="color: #f16521; position: absolute; right: 0px; padding-right: 5px"><i
+              class="glyphicon glyphicon-edit"></i></div>
+          {{/if}}
+          <div id="communityAbout" {{#if editMode}}contenteditable="true" spellcheck="false"
+               style="border: 1px #a9a9a9 dashed;"{{/if}}>
+            {{#if community.description.length}}
+              {{{community.description}}}
+            {{else}}
+              <p>{{{strings.Community.AboutPage.About}}}</p>
+            {{/if}}
+
+          </div>
+        </div>
+
+          
+      </div>
+    </div>
+  </div>
+
+  <div id="members" class="tab-pane" role="tabpanel">
+    {{>community/member_list}}
+  </div>
+
+  <div id="capabilities" class="tab-pane" role="tabpanel">
+    <div class="container">
+      {{>community/solutions_list}}
+    </div>
+  </div>
+
+  <div id="problems" class="tab-pane" role="tabpanel">
+    {{>community/discoveries_list}}
+  </div>
+
+  <div id="news" class="tab-pane" role="tabpanel">
+    {{>community/newspost_list}}
+  </div>
+
+  <div id="customTab" class="tab-pane" role="tabpanel">
+
+      <div class="container">
+          <div class="row">
+        
+    
+          {{#if editMode}}
+    <form name="customTabForm" id="customTabForm" class="form-horizontal" action="/community/about/{{community.urlFriendlyID}}/update"
+              enctype="multipart/form-data" method="POST">              <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+            <div id="sidebar" data-spy="affix" data-offset-top="0">
+        <div class="form-group">
+            <label for="customTabContent">Show Tab</label>
+				<div class="errPlacement">
+				<input type="checkbox" id="hideTab" data-checkbox="hideTab" name="hideTab" value="{{../community.showTab}}" data-hideTab="{{../community.showTab}}" data-on-color="success" data-on-text="Yes" data-off-text="No"
+              {{#if ../community.showTab}}checked{{/if}}/>
+              </div>
+          </div>
+        </div>
+        </div>
+    <div class="col-sm-12 col-md-9 col-lg-9"> 
+        <div class="form-group errPlacement">
+            <label for="customTabTitle" data-original-title="20 characters or less" data-placement="top" data-toggle="tooltip">Tab Title <span class="glyphicon glyphicon-question-sign"></span></label>
+		  <input id="tabTitle" name="tabTitle" maxlength="22" value="{{community.tabTitle}}" class="form-control"/>
+		  
+        </div>
+        <div class="form-group">
+            <label for="customTabContent">Tab Content</label>
+				<div class="col-sm-12 errPlacement" style="border: 1px #a9a9a9 dashed;"><textarea rows="4" class="form-control ckeditor" id="customTabContent"
+                                               name="customTabContent"
+                                               value="">{{{../community.tabContent}}}</textarea>
+              </div>
+          </div>
+        <button class="btn btn-primary" id="submitNewBtn" type="submit">Submit</button>
+    </div>
+    </form>
+              
+          {{else}}
+			  {{#if ../community.showTab}}
+		  <div id="customTabContent">
+              {{{../community.tabContent}}}
+          </div> 
+		  {{/if}}
+          {{/if}}
+      </div>
+      </div>           
+</div>
+<div id="customTab2" class="tab-pane" role="tabpanel">
+
+      <div class="container">
+          <div class="row">
+        
+    
+          {{#if editMode}}
+    <form name="customTabForm2" id="customTabForm2" class="form-horizontal" action="/community/about/{{community.urlFriendlyID}}/update"
+              enctype="multipart/form-data" method="POST">              <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+            <div id="sidebar" data-spy="affix" data-offset-top="0">
+        <div class="form-group">
+            <label for="customTabContent2">Show Tab</label>
+				<div class="errPlacement">
+				<input type="checkbox" id="hideTab2" data-checkbox="hideTab2" name="hideTab2" value="{{../community.showTab2}}" data-hideTab2="{{../community.showTab2}}" data-on-color="success" data-on-text="Yes" data-off-text="No"
+              {{#if ../community.showTab2}}checked{{/if}}/>
+              </div>
+          </div>
+        </div>
+        </div>
+    <div class="col-sm-12 col-md-9 col-lg-9"> 
+        <div class="form-group errPlacement">
+            <label for="customTabTitle2" data-original-title="20 characters or less" data-placement="top" data-toggle="tooltip">Tab Title <span class="glyphicon glyphicon-question-sign"></span></label>
+		  <input id="tabTitle2" name="tabTitle2" maxlength="22" value="{{community.tabTitle2}}" class="form-control"/>
+		  
+        </div>
+        <div class="form-group">
+            <label for="customTabContent2">Tab Content</label>
+				<div class="col-sm-12 errPlacement" style="border: 1px #a9a9a9 dashed;"><textarea rows="4" class="form-control ckeditor" id="customTabContent2"
+                                               name="customTabContent2"
+                                               value="">{{{../community.tabContent2}}}</textarea>
+              </div>
+          </div>
+        <button class="btn btn-primary" id="Button1" type="submit">Submit</button>
+    </div>
+    </form>
+              
+          {{else}}
+			  {{#if ../community.showTab2}}
+		  <div id="customTabContent2">
+              {{{../community.tabContent2}}}
+          </div> 
+		  {{/if}}
+          {{/if}}
+      </div>
+      </div>           
+</div>
+</div>
+
+{{#if editMode}}
+  <!-- Logo Modal -->
+  <div class="modal fade" id="logoUploader" tabindex="-1" role="dialog" aria-labelledby="logoUploaderLabel"
+       aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="logoUploaderLabel">Logo Uploader</h4>
+        </div>
+        <div class="modal-body">
+          <div id="logoUploaderModal">
+            <button type="button" id="logoUploaderCropButton" class="btn btn-success" style="color: #fff;">Save</button>
+          </div>
+        </div>
+        <div class="modal-footer text-center">
+          <button type="button" class="btn btn-danger text-center" onclick='' data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}
+<div class="modal fade" id="communityFail" tabindex="-1" role="dialog" aria-labelledby="communityFailLabel"
+     aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+        <h1 class="modal-title errorText" id="communityFailLabel">We&rsquo;re sorry!</h1>
+      </div>
+      <div class="modal-body">
+        <h1><span class="icon icon-key-o"></span></h1>
+        <!--<p><i class="fa fa-user-secret fa-5x jivango-mdgray"></i></p>-->
+        <div id="communityFailModal">
+
+        </div>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-default text-center" onclick='' data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+
+  <!--[if lt IE 9]>
+  <link rel="stylesheet"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+        media="all"><![endif]-->
+  <!--[if IE 9]>
+  <link rel="stylesheet"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}"/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+  <style>
+    #customTab form {
+        margin-bottom: 20px;
+    }
+      #customTab .form-horizontal .form-group {
+          margin-left: -5px;
+          margin-right: 0;
+      }
+      #customTab #submitNewBtn {
+          margin-left: -5px;
+      }
+  </style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+<!--
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.menu.min.js"></script>
+-->
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dirty-forms-settings.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community-join.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+  <script type="application/javascript">
+
+    $(window).load(function () {
+      {{#if modalMsg}}
+        $('#showcaseProductModal').modal('show');
+      {{/if}}
+    });
+    $(document).ready(function () {
+      var hash = document.location.hash;
+      var prefix = "tab_";
+      if (hash) {
+        $('.nav-tabs a[href=' + hash.replace(prefix, "") + ']').tab('show');
+      }
+      $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash.replace("#", "#" + prefix);
+      });
+      $('[data-toggle="tooltip"]').tooltip();
+      $('#example-getting-started').multiselect();
+      if (hash != '#tab_capabilities') {
+        $('#capabilities').show();
+      }
+      $('#capabilities-posts').children('.item').matchHeight({byRow: false});
+      if (hash != '#tab_capabilities') {
+        $('#capabilities').hide();
+      }
+      {{#if editMode}}
+	  $("[id='hideTab']").bootstrapSwitch();
+	    $('#hideTab').on('switchChange.bootstrapSwitch', function (event, state) {
+	
+	var $btn = $('#hideTab');
+        var newStatus = !($btn.attr('data-hideTab') == 'true');
+              $btn.attr('data-hideTab', newStatus);
+			   $btn.val(newStatus);
+	    });
+	    $("[id='hideTab2']").bootstrapSwitch();
+	    $('#hideTab2').on('switchChange.bootstrapSwitch', function (event, state) {
+	
+	        var $btn = $('#hideTab2');
+	        var newStatus = !($btn.attr('data-hideTab2') == 'true');
+	        $btn.attr('data-hideTab2', newStatus);
+	        $btn.val(newStatus);
+	    });
+        $('#customTabForm').validate({
+    rules: {
+      tabTitle: {
+        required: true
+      },
+      customTabContent: {
+        required: function() {
+          CKEDITOR.instances.customTabContent.updateElement();
+        }
+		
+      }
+      },
+    submitHandler: function (form) {
+      var _CKupdate = function () {
+        for (instance in CKEDITOR.instances)
+          CKEDITOR.instances[instance].updateElement();
+      };
+      _CKupdate();
+      var $form = $(form);
+      var formData = new FormData($form[0]);
+      $.ajax({
+        url: "/community/about/{{community.urlFriendlyID}}/update",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data, jqXHR) {
+         var notificationType = 'success';
+              $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+			  var newTitle = $('#tabTitle').val();
+			  $('#customTabTab').html('<i class="glyphicon glyphicon-edit"></i> ' + newTitle);
+        },
+        error: function (jqXHR, errorThrown) {
+           var notificationType = 'danger';
+              $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+        }
+      });
+    },
+    errorPlacement: function(error, element) {
+      error.appendTo(element.parent('.errPlacement'));
+    },
+	 ignore: []
+
+        });
+        $('#customTabForm2').validate({
+            rules: {
+                tabTitle2: {
+                    required: true
+                },
+                customTabContent2: {
+                    required: function() {
+                        CKEDITOR.instances.customTabContent2.updateElement();
+                    }
+		
+                }
+            },
+            submitHandler: function (form) {
+                var _CKupdate = function () {
+                    for (instance in CKEDITOR.instances)
+                        CKEDITOR.instances[instance].updateElement();
+                };
+                _CKupdate();
+                var $form = $(form);
+                var formData = new FormData($form[0]);
+                $.ajax({
+                    url: "/community/about/{{community.urlFriendlyID}}/update",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data, jqXHR) {
+                        var notificationType = 'success';
+                        $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+                        var newTitle = $('#tabTitle2').val();
+                        $('#customTabTab2').html('<i class="glyphicon glyphicon-edit"></i> ' + newTitle);
+                    },
+                    error: function (jqXHR, errorThrown) {
+                        var notificationType = 'danger';
+                        $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+                    }
+                });
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent('.errPlacement'));
+            },
+            ignore: []
+
+        });
+        CKEDITOR.disableAutoInline = true;
+		
+        CKEDITOR.inline('customTabContent', {toolbar: 'tabToolbar'});
+        CKEDITOR.inline('customTabContent2', {toolbar: 'tabToolbar'});
+        CKEDITOR.inline('communityAbout', {
+          //toolbar: 'Basic',
+          on: {
+            save: function (evt) {
+              $.post('/community/about/{{community.urlFriendlyID}}/update', {description: evt.editor.getData()})
+                .done(function (data) {
+                  var notificationType = 'danger';
+                  if (!data.error) {
+                    notificationType = 'success'
+                  }
+                  $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+                });
+            }
+          }
+        });
+        CKEDITOR.inline('communityCaption', {
+          toolbar: 'Basic',
+          on: {
+            save: function (evt) {
+              $.post('/community/about/{{community.urlFriendlyID}}/update', {caption: evt.editor.getData()})
+                .done(function (data) {
+                  var notificationType = 'danger';
+                  if (!data.error) {
+                    notificationType = 'success'
+                  }
+                  $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+                });
+            }
+          }
+        });
+
+
+        var $logoUploaderModal = $('#logoUploader'),
+          $avatar_dealio = $("#logoUploaderModal"),
+          $cropButton = $('#logoUploaderCropButton'),
+          $output = $("#communityLogoUrl");
+
+        $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+        var logoUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+          {
+            cropButton: $cropButton,
+            onCrop: function (croppedDataURI) {
+              $.post('/community/about/{{community.urlFriendlyID}}/update', {logo: croppedDataURI})
+                .done(function (data) {
+                  var notificationType = 'danger';
+                  if (!data.error) {
+                    notificationType = 'success'
+                  }
+                  $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+                });
+
+              $output.find("img").attr('src', croppedDataURI);
+              $logoUploaderModal.modal('hide');
+            },
+            onImageUpload: function () {
+              $cropButton.show();
+            },
+            onImageUploadError: function () {
+              $cropButton.hide();
+            }
+          }
+        );
+
+
+        $('#backgroundRemoveButton').on('click', function () {
+          $('.jumbotron.pickgradient.community-hero').removeAttr('style');
+        });
+
+        $('#backgroundRestoreButton').on('click', function () {
+          var orgImage = $('#originalJumbotronImage').attr('src');
+          $('.jumbotron.pickgradient.community-hero').css('backgroundImage', orgImage)
+        });
+        $('#backgroundSaveButton').on('click', function () {
+
+          var imgSrc = $('.jumbotron.pickgradient.community-hero').css('background-image');
+          var uploadObj = {};
+          if (imgSrc.match(/^data:image/)) {
+            uploadObj.jumbotronBase64 = imgSrc;
+          }
+          else if (imgSrc.match(/url/)) {
+            uploadObj.jumbotronBase64 = imgSrc.split(/url[()'"].*?/)[1].split(/[)]/)[0];
+          }
+          else {
+            uploadObj.jumbotronUrl = imgSrc;
+          }
+          $.post('/community/about/{{community.urlFriendlyID}}/update', uploadObj)
+            .done(function (data) {
+              var notificationType = 'danger';
+              if (!data.error) {
+                notificationType = 'success'
+              }
+              $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+            });
+        });
+
+        $('#backgroundFileSelectorButton').on('click', function (e) {
+          e.preventDefault();
+          $('#backgroundFileSelectorInput').click();
+        });
+
+        $('#backgroundFileSelectorInput').on('change', function (ev) {
+          var f = ev.target.files[0];
+          var fr = new FileReader();
+
+          fr.onload = function (ev2) {
+            $('.jumbotron.pickgradient.community-hero').css({
+              'background': 'linear-gradient(to bottom, rgba(0, 0, 0, .05) 0%, rgba(0, 0, 0, 0.65) 100%), url(' + ev2.target.result + ')',
+              'background-repeat': 'no-repeat',
+              'background-position': 'center top',
+              'background-attachment': 'fixed',
+              '-webkit-background-size': 'cover',
+              '-moz-background-size': 'cover',
+              '-o-background-size': 'cover',
+              'background-size': 'cover'
+            })
+
+          };
+
+          fr.readAsDataURL(f);
+        });
+
+      {{/if}}
+
+    });
+    function resizeIso() {
+      $('#capabilities').removeAttr("style");
+    }
+    function changeTab(tab) {
+      $('.nav-tabs a[href="' + tab + '"]').tab('show');
+    }
+
+//    setTimeout(function () {
+//      var s = skrollr.init({
+//        forceHeight: false
+//      });
+      //skrollr.menu.init(s, {
+      //	});
+//    }, 500);
+  </script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/isotope.pkgd.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/fit-columns.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/cells-by-row.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/packery-mode.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-multiselect.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list-v1.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list.pagination-v0.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.simplePagination.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.matchHeight-min.js"></script>
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+
+
+{{/contentFor}}

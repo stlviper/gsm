@@ -1,0 +1,271 @@
+<!-- Main content area -->
+<!-- Action buttons ============================================= -->
+      <div class="row actions-toggle page-title">
+          <div class="col-md-9 col-sm-12">
+            <h1 class="pull-left">Capabilities Catalog</h1>
+              {{#if userinfo}}
+               <a class="label label-default pull-right" data-toggle="modal" data-target="#showcaseProductModalDisclaimer"><i class="fa fa-plus"></i> List Your Capability</a>
+                {{else}}
+                    {{>modal_login signInLink=false linkText=strings.Capabilities.Buttons.SubmitNew}}
+              {{/if}}
+          </div>
+      </div>
+<!-- /Action buttons ============================================= -->
+    <div class="row">
+        <div class="col-md-9 col-sm-12">
+            <p class="page-description">This is a catalog of general Capabilities available within GSM. Please do not submit proprietary solutions under this Capabilities Catalog. Anything submitted here will be public and viewable to everyone visiting this website. Solutions submitted against a <a href="/problems">Problem</a> will only be seen by NGA.</p>
+        </div>
+    </div>
+<div id="capabilities-list" class="row">
+  <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+    <div id="sidebar" data-spy="affix" data-offset-top="0">
+      <form>
+        <div class="form-group has-feedback">
+          <label>Search Capabilities</label>
+          <input id="capability-search" type="text" class="form-control search" placeholder="Search" value=""/>
+          <i class="glyphicon glyphicon-search form-control-feedback"></i>
+        </div>
+        <br class="visible-xs"/>
+        {{#if community.solutions}}
+          <label>Categories:</label><br/>
+
+          <!-- Multiselect dropdown: -->
+          <div>
+            <select id="capabilitiesOptions" multiple="multiple">
+              {{#each categories}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+          </div>
+        {{/if}}
+
+      </form>
+    </div>
+  </div>
+  <div id="my-capabilities" class="col-sm-12 col-md-9 col-lg-9">
+    <div>
+      {{#if community.solutions}}
+        <div id="capabilities-posts" class="row list" style="border: solid 1px #f6f9f6;">
+          {{#if newProducts}}
+            {{#each newProducts}}
+              {{#if name}}
+                <!-- Capabilities tile -->
+                <div class="item col-xs-12 col-sm-6 col-md-5 col-lg-4 capability-item">
+                  <div class="well tile">
+                    {{#if logoUrl}}
+                      <a href="/capabilities/{{urlFriendlyID}}">
+                        <div class="thumb"><img src="{{logoUrl}}" class="img-responsive" alt="{{name}}"/></div>
+                      </a>
+                    {{else}}
+                      <a href="/capabilities/{{urlFriendlyID}}">
+                        <div class="thumb"><img
+                          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png"
+                          class="img-responsive" alt="{{name}}"/>
+                        </div>
+                      </a>
+
+                    {{/if}}
+                    <div class="capabilities-list">
+                      <a href="/capabilities/{{urlFriendlyID}}"><span
+                        class="label gsm-teal-bg baseline-shift pull-right">NEW</span>
+
+                        <h3
+                          class="capabilityName">{{name}}
+                        </h3>
+
+                        <h4
+                          class="orgName">{{#idEqualsTo ../../community.owner orgRef}}{{../../../organization.orgName}}{{else}}{{getOrgName orgRef ../../../members}}{{getOrgName orgRef ../../../newMembers}}{{/idEqualsTo}}</h4>
+
+                        <span class="categories"
+                            style="display:none;"> {{#if category}}                          {{category}}
+                      {{else}}
+                      {{/if}}</span>
+
+                        <p class="category-tag">
+                          {{#each category}}
+                            <span class="label jivango-category-bkgd category-tag">{{this}} </span>
+                          {{/each}}
+                        </p></a>
+                      <h4 class="baseline-shift more-link"><a
+                        href="/capabilities/{{urlFriendlyID}}"
+                        class="more-link jivango-mdgray">
+                <span class="fa-stack">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse" aria-hidden="true"></i>
+                </span> More</a></h4>
+
+                      <!--<div class="pull-right product-badge"><span class="label jivango-product-bkgd">Product</span>
+                      </div>-->
+                    </div>
+                  </div>
+                </div>
+                <!-- /Capabilities tile -->
+              {{/if}}
+            {{/each}}
+          {{/if}}
+          {{#if products}}
+            {{#each products}}
+              {{#if name}}
+                <!-- Capabilities tile   -->
+                <div class="item col-xs-12 col-sm-6 col-md-5 col-lg-4 capability-item">
+                  <div class="well tile">
+                    {{#if logoUrl}}
+                      <a href="/capabilities/{{urlFriendlyID}}">
+                        <div class="thumb"><img src="{{logoUrl}}" class="img-responsive" alt="{{name}}"/></div>
+                      </a>
+                    {{else}}
+                      <a href="/capabilities/{{urlFriendlyID}}">
+                        <div class="thumb"><img
+                          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png"
+                          class="img-responsive" alt="{{name}}"/>
+                        </div>
+                      </a>
+
+                    {{/if}}
+                    <div class="capabilities-list">
+                      <a href="/capabilities/{{urlFriendlyID}}"><h3
+                        class="capabilityName">{{name}}</h3>
+                        <h4 class="orgName">{{#idEqualsTo ../../community.owner orgRef}}{{../../../organization.orgName}}{{else}}{{getOrgName orgRef ../../../members}}{{getOrgName orgRef ../../../newMembers}}{{/idEqualsTo}}</h4>
+                      <span class="categories"
+                            style="display:none;"> {{#if category}}                          {{category}}
+                      {{else}}
+                      {{/if}}</span>
+
+                        <p class="category-tag">
+                          {{#each category}}
+                            <span class="label jivango-category-bkgd category-tag">{{this}} </span>
+                          {{/each}}
+                        </p>
+                      </a>
+                      <h4 class="baseline-shift more-link"><a
+                        href="/capabilities/{{urlFriendlyID}}"
+                        class="more-link jivango-mdgray">
+                <span class="fa-stack">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse" aria-hidden="true"></i>
+                </span> More</a></h4>
+
+                      <!--<div class="pull-right product-badge"><span class="label jivango-product-bkgd">Product</span>
+                      </div>-->
+                    </div>
+                  </div>
+                </div>
+                <!-- /Capabilities tile -->
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        </div>
+      {{else}}
+        <div class="null-notification" id="null-capabilities">
+          <h1 class="icon"><i class="fa fa-puzzle-piece"></i></h1>
+
+          <h2 class="text-center">There are no capabilities posted yet in the community.<br/>
+            Please check back soon!</h2>
+        </div>
+      {{/if}}
+    </div>
+
+
+    {{#if community.solutions}}
+      <div class="jiv-pagination-controls">
+        <ul class="capabilities-pagination pagination pagination-sm"></ul>
+        <ul class="pagination pagination-sm">
+          <li><a id="capabilities-showall" href="#" data-showall="false">Show All</a></li>
+        </ul>
+        <select class="form-control" name="type" id="capabilities-itemsperpage">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+    {{/if}}
+
+  </div>
+  <!-- /.container -->
+
+</div>
+<!-- /.row -->
+
+<!-- /Main content area -->
+<div style="display:none;">
+  <!-- Capabilities tile -->
+  <div id="capabilities-template" class="item col-xs-12 col-sm-6 col-md-5 col-lg-4 capability-item">
+    <div class="well tile">
+      <a id="topCapabilitiesLink" href="">
+        <div class="thumb"><img src="" class="img-responsive" alt=""/>
+        </div>
+      </a>
+
+      <div class="capabilities-list">
+        <a id="bottomCapabilitiesLink" href=""><h3
+          class="capabilityName"><span class="label gsm-teal-bg baseline-shift pull-right">NEW</span>
+        </h3>
+
+          <h4 class="orgName"></h4>
+
+          <p class="category-tag"><label>Categories:</label><span class="categories"></span></p></a>
+        <h4 class="baseline-shift more-link"><a id="moreCapabilitiesLink"
+                                                href=""
+                                                class="more-link jivango-mdgray">
+                <span class="fa-stack">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse" aria-hidden="true"></i>
+                </span> More</a></h4>
+
+        <div class="pull-right product-badge"><span class="label jivango-product-bkgd">Product</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Capabilities tile -->
+</div>
+
+
+
+{{> modal_showCaseProduct }}
+
+{{#contentFor 'pageCSS'}}
+  <style>
+    #showcaseProductModal {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+  </style>
+{{/contentFor}}
+{{#contentFor "postJqueryScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community/solutions-list.js"></script>
+  <script type="application/javascript">
+    $(document).ready(function(){
+      $('#category').tokenfield({
+        autocomplete: {
+          source: [
+            '{{strings.Capabilities.Filters.Analytics}}',
+            '{{strings.Capabilities.Filters.Collaboration}}',
+            '{{strings.Capabilities.Filters.CyberSecurity}}',
+            '{{strings.Capabilities.Filters.GIS}}',
+            '{{strings.Capabilities.Filters.Imaging}}',
+            '{{strings.Capabilities.Filters.Infrastructure}}',
+            '{{strings.Capabilities.Filters.Modeling}}',
+            '{{strings.Capabilities.Filters.RemoteSensing}}',
+            '{{strings.Capabilities.Filters.Search}}',
+            '{{strings.Capabilities.Filters.Visualization}}'
+          ],
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+
+      });
+    });
+  </script>
+<script>
+// Community Action toggle ============================================= 
+$(document).ready(function(){
+  $("#capabilities-collapse").on("hide.bs.collapse", function(){
+    $(".pull-right.caret-icon").html('<span class="label label-default"> Add Your Capability <i class="fa fa-plus"></i></span>');
+  });
+  $("#capabilities-collapse").on("show.bs.collapse", function(){
+    $(".pull-right.caret-icon").html('<small>Close</small> <i class="fa fa-times"></i>');
+  });
+});
+</script>
+{{/contentFor}}

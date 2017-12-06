@@ -1,0 +1,247 @@
+<div id="noJoinModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1 class="icon"><span class="glyphicon glyphicon-remove-circle"></span></h1>
+        <h2 class="text-center">This is a private community.</h2>
+        <p class="text-center">Only users permitted by the community owner may join this community.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left:0;">Close.</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{> dashboard_sidebar_header activeId="id-com-mgmnt" activeSubId="id-com-memberships"}}
+
+  <!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+  <div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+      <h1>Community Management <small>Memberships</small></h1>
+    </section>
+
+    <!-- Widgets content -->
+    <section class="content">
+
+      <div class="row">
+        <section class="col-lg-12 connectedSortable community">
+          <div class="box box-orange" id="memberships">
+            <div class="box-body">
+              <div class="row col-lg-12">
+                <div class="pull-left">
+                  <!-- Filters -->
+                  <div class="filters">
+                    <label class="radio-inline"><input id="id-all-communities" type="radio" name="communities" onclick="filterCommunityTiles()" checked>All Communities</label>
+                    <label class="radio-inline"><input id="id-my-communities" type="radio" name="communities" onclick="filterCommunityTiles()">My Communities</label>
+                    <label class="radio-inline"><input id="id-other-communities" type="radio" name="communities" onclick="filterCommunityTiles()">Other Communities</label>
+                    <label class="checkbox-inline"><input id="id-include-private-communities" type="checkbox" name="private" onclick="filterCommunityTiles()" checked>Include Private Communities</label>
+                    <br class="visible-sm visible-xs hidden" />
+                    <div class="form-group filter-dropdown pull-right hidden">
+                      <select class="" id="sel1">
+                        <option>Sort by</option>
+                        <option>Community Name</option>
+                        <option>Newest</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="pull-right">
+                  <form class="form-horizontal dataTables_wrapper form-inline">
+                    <div id="fileManager_filter" class="dataTables_filter"><label>Search:<input id="id-search-bar" type="search" class="form-control input-sm" placeholder="" aria-controls="fileManager"></label>
+                    <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="row">
+                {{#each communities}}
+                <!-- Start tile -->
+                  <div id="id-tile-{{urlFriendlyID}}{{#isOrganizationInCommunity ../userinfo.orgRef this}}-member{{else}}-other{{/isOrganizationInCommunity}}{{#equalsTo this.type 'private'}}-private{{/equalsTo}}" class="col-md-4">
+                  <div class="box box-widget widget-user">
+                    <div class="widget-user-header bg-black" style="background: url('{{jumbotronUrl}}') center center; background-size: auto 150px">
+                      {{#isOrganizationInCommunity ../userinfo.orgRef this}}
+                        <span id='id-join-icon-{{this.urlFriendlyID}}' class="pull-right widget-user-desc"><a href="#" data-toggle="tooltip" data-placement="top" title="Joined">
+                        <i class="fa fa-fw fa-check"></i></a></span>
+                      {{else}}
+                        {{#equalsTo type 'open'}}
+                          <span id='id-public-icon-{{urlFriendlyID}}' class="pull-right widget-user-desc"><a href="#" data-toggle="tooltip" data-placement="top" title="Public">
+                          <i class="icon icon-globe"></i></a></span>
+                        {{/equalsTo}}
+                        {{#equalsTo type 'private'}}
+                          <span id='id-private-icon-{{urlFriendlyID}}' class="pull-right widget-user-desc"><a href="#" data-toggle="tooltip" data-placement="top" title="Private">
+                          <i class="icon icon-key"></i></a></span>
+                        {{/equalsTo}}
+                      {{/isOrganizationInCommunity}}
+                    </div>
+                    <div class="widget-user-image">
+                      <img class="img-thumb" src="{{logoUrl}}" alt="{{name}}">
+                    </div>
+                    <div class="box-footer">
+                      <div class="row text-center">
+                        <a href="/community/about/{{urlFriendlyID}}#tab_about">
+                        <h3 id="id-name-{{urlFriendlyID}}" class="community_name">{{name}}</h3>
+                        </a>
+                        <p class="tagline">{{{caption}}}</p>
+                        <p class="leader">Community Leader: <a href="/organization/{{getCommunityOwnerUrlFriendlyName this ../organizations}}">{{getCommunityOwnerName this ../organizations}}</a></p>
+                      </div>
+                      <div class="row metrics">
+                        <div class="col-sm-4 border-right">
+                          <a href="">
+                            <div class="description-block">
+                              <a href="/community/about/{{this.urlFriendlyID}}#tab_members">
+                              <h5 class="description-header">{{members.length}}</h5>
+                              <span class="description-text">MEMBERS</span>
+                              </a>
+                            </div><!-- /.description-block -->
+                          </a>
+                        </div><!-- /.col -->
+                        <div class="col-sm-4 border-right">
+                          <a href="">
+                            <div class="description-block">
+                              <a href="/community/about/{{this.urlFriendlyID}}#tab_capabilities">
+                              <h5 class="description-header">{{productLength}}</h5>
+                              <span class="description-text">CAPABILITIES</span>
+                              </a>
+                            </div><!-- /.description-block -->
+                          </a>
+                        </div><!-- /.col -->
+                        <div class="col-sm-4">
+                          <a href="">
+                            <div class="description-block">
+                              <a href="/community/about/{{this.urlFriendlyID}}#tab_problems">
+                              <h5 class="description-header">{{discoveryLength}}</h5>
+                              <span class="description-text">PROBLEMS</span>
+                              </a>
+                            </div><!-- /.description-block -->
+                          </a>
+                        </div><!-- /.col -->
+                      </div><!-- /.row -->
+                      <div class="row actions text-center">
+                      {{#equalsTo (getCommunityOwnerName this ../organizations) (getOrgName ../userinfo.orgRef ../organizations)}}
+                          <a class="btn btn-default btn-sm" href="/community/about/{{this.urlFriendlyID}}/edit"><i class="fa fa-pencil"></i> Edit</a>
+                      {{else}}
+                        {{#isOrganizationInCommunity ../../userinfo.orgRef ../this}}
+                          <a class="btn btn-default btn-sm" href="/community/about/{{this.urlFriendlyID}}#tab_about"><i class="fa fa-arrow-circle-right"></i> Visit</a>
+                        {{else}}
+                          <a id="id-join-com-btn-{{../this.urlFriendlyID}}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#" onclick="joinCommunity(this.id, '{{../this._id}}', '{{../urlFriendlyID}}', {{#equalsTo this.type 'private'}}true{{else}}false{{/equalsTo}})"><i class="fa fa-plus-circle"></i> Join this Community</a>
+                        {{/isOrganizationInCommunity}}
+                      {{/equalsTo}}
+                      </div>
+                    </div>
+                  </div><!-- /.widget-user -->
+                </div><!-- /.col -->
+                <!-- End tile -->
+                {{/each}}
+              </div>
+
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        </section><!-- ./col -->
+      </div><!-- /.row -->
+    </section>
+  </div>
+
+{{> dashboard_sidebar_footer }}
+
+{{#contentFor "pageCSS"}}
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+<script>
+  var joinCommunity = function (elementId, communityId, urlFriendlyCommunityName, isPrivate) {
+    $.post('/community/join', {id: communityId})
+      .done(function(data){
+        if (data.message === "Successful") {
+          $('#'+elementId).replaceWith('<a id="' + elementId + '" class="btn btn-default btn-sm" href="/community/about/' + urlFriendlyCommunityName + '#tab_about"><i class="fa fa-arrow-circle-right"></i> Visit</a>');
+          $('#id-private-icon-'+urlFriendlyCommunityName).replaceWith(
+            '<span id="id-join-icon-' + urlFriendlyCommunityName + '" class="pull-right widget-user-desc"><a href="" data-toggle="tooltip" data-placement="top" title="Joined">' +
+            '<i class="fa fa-fw fa-check"></i></a></span>');
+          $('#id-public-icon-'+urlFriendlyCommunityName).replaceWith(
+            '<span id="id-join-icon-' + urlFriendlyCommunityName + '" class="pull-right widget-user-desc"><a href="" data-toggle="tooltip" data-placement="top" title="Joined">' +
+            '<i class="fa fa-fw fa-check"></i></a></span>');
+          var idString = 'id-com-' + urlFriendlyCommunityName;
+          if (isPrivate) {
+            $("[id^="+idString+"]").attr("id", "id-com-" + urlFriendlyCommunityName + "-member-private");
+          }
+          else {
+            $("[id^="+idString+"]").attr("id", "id-com-" + urlFriendlyCommunityName + "-member");
+          }
+        }
+      })
+      .fail(function(){
+        showErrorModal();
+      });
+  };
+
+  var showErrorModal = function () {
+    $('#noJoinModal').on('shown.bs.modal', function (e) {
+      $(this).find('input[type=text]:visible:first').focus();
+    });
+    $('#noJoinModal').modal('show').trigger('shown');
+  };
+
+  var filterCommunityTiles = function () {
+    if ($('#id-all-communities').is(':checked')) {
+      if ($('#id-include-private-communities').is(':checked')) {
+        $("[id^='id-tile'][id*='-member']").show();
+        $("[id^='id-tile'][id*='-other']").show();
+      }
+      else {
+        $("[id^='id-tile'][id$='-member']").show();
+        $("[id^='id-tile'][id$='-other']").show();
+        $("[id^='id-tile'][id*='-private']").hide();
+      }
+    }
+    else if ($('#id-my-communities').is(':checked')) {
+      if ($('#id-include-private-communities').is(':checked')) {
+        $("[id^='id-tile'][id*='-member']").show();
+        $("[id^='id-tile'][id*='-other']").hide();
+      }
+      else {
+        $("[id^='id-tile'][id$='-member']").show();
+        $("[id^='id-tile'][id$='-other']").hide();
+        $("[id^='id-tile'][id*='-private']").hide();
+      }
+    }
+    else if ($('#id-other-communities').is(':checked')) {
+      if ($('#id-include-private-communities').is(':checked')) {
+        $("[id^='id-tile'][id*='-member']").hide();
+        $("[id^='id-tile'][id*='-other']").show();
+      }
+      else {
+        $("[id^='id-tile'][id$='-member']").hide();
+        $("[id^='id-tile'][id$='-other']").show();
+        $("[id^='id-tile'][id*='-private']").hide();
+      }
+    }
+    searchBarFilter();
+  };
+
+  $('#id-search-bar').on('input', function() {
+    filterCommunityTiles();
+  });
+
+  var searchBarFilter = function () {
+    var searchString = $('#id-search-bar').val();
+    var re = new RegExp(searchString, 'i');
+    var nameIds = $("[id^='id-name-']");
+    for (var itr=0; itr<nameIds.length; itr++) {
+      var name = $(nameIds[itr]).text();
+      var tileId = $(nameIds[itr]).attr('id').replace(/^id-name-/, 'id-tile-');
+      if ($("[id^="+tileId+"]").is(":visible")) {
+        if (re.test(name)) {
+          $("[id^=" + tileId + "]").show();
+        }
+        else {
+          $("[id^=" + tileId + "]").hide();
+        }
+      }
+    }
+  }
+</script>
+{{/contentFor}}
+

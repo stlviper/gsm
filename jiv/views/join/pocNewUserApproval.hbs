@@ -1,0 +1,47 @@
+<div id="main-content" class="container-fluid maincontent-container clouds-container">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h1>Are you sure you want to approve this person?</h1>
+        <div class="new-user-approval alert">
+            <p><i class="fa fa-user"></i><br />
+            {{userDoc.firstName}} {{userDoc.lastName}}</p>
+            <button id="pocApproveUser" class="btn btn-primary">Approve</button>
+            <button id="pocDeny" class="btn btn-default">Deny</button>
+        </div>
+      {{>message}}
+    </div>
+  </div>
+</div>
+</div>
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript">
+    $(document).ready(function () {
+
+      $('#pocApproveUser').on('click', function () {
+        $.post('/join/pocapprove', {id: '{{userDoc._id}}', approved: true})
+          .done(function (data) {
+            var msgArea = $('#manageRegisterMsg');
+            msgArea.html(data.message);
+            msgArea.removeClass('hide');
+          })
+          .fail(function (data) {
+          });
+      });
+
+      $('#pocDeny').on('click', function () {
+        $.post('/join/pocdeny', {id: '{{userDoc._id}}', approved: false})
+          .done(function (data) {
+            var msgArea = $('#manageRegisterMsg');
+            msgArea.html(data.message);
+            msgArea.removeClass('hide');
+          })
+          .fail(function (data) {
+          });
+      });
+
+    });
+  </script>
+
+{{/contentFor}}

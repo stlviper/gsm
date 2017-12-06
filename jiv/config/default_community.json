@@ -1,0 +1,20 @@
+{
+	"_id" : ObjectId("557f96bbbc76b4e6551ec0d6"),
+	"name" : "GEOINT Solutions Marketplace",
+	"description" : "<p>This is a community for the GEOINT Community to collaborate.",
+	"owner" : ObjectId("54ee3070939428de1fec485a"),
+	"urlFriendlyID" : "geoint-solutions-marketplace",
+	"type" : "open",
+	"dateAdded" : ISODate("2016-02-29T02:51:16.147Z"),
+	"approved" : true,
+	"news" : [],
+	"solutions" : [],
+	"discoveries" : [],
+	"members" : [],
+	"categories" : [],
+	"__v" : 301,
+	"whyJoin" : "",
+	"logoUrl" : "/images/organizations/logo_community_industry-solutions-marketspace.png",
+	"caption" : "Community for GEOINT-related Solutions &amp; Discoveries",
+	"jumbotronUrl" : "/images/organizations/community_jumbotron_ism.png"
+}

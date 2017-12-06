@@ -1,0 +1,80 @@
+<div id="main-content" class="container maincontent-container">
+{{> message}}
+<h4 class="left">
+  {{title}}
+  {{#if logs}}
+    <small>
+      <a id="clearLogBtn" type="button" class="btn btn-danger"
+         data-toggle="modal"
+         data-target="#clearLogModal">
+        Clear Logs
+      </a>
+    </small>
+  {{/if}}
+</h4>
+
+<table id="log-list" class="jiv-table table table-striped table-bordered table-hover">
+  <thead>
+  <tr>
+    <td align="center">Level</td>
+    <td align="center">Time Stamp</td>
+    <td align="center">Message</td>
+    <td align="center">Actions</td>
+  </tr>
+  </thead>
+  <tbody>
+  {{#each logs}}
+    <tr class="user-row">
+      <td>{{level}}</td>
+      <td>{{dateFormatter timestamp 'long' 'America/New_York'}}</td>
+      <td>{{message}}</td>
+      <td>
+        {{#if _id}}
+          <a href="/admin/logs/{{_id}}" class="btn btn-primary">Details</a>
+        {{else}}
+          <a href="/admin/logs/{{index}}" class="btn btn-primary">Details</a>
+        {{/if}}
+      </td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+
+
+<div class="modal fade" id="clearLogModal" tabindex="-1" role="dialog"
+     aria-labelledby="clearLoglabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="clearLog_modal">Clear Logs</h4>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning">
+          Are you sure you want to clear the logs?
+        </div>
+        <form method="post" action="/admin/logs/delete">
+          <input type="submit" class="btn btn-danger btn-md long-btn" value="Clear Logs"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css">
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+  <script type="application/javascript">
+    $(function () {
+      $('#log-list').DataTable({
+        'order': [[1, "desc"]]
+      });
+    });
+  </script>
+{{/contentFor}}

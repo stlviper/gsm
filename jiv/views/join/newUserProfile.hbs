@@ -1,0 +1,120 @@
+<div id="main-content" class="container maincontent-container signup">
+<div class="formPage signup">
+  <div id="signupCreateUserForm" class="">
+    <h1>{{{strings.Join.createUserProfile.Title}}}</h1>
+      <form id="new-profile-form" method="post" action="/join/newprofile">
+      <div class="form-group">
+        <input type="text" id="firstname" name="firstname" class="big-orange-field"
+               placeholder="{{{strings.Join.createUserProfile.Fields.FirstName.Placeholder}}}"
+               value="{{account.firstName}}">
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="lastname" name="lastname" class="big-orange-field"
+               placeholder="{{{strings.Join.createUserProfile.Fields.LastName.Placeholder}}}"
+               value="{{account.lastName}}">
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="phonenumber" name="phonenumber" class="big-orange-field"
+               placeholder="{{{strings.Join.createUserProfile.Fields.Phone.Placeholder}}}"
+               value="{{account.phoneNumber}}">
+      </div>
+
+      <div class="form-group">
+        <label for="email">{{strings.Join.createUserProfile.Fields.Email.Label}}</label>
+        <input type="text" id="email" name="email" class="big-orange-field"
+               value="{{account.email}}"
+               placeholder="{{{strings.Join.createUserProfile.Fields.Email.Placeholder}}}">
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="confirmemail" name="confirmemail" class="big-orange-field"
+               placeholder="{{{strings.Join.createUserProfile.Fields.ConfirmEmail.Placeholder}}}"
+               value="{{account.email}}">
+      </div>
+      {{>message}}
+      <div class="form-group">
+        <input type="submit" id="newprofilesubmit" class="big-orange-btn"
+               value="{{{strings.Join.createUserProfile.Buttons.Submit}}}">
+      </div>
+    </form>
+
+    </div>
+  <div id="signupFormSidebarRight" class="col-lg-3 col-md-3">
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.OrganizationName}}}</div>
+    {{organization.orgAddress}}<br>
+    {{organization.orgWebsite}}<br>
+    Organization Type: {{organization.orgType}} <br>
+    <!--Role: {{getOrganizationRoleFriendly organization.orgRole}}<br>-->
+
+    {{#equalsTo organization.orgId.name 'orgDuns'}}
+      DUNs: {{organization.orgId.value}}<br>
+    {{/equalsTo}}
+    {{#if organization.orgNaics}}
+      NAICS Number: {{organization.orgNaics}} <br>
+    {{/if}}
+    <br>
+
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.BPOC}}}</div>
+    {{organization.businessPocFirstName}}&nbsp;{{organization.businessPocLastName}}<br/>
+    {{organization.businessPocEmail}}<br/>
+    {{organization.businessPocPhone}}<br/>
+    <br>
+
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.TPOC}}}</div>
+    {{organization.technicalPocFirstName}}&nbsp;{{organization.technicalPocLastName}}<br/>
+    {{organization.technicalPocEmail}}<br/>
+    {{organization.technicalPocPhone}}<br/>
+  </div>
+    </div>
+
+
+</div>
+{{#contentFor "pageScripts"}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js" type="application/javascript"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js" type="application/javascript"></script>
+  <script type="application/javascript">
+
+    $(document).ready(function () {
+      $('#email').keyup(function () {
+        this.value = this.value.toLowerCase();
+      });
+      $('#confirmemail').keyup(function () {
+        this.value = this.value.toLowerCase();
+      });
+      $('#new-profile-form').validate({
+        rules: {
+          firstname: {
+            minlength: 2,
+            required: true
+          },
+          lastname: {
+            minlength: 2,
+            required: true
+          },
+          phonenumber: {
+            required: true,
+            phoneUS: false
+          },
+          email: {
+            required: true,
+            email: true
+          },
+          confirmemail: {
+            required: true,
+            email: true,
+            equalTo: '#email'
+          }
+        },
+        highlight: function (element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+          element/*.text('OK!')*/.addClass('valid')
+            .closest('.control-group').removeClass('error').addClass('success');
+        }
+      });
+    });
+  </script>
+{{/contentFor}}

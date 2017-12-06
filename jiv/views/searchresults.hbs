@@ -1,0 +1,233 @@
+{{> community/community_create_modal}}
+
+<div class="container maincontent-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><a class="btn jivango-ltorange-bkgd create-lg" data-toggle="modal" data-target="#CreateCommunity">Create a Community</a></div>
+        <div class="col-xs-12 col-sm-8 search-lg">
+          <div class="form-group has-feedback">
+            <input id="searchTerm" type="text" class="form-control" placeholder="Find a community&hellip;" value="" />
+            <button class="form-control-feedback" style="border:none;background:none;pointer-events:visible;" type="submit" onClick="submitSearchForm()"><img src="/images/mag-glass.png" alt="Search" /></button>
+          </div>
+        </div>
+    </div><!-- /.row -->
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 sidebar"  style="display:none;">
+
+        <form id="searchForm" action="/searchresults" method="post" enctype="application/x-www-form-urlencoded">
+          <label>Filters:&nbsp;</label>
+          <div class="checkbox">
+            <label><input type="checkbox" id="allcommunities" name="allcommunities" value="allcommunities" {{#equalsTo checkbox 'allcommunities'}}checked='checked'{{/equalsTo}}{{#unless checkbox}}checked='checked'{{/unless}} onclick="allowOneCheckboxSelection()" onclick="communityHlpr.joinCommunity(this, '{{id}}')">All Communities</label>
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" id="mycommunities" name="mycommunities" value="mycommunities" {{#equalsTo checkbox 'mycommunities'}}checked='checked'{{/equalsTo}} onclick="allowOneCheckboxSelection()">My Communities</label>
+          </div>
+          <br class="visible-xs" />
+          <label>Categories:</label><br />
+          <!-- Multiselect dropdown: -->
+          <div>
+            <select id="choose-category" multiple="multiple">
+              <option value="analytics" {{#isCategoryInString 'analytics' categories}}selected=true{{/isCategoryInString}}>Analytics</option>
+              <option value="collaboration" {{#isCategoryInString 'collaboration' categories}}selected=true{{/isCategoryInString}}>Collaboration</option>
+              <option value="cybersecurity" {{#isCategoryInString 'cybersecurity' categories}}selected=true{{/isCategoryInString}}>Cyber Security</option>
+              <option value="gis" {{#isCategoryInString 'gis' categories}}selected=true{{/isCategoryInString}}>GIS</option>
+              <option value="imageprocessing" {{#isCategoryInString 'imageprocessing' categories}}selected=true{{/isCategoryInString}}>Image Processing</option>
+              <option value="infrastructure" {{#isCategoryInString 'infrastructure' categories}}selected=true{{/isCategoryInString}}>Infrastructure</option>
+              <option value="modeling" {{#isCategoryInString 'modeling' categories}}selected=true{{/isCategoryInString}}>Modeling</option>
+              <option value="remotesensing" {{#isCategoryInString 'remotesensing' categories}}selected=true{{/isCategoryInString}}>Remote Sensing</option>
+              <option value="search" {{#isCategoryInString 'search' categories}}selected=true{{/isCategoryInString}}>Search</option>
+              <option value="visualization" {{#isCategoryInString 'visualization' categories}}selected=true{{/isCategoryInString}}>Visualization</option>
+            </select>
+          </div>
+          <br /><button onclick="submitSearchForm()" class="big-organge-btn">Search</button>
+        </form>
+
+      </div>
+      <div class="col-xs-12 col-sm-12">
+        <h2>Search results</h2>
+
+        <table id="members-list" style="width: 100%">
+          <tbody>
+          {{#unless communities}}
+            {{#if message}}
+              {{message}} <br />
+            {{/if}}
+            {{#if error}}
+              {{error}} <br />
+            {{/if}}
+          {{/unless}}
+          {{#each communities}}
+            <div class="border-bottom"><a href="/community/about/{{urlFriendlyID}}">
+              <div class="pull-left thumb hidden-xs"><img src="{{logoUrl}}" class="img-responsive logo" alt="{{name}}" /></div>
+              {{#notEqualsTo owner ../userinfo.orgRef}}
+                {{#isIdInArray ../../userinfo.orgRef members}}
+                  {{#each members}}
+                    {{#equalsTo this ../../../../userinfo.orgRef}}
+                      <div class="pull-right"><a class="btn leave-sm baseline-shift" {{#if ../../../../../userinfo}} onclick="communityHlpr.leaveCommunity('{{../../../../id}}')" {{else}}
+                                                 data-toggle="modal"
+                                                 data-target="#loginModal"{{/if}}><span class="glyphicon glyphicon-remove"></span> Leave Community</a>
+                      </div>
+                    {{/equalsTo}}
+                  {{/each}}
+                {{else}}
+                  <div class="pull-right"><a class="btn join-sm baseline-shift" {{#if ../../../userinfo}} onclick="communityHlpr.joinCommunity('{{../../id}}')" {{else}}
+                                             data-toggle="modal"
+                                             data-target="#loginModal"{{/if}}><span class="glyphicon glyphicon-plus-sign"></span> Join Community</a>
+                  </div>
+                {{/isIdInArray}}
+              {{else}}
+                <div class="pull-right"><a class="badge jivango-ltorange-bkgd baseline-shift">Community Owner</a></div>
+              {{/notEqualsTo}}
+              <div class="members-list">
+                <h3>{{name}}</h3>
+                <p class="search-results">{{{description}}}</p>
+                <h4 class="baseline-shift more-link"><a href="/community/about/{{urlFriendlyID}}" class="more-link jivango-mdgray">
+                            <span class="fa-stack">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse" aria-hidden="true"></i>
+                            </span> More</a></h4>
+              </div>
+            </a></div>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js" type="application/javascript"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js" type="application/javascript"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/bootstrap-multiselect.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/bootstrap-typeahead.js" type="text/javascript"></script>
+  <script>
+    // This function is used to submit the search form since it can be triggered both by the search button as well as
+    // pressing enter in the search field
+    function submitSearchForm() {
+      var field = document.createElement('input');
+      field.type = 'hidden';
+      field.name = 'name';
+      field.value = $('#searchTerm').val();
+      var categoryfield = document.createElement('input');
+      categoryfield.type = 'hidden';
+      categoryfield.name = 'categories';
+      categoryfield.value = $('#choose-category').val();
+      var form = document.getElementById('searchForm');
+      form.appendChild(field);
+      form.appendChild(categoryfield);
+      $('#searchForm').submit();
+    }
+    $('#choose-category').multiselect({
+      includeSelectAllOption: false
+    })
+
+    function allowOneCheckboxSelection() {
+      if( $('#allcommunities').attr('checked') ){
+        if( signedInHlprChk.isUserSignedIn() ) {
+          $('#allcommunities').attr('checked', false);
+          $('#mycommunities').attr('checked', true);
+        } else {
+          $('#allcommunities').attr('checked', true);
+          $('#mycommunities').attr('checked', false);
+        }
+      } else if( !$('#allcommunities').checked ){
+        $('#allcommunities').attr('checked', true);
+        $('#mycommunities').attr('checked', false);
+      }
+    }
+    $("#searchTerm").keyup(function (e) {
+      // Detect Enter key press
+      if (e.keyCode == 13) {
+        submitSearchForm();
+      }
+    });
+    $('#newCommunityData_form').validate({
+      rules: {
+        community_name: {
+          required: true
+        },
+        community_description: {
+          required: true
+        }
+      },
+      highlight: function (element) {
+        $(element).closest('.control-group').removeClass('success').addClass('error');
+      },
+      success: function (element) {
+        element/*.text('OK!')*/.addClass('valid')
+                .closest('.control-group').removeClass('error').addClass('success');
+      },
+      submitHandler: function (form) {
+        $.post('/community/create', $('#newCommunityData_form').serialize())
+                .done(function (data) {
+                  var message = data.message;
+                  $('#createCommunity_buttonn').hide();
+                  $('#community_form_inputs').hide();
+                  $('#community_form_success_msg').html(message);
+                  $('#community_form_success').show();
+                })
+                .fail(function (data) {
+                  var errorMsg = data.message;
+                });
+      }
+    });
+
+    $('#searchTerm').typeahead({
+      ajax: {
+        url: '/getallcommunities',
+        // Time between database queries (ms)
+        timeout: 100,
+        // The field you want to show up in the search results
+        displayField: 'name',
+        triggerLength: 1,
+        method: 'get',
+        scrollBar: true,
+        loadingClass: 'loading-circle'
+      },
+      // Max items in the results list
+      items: 100
+    });
+
+    (function(exports) {
+
+      exports.signedInHlprChk = {
+        isUserSignedIn: function(){
+          {{#if userinfo}}
+            return true;
+          {{else}}
+            return false;
+          {{/if}}
+        }
+      }
+
+      {{#if userinfo}}
+        var _settings = {
+          joinUrl: '/community/join',
+          leaveUrl: '/community/leave'
+        };
+
+        exports.communityHlpr = {
+          leaveCommunity: function(communityID) {
+            $.post(_settings.leaveUrl, {id: communityID})
+              .done(function(){
+                location.reload();
+              });
+          },
+
+          joinCommunity: function(communityID) {
+            $.post(_settings.joinUrl, {id: communityID})
+              .done(function(){
+                location.reload();
+              });
+          }
+        };
+      {{/if}}
+    })(window);
+
+  </script>
+
+{{/contentFor}}

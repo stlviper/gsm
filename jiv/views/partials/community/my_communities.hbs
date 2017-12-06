@@ -1,0 +1,78 @@
+<div id="my-communities" {{#unless myCommunities}}style="display: none;"{{/unless}}>
+  <h1 class="indent">My Communities</h1>
+
+  <div id="my-communities-posts" class="row">
+
+    {{#each myCommunities}}
+      <!-- My Community tile -->
+      <div class="item col-sm-6 col-md-4 col-lg-3">
+        <div class="well tile">
+          <a href="/community/about/{{#if urlFriendlyID}}{{urlFriendlyID}}#tab_about{{else}}{{name}}#tab_about{{/if}}">
+            <div class="thumb">
+              {{#if logoUrl}}
+                <img src="{{../logoUrl}}" class="img-responsive"
+                     alt="{{../name}}"/>
+              {{else}}
+                <img src="{{getOrgLogoURL ../owner ../../organizations}}" class="img-responsive" alt="{{../name}}"/>
+              {{/if}}
+            </div>
+            <h3 class="name">{{name}}</h3></a>
+
+          <div class="list-group my-communities">
+            <a href="/community/about/{{urlFriendlyID}}#tab_members" class="list-group-item">
+              <i class="fa fa-institution fa-fw"></i> Members <span class="badge">{{lengthOf members}}</span>
+            </a>
+            <a href="/community/about/{{urlFriendlyID}}#tab_capabilities" class="list-group-item">
+              <i class="fa fa-puzzle-piece fa-fw"></i> Capabilities <span class="badge">{{productLength}}</span>
+            </a>
+            <a href="/community/about/{{urlFriendlyID}}#tab_problems" class="list-group-item">
+              <i class="fa fa-bullhorn fa-fw"></i> Problems <span class="badge">{{discoveryLength}}</span>
+            </a>
+              <!--<a href="/community/about/{{urlFriendlyID}}#tab_news" class="list-group-item">
+                <i class="fa fa-newspaper-o fa-fw"></i> News <span class="badge">{{lengthOf news}}</span>
+              </a>-->
+            </div>
+          {{#notEqualsTo ../userinfo.orgRef owner}}
+            <a class="btn leave-sm" onclick="communityHlpr.leaveCommunity(this, '{{../id}}')">
+              <span class="glyphicon glyphicon-remove"></span> Leave Community
+            </a>
+          {{/notEqualsTo}}
+
+        </div>
+      </div>
+      <!-- /My Community tile -->
+    {{/each}}
+  </div>
+  <!-- /.row -->
+  <div style="display: none;">
+
+    <!-- Template for when joining a community. Copy this and populate then display to page in my community section -->
+    <div id="mycommunity-template" class="item col-sm-6 col-md-4 col-lg-3">
+      <a class='about-link'href="#">
+        <div class="well tile">
+          <div class="thumb"><img src="" class="img-responsive" alt=""/></div>
+          <h3 class="name"></h3>
+
+          <div class="list-group my-communities">
+            <!-- <a href="#" class="list-group-item">
+              <i class="fa fa-newspaper-o"></i> News <span class="badge news">{{lengthOf news}}</span>
+            </a> -->
+            <a href="#" class="list-group-item">
+              <i class="fa fa-users fa-fw"></i> Members <span class="badge members">{{lengthOf members}}</span>
+            </a>
+            <a href="#" class="list-group-item">
+              <i class="fa fa-puzzle-piece fa-fw"></i> Capabilities <span class="badge solutions">{{productLength}}</span>
+            </a>
+            <a href="#" class="list-group-item">
+              <i class="fa fa-bullhorn fa-fw"></i> Problems <span class="badge discoveries">{{discoveryLength}}</span>
+            </a>
+          </div>
+          <br/>
+          <a class="btn leave-sm" onclick="">
+            <span class="glyphicon glyphicon-remove"></span>Leave Community
+          </a>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

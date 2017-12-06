@@ -1,0 +1,39 @@
+
+{{#contentFor 'pageScripts'}}
+  {{#ifDev}}
+    <style>
+      .jquery-particle {
+        position: absolute;
+        opacity: 0;
+      }
+    </style>
+    <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.particles.burst.js"></script>
+    <script type="application/javascript">
+      (function (exports) {
+        var triggerElm = '.item-image';
+        exports.billify = {
+          init: function(){
+            $(triggerElm).click(function(){
+              billify.show();
+            });
+          },
+          show: function () {
+            $(document).click(function (event) {
+              event.preventDefault();
+              var mouse = {};
+              mouse.left = event.clientX;
+              mouse.top = event.pageY;
+              var idVal = 'billify_'+mouse.top+mouse.left;
+
+              $('body').append('<div id="'+idVal+'" class="billify" style="z-index: 99999; position: absolute; top:' + (mouse.top-30) + 'px; left:' + (mouse.left-30) + 'px;" ></div>');
+              var $emitter =  $('#'+idVal);
+              $emitter.pburst({particle: '/images/jivango_32x32.png'});
+              $emitter.pburst('burst_part', 100);
+            });
+          }
+        };
+      })(window);
+      billify.init();
+    </script>
+  {{/ifDev}}
+{{/contentFor}}

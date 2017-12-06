@@ -1,0 +1,168 @@
+{{> dashboard_sidebar_header activeId="id-org-mgmnt" activeSubId="id-org-users"}}
+
+<!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+<div class="content-wrapper">
+
+  <!-- Dashboard header -->
+  <section class="content-header adjusted">
+    <h1>Organization Management
+      <small>Users</small>
+    </h1>
+
+  </section>
+  <!-- Widgets content -->
+  <section class="content">
+    <div class="row">
+      <section class="col-lg-12 connectedSortable organization-management">
+        <div class="box box-orange" id="users">
+          <div class="box-body">
+            <div class="row">
+              <div class="actions pull-right">
+                <a href="#" data-toggle="tooltip" title="Private" class="panel-tooltip"><span
+                  class="icon icon-key"></span></a>
+              </div>
+            </div>
+
+            <table id="userTbl" class="jiv-table table table-striped table-bordered table-hover">
+              <thead>
+              <tr>
+                <td width="13%">First Name</td>
+                <td width="13%">Last Name</td>
+                <td>Email</td>
+                <td width="18%">User Role(s)</td>
+                <td width="13%">
+                  <span data-toggle="tooltip" data-placement="left"
+                        data-original-title="You are able to activate or deactivate accounts by clicking the buttons."
+                        class="text-left">
+                      Active Account  <span class="glyphicon glyphicon-question-sign"></span>
+                  </span>
+                </td>
+                <td width="17%">
+                  <span data-toggle="tooltip" data-placement="left"
+                        data-original-title="The Organization Manager is a &ldquo;super user&rdquo; for your organization with full privileges. They are allowed to approve and disable user accounts, edit your organization data, and interact in Problems.">
+                      Organization Manager <span class="glyphicon glyphicon-question-sign"></span>
+                  </span>
+                </td>
+              </tr>
+              </thead>
+              <tbody>
+              {{#each users}}
+                <tr class="user-row">
+                  <td>{{firstName}}</td>
+                  <td>{{lastName}}</td>
+                  <td>{{email}}</td>
+                  <td id="orgUserRoles_{{_id}}">
+                    {{{getOrgUserRoles roles _id}}}
+
+
+                  </td>
+                  <td class="text-center">
+                    <input type="checkbox" id="approved_btn_{{_id}}" data-checkbox="{{_id}}" name="{{_id}}"
+                           class="activeAccount" data-approved="{{approved}}" data-on-color="success" data-on-text="Yes"
+                           data-off-text="No"
+                      {{#if approved}} checked{{/if}} />
+                  </td>
+                  <td class="text-center">
+                    <input type="checkbox" id="orgAdmin_btn_{{_id}}" data-checkbox="{{_id}}" name="{{_id}}"
+                           data-orguser="{{../userinfo.username}}" class="activeOrgManager"
+                           data-orgAdmin="{{#ifIn 'organizationManager' roles}}true{{else}}false{{/ifIn}}"
+                           data-on-color="success" data-on-text="Yes" data-off-text="No"
+                      {{#ifIn 'organizationManager' roles}} checked{{/ifIn}} />
+                  </td>
+                </tr>
+              {{/each}}
+              </tbody>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </section><!-- ./col -->
+    </div><!-- /.row -->
+  </section><!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{{> dashboard_sidebar_footer}}
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css"
+        rel="stylesheet">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/dashboard/dataTables.bootstrap.css">
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-form-v3.51.0.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dashboard/jquery.dataTables.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dashboard/dataTables.bootstrap.min.js"></script>
+  <script>
+    $("[class='activeAccount']").bootstrapSwitch();
+    $("[class='activeOrgManager']").bootstrapSwitch();
+    $('.activeAccount').on('switchChange.bootstrapSwitch', function (event, state) {
+      var id = this.name;
+      var $btn = $('#approved_btn_' + id);
+      var newStatus = !($btn.attr('data-approved') == 'true');
+      if ($btn) {
+        $.post('/admin/users/isApproved', {id: id, approved: newStatus})
+          .done(function (data) {
+            $btn.attr('data-approved', newStatus);
+          })
+          .fail(function (data) {
+          });
+      }
+    });
+    $('.activeOrgManager').on('switchChange.bootstrapSwitch', function (event, state) {
+      var id = this.name;
+      var username = document.getElementById('orgAdmin_btn_' + id).dataset.orguser;
+      var $btn = $('#orgAdmin_btn_' + id);
+      var userRoles = document.getElementById("orgUserRoles_" + id);
+      var str = $('#orgUserRoles_' + id).text().replace('Organization Manager', '');
+      var newStatus = !($btn.attr('data-orgAdmin') == 'true');
+      if ($btn) {
+        $.post('/profile/' + username + '/orgAdmin', {id: id, orgManager: newStatus})
+          .done(function (data) {
+            $btn.attr('data-orgAdmin', newStatus);
+            if (newStatus) {
+              userRoles.innerHTML += "<span class='label label-default label_" + id + "'>Organization Manager</span> ";
+            }
+            else {
+              $(".label_" + id + ":contains('Organization Manager')").filter(function () {
+                return $(this).length > 0;
+              }).remove();
+            }
+
+          })
+          .fail(function (data) {
+
+          });
+      }
+    });
+  </script>
+{{/contentFor}}
+
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript">
+
+    $('#userTbl').DataTable({
+//          "paging": true,
+//          "lengthChange": true,
+//          "searching": true,
+//          "ordering": true,
+//          "info": true,
+      "autoWidth": false,
+      "aoColumnDefs": [
+        {'bSortable': false, 'aTargets': [4, 5]}
+      ]
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+  </script>
+{{/contentFor}}

@@ -1,0 +1,19 @@
+{
+  "name": "s3_upload",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": ""
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1.48",
+    "dive": "^0.3.1",
+    "fs": "0.0.2",
+    "process": "^0.11.2",
+    "s3": "^4.3.1"
+  },
+  "description": "Uploads files to an AWS S3 bucket",
+  "main": "push_public_to_s3.js",
+  "author": "",
+  "license": "OGS"
+}

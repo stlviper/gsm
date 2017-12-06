@@ -1,0 +1,15 @@
+<div id="main-content" class="container maincontent-container">
+
+<div class="container">
+    <h1 class="icon"><span class="icon-warning-o"></span></h1>
+    <p class="text-center">Are you sure you want to remove <strong>{{orgName}}</strong>?</p>
+</div>
+<div class="text-center">
+        <form method="POST" action="/admin/organizations/{{urlFriendlyID}}/delete">
+          <button type="submit" id="deleteOrg" class="btn btn-danger ">
+        Delete
+      </button>
+	  <a class="btn btn-primary" href="/admin/organizations/">Cancel</a>
+    </form>
+    </div>
+</div>

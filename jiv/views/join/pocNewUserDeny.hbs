@@ -1,0 +1,29 @@
+<div id="main-content" class="container maincontent-container">
+  <h5>Are you sure you want to deny this person?</h5>
+
+  <p>User: {{userDoc.firstName}} {{userDoc.lastName}}</p>
+
+  <br><br>
+  <button id="pocDeny">Deny</button>
+  <br><br>
+
+  {{>message}}
+</div>
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript">
+    $(document).ready(function () {
+      $('#pocDeny').on('click', function () {
+        $.post('/join/pocdeny', {id: '{{userDoc._id}}', approved: false})
+          .done(function (data) {
+            var msgArea = $('#manageRegisterMsg');
+            msgArea.html(data.message);
+            msgArea.removeClass('hide');
+          })
+          .fail(function (data) {
+          });
+      });
+    });
+  </script>
+
+{{/contentFor}}

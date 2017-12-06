@@ -1,0 +1,194 @@
+<div id="main-content" class="container maincontent-container">
+  {{#with organization}}
+    {{debug dateCreated}}
+    <div class="row">
+      {{#if logoUrl}}
+        <div class="col-sm-3 fill profileImg">
+            <div class="thumb" style="margin: 0 0 10px 0;">
+                <img src="{{logoUrl}}" class="img-responsive"/>
+            </div>
+        </div>
+      {{/if}}
+    </div>
+    <div class="row">
+      <div class="col-sm-7">
+        <h1>{{orgName}}</h1>
+      </div>
+    </div>
+
+  <form class="form-horizontal" id="admin-update-org" enctype="multipart/form-data">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgName" value="{{orgName}}" disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Address</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgAddress" value="{{orgAddress}}" disabled="disabled"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Website URL</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgWebsite" value="{{orgWebsite}}" disabled="disabled"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Role</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgRole" value="{{getOrganizationRoleFriendly orgRole}}" disabled="disabled"/>
+      </div>
+    </div>
+
+    {{#equalsTo orgId.name 'orgDuns'}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">DUNS Number</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="orgRouteId" value="{{orgId.value}}" disabled="disabled"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">NAICS Number</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="orgNaics" value="{{orgNaics}}" disabled="disabled"/>
+        </div>
+      </div>
+    {{/equalsTo}}
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Logo URL</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="logoUrl" value="{{logoUrl}}" disabled="disabled"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Tag Line</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="tagline" value="{{tagline}}" disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Location</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="location" value="{{location}}" disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Market Area</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="marketArea" value="{{marketArea}}" disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Year Founded</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="yearFounded" value="{{yearFounded}}" disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Size</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="size" value="{{size}}" disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Description</label>
+
+      <div class="col-sm-7">
+        <div class="form-control form-control-contains-html" type="text" disabled="disabled"
+             name="description">{{{trim description}}}</div>
+      </div>
+    </div>
+    <h3>Business POC</h3>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocFirstName" value="{{businessPocFirstName}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocLastName" value="{{businessPocLastName}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone Number</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocPhone" value="{{businessPocPhone}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocEmail" value="{{businessPocEmail}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+    <h3>Technical POC</h3>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocFirstName" value="{{technicalPocFirstName}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocLastName" value="{{technicalPocLastName}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone Number</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocPhone" value="{{technicalPocPhone}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocEmail" value="{{technicalPocEmail}}"
+               disabled="disabled"/>
+      </div>
+    </div>
+  {{/with}}
+  <div class="col-sm-2"></div>
+  <div class="col-sm-7">
+    <a class="btn btn-info" href="/admin/organizations" style="margin-left: -10px;"><span class="glyphicon glyphicon-arrow-left"></span> Back to List</a>
+  </div>
+    </form>
+</div>

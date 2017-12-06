@@ -1,0 +1,27 @@
+<div id="main-content" class="container-fluid maincontent-container clouds-container">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+    {{#if isAlert}}
+    <h1>{{strings.Join.status.ErrorTitle}}</h1>
+    <h1><span class="icon icon-warning-o"></span></h1>
+    <p>{{message}}</p>
+  {{else}}
+    {{#if isNew}}
+      <div class="text-center container">
+        <h1 class="icon"><span class="icon-thank-you-o"></span></h1>
+        <h1>{{{strings.Join.status.SuccessOrgTitle}}} </h1>
+        <p>{{{strings.Join.status.SuccessOrgCaption}}}</p>
+      </div>
+    {{else}}
+      <div class="text-center container">
+        <h1 class="icon"><span class="icon-thank-you-o"></span></h1>
+        <h1>{{{strings.Join.status.SuccessUserTitle}}}</h1>
+        <p>{{{strings.Join.status.SuccessUserCaption}}}</p>
+      </div>
+    {{/if}}
+  {{/if}}
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,238 @@
+<div class="container">
+      <div class="row actions-toggle page-title">
+          <div class="col-md-9 col-sm-12">
+            <h1 class="pull-left">Members</h1>
+          </div>
+      </div>
+    <div class="row">
+        <div class="col-md-9 col-sm-12">
+            <p class="page-description">GSM Members can connect and collaborate to enhance the GEOINT mission. Explore the Members directory and discover opportunities to work together.</p>
+        </div>
+    </div>
+    <div id="members-list" class="row">
+
+    <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+      <div id="sidebar" data-spy="affix" data-offset-top="0">
+        <div class="form-group has-feedback">
+          <label>Search Members</label>
+          <input type="text" class="form-control search" placeholder="Search" value=""/>
+          <i class="glyphicon glyphicon-search form-control-feedback"></i>
+        </div>
+
+        <label style="margin-bottom: -10px;">Sort:</label>
+        <div class="radio">
+          <label><input class="sort" type="radio" name="sort-controls" data-sort="orgName">By Name</label>
+        </div>
+        <div class="radio">
+          <label><input class="sort" type="radio" name="sort-controls" data-sort="marketArea">By Market Area</label>
+        </div>
+        <br class="visible-xs"/>
+        <label style="margin-bottom: -10px;">Organization Type:</label>
+        <br class="visible-xs"/>
+		<div class="checkbox">
+                <label><input class="members-filter" type="checkbox"
+                value="industry">Industry
+                </label>
+        </div>
+		<div class="checkbox">
+                <label><input class="members-filter" type="checkbox"
+                value="government">Government
+                </label>
+        </div>
+		<div class="checkbox">
+                <label><input class="members-filter" type="checkbox"
+                value="academia">Academia
+                </label>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-9 col-lg-9">
+      {{#equalsTo memebers.length 0}}
+        <span class="alert alert-info">{{strings.Community.Messages.NoMembersAlert}}</span>
+      {{/equalsTo}}
+      <ul class="list">
+         <li>
+            <div class="border-bottom">
+              <a
+                href="/members/{{organization.urlFriendlyID}}">
+                <div class="pull-left thumb hidden-xs"><img src="{{#if organization.logoUrl}}{{organization.logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" class="img-responsive logo"
+                                                            alt="{{organization.orgName}}"/>
+                </div>
+                <div class="pull-right hidden">
+                      <span class="label jivango-owner-bkgd">Community Owner</span>
+                </div>
+                <div class="members-list">
+				  <span style="display:none;" class="orgType">{{organization.orgType}}</span>
+                  <h2 class="orgName">{{organization.orgName}}</h2>
+
+                  <h3 class="tagline">{{organization.tagline}}</h3>
+  
+                {{#if organization.marketArea}}
+                  <p><label>Market Area:</label> <span class="marketArea">{{organization.marketArea}}</span></p>
+                {{/if}}
+                    
+                  <h4 class="baseline-shift more-link">
+                    <a href="/members/{{organization.urlFriendlyID}}"
+                       class="more-link jivango-mdgray">
+                        <span class="fa-stack">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse"
+                             aria-hidden="true"></i>
+                        </span>
+                      More
+                    </a>
+                  </h4>
+                </div>
+              </a>
+            </div>
+          </li>
+        {{#each newMembers}}
+          {{#notEqualsTo ../community.owner _id}}
+          <li>
+            <div class="border-bottom">
+              <a
+                href="/members/{{urlFriendlyID}}">
+                <div class="pull-left thumb hidden-xs"><img src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" class="img-responsive logo"
+                                                            alt="{{orgName}}"/>
+                </div>
+                <span class="orgRole" style="display: none;">
+                  {{#notEqualsTo orgRole 'both'}}
+                    {{getOrganizationRoleFriendly orgRole}}
+                  {{else}}
+                    {{getOrganizationRoleFriendly 'provider'}},{{getOrganizationRoleFriendly 'client'}}
+                  {{/notEqualsTo}}
+                </span>
+
+                <div class="pull-right">
+				{{#notEqualsTo ../../community.owner _id}}
+				<span class="label gsm-teal-bg">NEW</span>
+				{{/notEqualsTo}}
+                  {{#notEqualsTo orgRole 'both'}}
+                    {{#equalsTo orgRole 'client'}}
+                      <span class="label jivango-explorer-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+                    {{/equalsTo}}
+                    {{#equalsTo orgRole 'provider'}}
+                      <span class="label jivango-provider-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+                    {{/equalsTo}}
+                  {{else}}
+                    <span class="label jivango-explorer-bkgd hidden">{{getOrganizationRoleFriendly 'client'}}</span>
+                    <span class="label jivango-provider-bkgd hidden">{{getOrganizationRoleFriendly 'provider'}}</span>
+                  {{/notEqualsTo}}
+                </div>
+                <div class="members-list">
+				  <span style="display:none;" class="orgType">{{orgType}}</span>
+                  <h2 class="orgName">{{orgName}}</h2>
+
+                  <h3 class="tagline">{{tagline}}</h3>
+  
+                {{#if marketArea}}
+                  <p><label>Market Area:</label> <span class="marketArea">{{marketArea}}</span></p>
+                {{/if}}
+                    
+                  <h4 class="baseline-shift more-link">
+                    <a href="/members/{{urlFriendlyID}}"
+                       class="more-link jivango-mdgray">
+                        <span class="fa-stack">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse"
+                             aria-hidden="true"></i>
+                        </span>
+                      More
+                    </a>
+                  </h4>
+                </div>
+              </a>
+            </div>
+          </li>
+          {{/notEqualsTo}}
+        {{/each}}
+		{{#each members}}
+		{{#notEqualsTo ../community.owner _id}}
+          <li>
+            <div class="border-bottom">
+              <a
+                href="/members/{{urlFriendlyID}}">
+                <div class="pull-left thumb hidden-xs"><img src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" class="img-responsive logo"
+                                                            alt="{{orgName}}"/>
+                </div>
+                <span class="orgRole" style="display: none;">
+                  {{#notEqualsTo orgRole 'both'}}
+                    {{getOrganizationRoleFriendly orgRole}}
+                  {{else}}
+                    {{getOrganizationRoleFriendly 'provider'}},{{getOrganizationRoleFriendly 'client'}}
+                  {{/notEqualsTo}}
+                </span>
+
+                <div class="pull-right">
+                  {{#notEqualsTo orgRole 'both'}}
+                    {{#equalsTo orgRole 'client'}}
+                      <span class="label jivango-explorer-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+                    {{/equalsTo}}
+                    {{#equalsTo orgRole 'provider'}}
+                      <span class="label jivango-provider-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+                    {{/equalsTo}}
+                  {{else}}
+                    <span class="label jivango-explorer-bkgd hidden">{{getOrganizationRoleFriendly 'client'}}</span>
+                    <span class="label jivango-provider-bkgd hidden">{{getOrganizationRoleFriendly 'provider'}}</span>
+                  {{/notEqualsTo}}
+                </div>
+                <div class="members-list">
+				  <span style="display:none;" class="orgType">{{orgType}}</span>
+                  <h2 class="orgName">{{orgName}}</h2>
+
+                  <h3 class="tagline">{{tagline}}</h3>
+  
+                {{#if marketArea}}
+                  <p><label>Market Area:</label> <span class="marketArea">{{marketArea}}</span></p>
+                {{/if}}
+                    
+                  <h4 class="baseline-shift more-link">
+                    <a href="/members/{{urlFriendlyID}}"
+                       class="more-link jivango-mdgray">
+                        <span class="fa-stack">
+                          <i class="fa fa-circle fa-stack-2x"></i>
+                          <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse"
+                             aria-hidden="true"></i>
+                        </span>
+                      More
+                    </a>
+                  </h4>
+                </div>
+              </a>
+            </div>
+          </li>
+		 {{/notEqualsTo}}
+        {{/each}}
+      </ul>
+
+
+      <div class="jiv-pagination-controls">
+        <ul class="members-pagination pagination pagination-sm"></ul>
+        <ul class="pagination pagination-sm">
+          <li><a id="members-showall" href="#" data-showall="false">Show All</a></li>
+        </ul>
+        <select class="form-control" name="type" id="members-itemsperpage">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+    </div>
+   
+  </div>
+  <!-- /.row -->
+</div><!-- /.container -->
+
+{{#contentFor 'pageCSS'}}
+  <style>
+    ul.list {
+      list-style-type: none;
+    }
+  </style>
+{{/contentFor}}
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community-members-list.js"></script>
+{{/contentFor}}

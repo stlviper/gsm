@@ -1,0 +1,32 @@
+<html>
+<head>
+  <style>
+    body { background: #000; text-align: center }
+    div { width: 320px; height: 240px; display: inline-block; font-family: sans-serif; border: 2px solid #aaa;}
+    p { opacity: 0.6; background: #fff; padding: 5px; font-weight: bold;  margin: 0; }
+  </style>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="draggable_background.js"></script>
+  <script>
+    $(function() {
+      $('#default').backgroundDraggable();
+      $('#unbounded').backgroundDraggable({ bound: false });
+      $('#x').backgroundDraggable({ axis: 'x' });
+      $('#y').backgroundDraggable({ axis: 'y' });
+
+      $('div').each(function() {
+        var $this = $(this),
+            html = $this.html();
+        $this.empty().append($('<p>').html(html))
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="default" style="background:url('http://pipsum.com/640x480.jpg')">default</div>
+  <div id="unbounded" style="background:url('http://pipsum.com/640x480.jpg')">bound: false</div>
+  <br><br>
+  <div id="x" style="background:url('http://pipsum.com/2560x240.jpg')">axis: 'x'</div>
+  <div id="y" style="background:url('http://pipsum.com/320x1600.jpg')">axis: 'y'</div>
+</body>
+</html>

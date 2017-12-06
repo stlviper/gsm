@@ -1,0 +1,176 @@
+body{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#main-content{
+    margin-top: 130px;
+}
+
+#jivango-footer{
+    margin-bottom:0px;
+    margin-top:35px;
+}
+
+#site-banner{
+    background-color: #FFF;
+}
+#jivango-header{
+    padding-bottom:1px;
+}
+#heading{
+    color: rgb(85, 85, 85);
+    font-size: 14px;
+    font-weight: 200;
+    height: 61px;
+    line-height: 20px;
+    padding-bottom: 1px;
+}
+.site-title{
+
+}
+.site-tite-link{
+}
+
+.site-title-image{
+    margin-left:-6px;
+}
+
+.signin-link{
+    color: #f16521 !important;
+    line-height: 31px;
+}
+
+.join-link{
+    color: #f16521 !important;
+    line-height: 31px;
+}
+
+.product-btn{
+    cursor: pointer;
+    font-size: 17px;
+    margin-top: 10px;
+    text-align: center;
+    width: 190px;
+    display: block;
+    height: 35px;
+    line-height: 33px;
+    margin: 0 auto;
+    text-decoration: none;
+    background-color: #404041;
+    border-radius: 2px;
+    color: #fff!important;
+}
+/*--------------------------------------------------------
+* Homepage Splash Styling
+*-------------------------------------------------------*/
+#splash-bg{
+    background-image: url("/images/headerImg.jpg");
+    background-position: center center;
+    background-size: cover;
+    height: 375px;
+}
+
+.jivango-jumbotron{
+    padding: 0 0 0 0 !important;
+}
+
+#splash-cover{
+    color: #FFF;
+    background-color: rgba(0,0,0,0.35);
+    height: 100%;
+}
+
+#splash-info{
+    top: 75px;
+}
+
+#splash-title{
+    font-size:36px;
+    position:relative;
+    margin:0 auto auto;
+    padding-bottom:10px;
+}
+
+.splash-btn{
+    background-color: #ef4722;
+    color: #FFF !important;
+    font-size: 25px;
+    display: inline-block;
+    height: 35px;
+    line-height: 33px;
+    margin: 0 auto;
+    padding: 0!important;
+    text-decoration: none;
+    width: 180px;
+    background-color: #ef4722;
+    border-radius: 2px;
+}
+
+/*--------------------------------------------------------
+* Homepage Info Styling
+*-------------------------------------------------------*/
+.title-text{
+    background-color: white;
+    color: #404041;
+    font-size: 1.6em;
+    padding-left: 5px;
+    padding-right: 5px;
+    position: relative;
+    top: -0.5em;
+}
+
+.title-line{
+    background-color: #d1d2d4;
+    height: 1px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.service-row{
+    margin-top:35px;
+}
+.service-item{
+    list-style-type: none;
+    display: inline-block;
+    width: 33%;
+    line-height: 20px!important;
+    vertical-align: top;
+    text-align: center;
+}
+
+.item-image{
+    height: 150px;
+    width: 150px;
+}
+
+.item-title{
+    color: #f26522;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.item-info{
+    color: #404041;
+    font-size: 1.1em;
+    margin: 0 auto!important;
+    text-align: center;
+    width: 265px;
+}
+
+#create_ldap_user {
+    max-width: 400px;
+}
+
+#ldapErrorMessage, #passwordErrorMessage  {
+    display: none;
+}
+
+#welcomePage {
+    min-height: 400px;
+}
+
+#welcomeMessage {
+    padding: 20px;
+}

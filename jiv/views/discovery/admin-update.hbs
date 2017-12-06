@@ -1,0 +1,699 @@
+<div id="main-content" class="container maincontent-container">
+  {{#unless discovery.approved}}
+    <div class="container">
+      <div class="alert alert-info">
+        NOTE: This discovery is not approved and will not appear on the marketspace until it is marked approved.
+      </div>
+    </div>
+  {{/unless}}
+  <div id="missing-fields-alert"></div>
+
+<div class="container">
+    <div id="output" class="aui-avatar aui-avatar-standard pull-left" style="margin: 0 10px 10px 0;">
+        <div class="aui-avatar-inner thumb">
+          {{#if discovery.thumbnail.name}}
+            <img src="/images/community/{{discovery.thumbnail.name}}" class=" test  img-responsive logo" alt="{{discovery.name}}"/>
+          {{else}}
+            <img src="{{getOrgLogoURL orgRef ../../members}}" class="img-responsive logo" alt="{{discovery.name}}">
+          {{/if}}
+        </div>
+    </div>
+     <h4 style="font-size:18px;margin:0 0 .5em 0;">Manage Problem:</h4>
+     <h1 style="font-size:36px;margin:0 0 .5em 0;">{{discovery.name}}</h1>
+</div>
+
+    
+  <div class="container">
+    <ul class="nav nav-tabs" role="tablist" style="margin: 10px 0 20px 0;">
+      <li role="presentation" class="active">
+        <a href="#discoveryEdit" aria-controls="editDiscovery" role="tab" data-toggle="tab">Edit Problem</a>
+      </li>
+
+      <li role="presentation">
+        <a href="#registrationEdit" aria-controls="editRegistration" role="tab" data-toggle="tab">Edit Solution
+          Form</a>
+      </li>
+    </ul>
+  </div>
+    
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active check-dirty" id="discoveryEdit">
+      <form id='discoveryEditForm' method="POST" class="form-horizontal form-padding indent check-dirty"
+            action="/admin/problems/{{discovery.id}}/update"
+            enctype="multipart/form-data">
+        {{#with discovery}}
+          <input type="hidden" id="challengeID" value="{{id}}">
+
+          <div class="container">
+            <p class="text-muted"><span class="small required-field">*Required fields</span></p>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Problem Title<span class="required-field">*</span></label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="name" id="name" value="{{name}}"/>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Stage</label>
+            <div class="col-sm-10">
+              {{> challenge_stage_select}}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Problem Owner<span class="required-field">*</span></label>
+            <div class="col-sm-10">
+              <select class="form-control" name="orgRef" id="organization">
+                <option value="">-</option>
+                {{#each ../organizations}}
+                  <option value="{{id}}"
+                          {{#idEqualsTo id ../orgRef}}selected{{/idEqualsTo}}>{{orgName}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+    
+          <div class="form-group">
+            <label class="col-sm-2 control-label" data-original-title="Start typing any tag you wish and press 'Enter' or 'Tab' to save it. Enter as many as you like." data-placement="right"
+                     data-toggle="tooltip">Category Tags <span class="glyphicon glyphicon-question-sign"></span></label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" name="categories" id="categories" value="{{categories}}"/>
+            </div>
+          </div>
+    
+            <div class="form-group">
+            <label class="col-sm-2 control-label" data-toggle="tooltip" data-target=".organizationLogo"
+                    data-original-title="Problem Managers have the ability to edit the discovery data, view solution submissions, and submit feedback." data-placement="right">Problem Manager(s)<span class="required-field">*</span>
+              <span class="glyphicon glyphicon-question-sign"></span>
+              </label>
+            <div id="managerInputs" class="col-sm-10 error-placement">
+              <input class="form-control required-field col-sm-11" type="text" name="discoveryManagers" id="discoveryManagers" value=""/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label"  data-toggle="tooltip" data-target=".organizationLogo"
+                    data-original-title="Problem Evaluators have the ability to view solution submissions and save draft feedback, but NOT the ability to edit the problem or submit feedback." data-placement="right">Problem Evaluators
+              <span class="glyphicon glyphicon-question-sign"></span>
+            </label>
+            <div id="evaluatorInputs" class="col-sm-10 error-placement">
+              <input class="form-control" type="text" name="discoveryEvaluators" id="discoveryEvaluators" value=""/>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" data-toggle="tooltip" data-original-title="If selected, scoring will be required on evaluator assessments." data-placement="right">Scoring
+              <span class="glyphicon glyphicon-question-sign"></span>
+            </label>
+            <div class="col-sm-10">
+
+              <div class="btn-group btn-toggle">
+                <button class="btn {{#if scoringScale}}active btn-success{{else}}btn-default{{/if}}" data-toggle="collapse" data-target="#scoring" type="button">Yes</button>
+                <button class="btn {{#unless scoringScale}}active btn-warning{{else}}btn-default{{/unless}}" data-toggle="collapse" data-target="#scoring" type="button" onclick="clearRadioButtons()">No</button>
+              </div>&nbsp;&nbsp;Include scoring for Solution assessments.
+              <div class="collapse {{#if scoringScale}}in {{/if}}scoring" id="scoring">
+                Select a rating scale<span class="required-field">*</span><br />
+                <div class="radio">
+                  <label>
+                    <input id="radio-categories" type="radio" name="optradio" value="categories" {{#equalsTo scoringScale 'categories'}}checked{{/equalsTo}}/>
+                    <span class="label score score-black">Unsatisfactory</span>
+                    <span class="label score score-red">Poor</span>
+                    <span class="label score score-yellow">Fair</span>
+                    <span class="label score score-green">Good</span>
+                    <span class="label score score-blue">Excellent</span>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input id="radio-stars" type="radio" name="optradio" value="stars" {{#equalsTo scoringScale 'stars'}}checked{{/equalsTo}}/>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                    <i class="fa fa-star fa-2x"></i>
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input id="radio-passfail" type="radio" name="optradio" value="passfail" {{#equalsTo scoringScale 'passfail'}}checked{{/equalsTo}}/>
+                    <span class="label score score-green">Acceptable</span>
+                    <span class="label score score-red">Needs Improvement</span>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="form-group col-sm-12">
+            <label class="col-sm-2 control-label" data-original-title="10MB file restriction" data-placement="right"
+                   data-toggle="tooltip">
+              Upload Thumbnail <span class="glyphicon glyphicon-question-sign" data-toggle="modal"
+                                      data-target=".organizationLogo"></span>
+            </label>
+
+            <div class="col-sm-10" id="thumbnailDic">
+              <input type="hidden" class="form-control" name="thumbnail" id="thumbnail">
+
+              <div id="thumbnail-dealio">
+                <button type="button" id="thumbnail-crop-button" class="aui-button aui-button-primary">Save Image
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="clearfix"></div>
+          <hr/>
+          
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+          <h1><i class="fa fa-list fa-fw jivango-dkgray"></i> Description</h1>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Summary<br><span class="muted small" style="font-weight: normal">(Provide a brief description for the Problem listing page.)</span></label>
+
+            <div class="col-sm-10">
+              <textarea rows="4" class="form-control" id="summary" name="summary">{{trim summary}}</textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Full Description</label>
+
+            <div class="col-sm-10">
+              <textarea rows="4" class="form-control ckeditor" id="description"
+                        name="description">{{{trim description}}}</textarea>
+            </div>
+          </div>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+          <hr/>
+          <h1><i class="fa fa-calendar fa-fw baseline-shift jivango-dkgray"></i> Event Schedule</h1>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Start and End Dates<span class="required-field">*</span></label>
+
+            <div class="col-sm-4">
+              <div class="input-group add-date">
+                <input class="form-control" type="text" name="startDate" id="startDate"
+                       value="{{dateFormatter startDate 'short'}}"/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+            <label class="col-sm-1 control-label" style="text-align: center;"> to </label>
+
+            <div class="col-sm-4">
+              <div class="input-group add-date">
+                <input class="form-control" type="text" name="endDate" id="endDate"
+                       value="{{dateFormatter endDate 'short'}}"/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Solution Submission End Date<span class="required-field">*</span></label>
+			<div class="col-sm-4">
+              <div class="input-group add-date">
+                <input class="form-control" type="text" name="regEndDate" id="regEndDate"
+                       value="{{convertToEST regEndDate 'long'}}"/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2"></label>
+            <div class="col-sm-9">
+              <ul id="scheduleDates" class="list-group">
+                {{#each schedule}}
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-sm-11">
+                        <span class="mark">{{dateFormatter startDate 'short'}}{{#if endDate}}
+                          &ndash; {{dateFormatter endDate 'short'}}{{/if}}:</span>
+                        <span>{{description}}</span>
+                      </div>
+                      <div class="col-sm-1">
+                        <a href="#" onclick="userChallengeEdit.removeDateEvent(event);" data-event-id="{{_id}}"><span
+                          class="glyphicon glyphicon-remove pull-right"></span></a>
+                      </div>
+                    </div>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Add New Event</label>
+
+            <div class="col-sm-4">
+              <div class="input-group add-date">
+                <input type="text" class="form-control" name="newScheduleStartDate" id="newScheduleStartDate"
+                       placeholder="Event start date">
+                <span id="newScheduleStartDateIcon" class="input-group-addon"><span
+                  class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+            <label class="col-sm-1 control-label" style="text-align: center;"> to </label>
+            <div class="col-sm-4">
+              <div class="input-group add-date">
+                <input type="text" class="form-control" name="newScheduleEndDate" id="newScheduleEndDate"
+                       placeholder="Event end date">
+                <span id="newScheduleEndDateIcon" class="input-group-addon"><span
+                  class="glyphicon glyphicon-calendar"></span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Event Description</label>
+
+            <div class="col-sm-9">
+        <textarea rows="4" class="form-control" type="text" class="form-control" name="newScheduleDescription"
+                  id="newScheduleDescription"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-10">
+              <a class="btn btn-success" href="#" onclick="userChallengeEdit.addDateEvent(event)">Add Event</a>
+            </div>
+          </div>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+          <hr/>
+          <h1><i class="fa fa-comment fa-flip-horizontal fa-fw baseline-shift jivango-dkgray"></i> Feedback Criteria
+          </h1>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Feedback Overview</label>
+
+            <div class="col-sm-10">
+              <textarea rows="4" class="form-control ckeditor" id="evaluationCriteria"
+                        name="evaluationCriteria">{{trim evaluationCriteria}}</textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Feedback Criteria</label>
+
+            <div class="col-sm-10">
+              <ol id="feedbackInputs" class="list-group">
+                {{#each feedbackArea}}
+                  <li class="list-group-item">
+                    <div class="row">
+                      <div class="col-sm-11">
+                        <span>{{{description}}}</span>
+                      </div>
+                      <div class="col-sm-1">
+                        <a href="#" onclick="userChallengeEdit.removeFeedback(event);" data-desc="{{description}}">
+                          <span class="glyphicon glyphicon-remove pull-right"></span>
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                {{/each}}
+              </ol>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Add New Feedback Criteria</label>
+
+            <div class="col-sm-10">
+              <textarea rows="4" class="form-control ckeditor" type="text" class="form-control"
+                        name="newFeedbackDescription"
+                        id="newFeedbackDescription"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+
+            <div class="col-sm-10">
+              <a class="btn btn-success" href="#" onclick="userChallengeEdit.addFeedback(event)">Add Feedback
+                Criteria</a>
+            </div>
+          </div>
+
+          <hr/>
+          <h1><i class="fa fa-file-text fa-fw jivango-dkgray"></i> Supporting Documents</h1>
+
+          <div class="form-group" style="margin-left: -5px;">
+            <div class="col-sm-12">
+              <ul class="list-group">
+                {{#each documents}}
+                  <li class="list-group-item">
+                    <a href="{{path}}"><i class="fa fa-file-text-o"></i> {{name}}</a>
+                    <a href="#" data-id="{{id}}" onclick="userChallengeEdit.removeDocEvent(event);"
+                       class="glyphicon glyphicon-remove pull-right"></a>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="showcaseImage">Add Supporting Documents</label>
+
+            <div class="col-sm-7">
+              <input type="file" class="form-control" name="documents" id="documents" multiple>
+            </div>
+            <div class="col-sm-2"></div>
+
+          </div>
+          <hr/>
+
+          <div class="form-group text-center" style="margin-left:-5px;">
+            <div class="col-sm-12">
+              <button class="btn btn-primary" id="submitChallengeBtn" type="button" onclick="validateAndSubmit()">
+                <span class="glyphicon glyphicon-floppy-disk"></span> Update this Problem
+              </button>
+              <a class="btn btn-default" href="/admin/problems" style=""><span
+                class="glyphicon glyphicon-arrow-left"></span> Back to Problems List</a>
+            </div>
+          </div>
+          
+        {{/with}}
+      </form>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="registrationEdit">
+      {{> discovery/registration_field_edit}}
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/formbuilder/dist/formbuilder.css"/>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-scoring.css" type="text/css" media="screen"/>
+
+  <style type="text/css">
+    .ui-widget-header {
+      border: 1px solid #2e6da4;
+      background: #337ab7 url({{strings.PublicStaticContentDirectoryFullPrefixPath}}) 50% 50% repeat-x;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .ui-datepicker {
+      background: white;
+      border: 1px solid #555;
+      color: white;
+    }
+
+    .fb-main {
+      background-color: #fff;
+      border-radius: 5px;
+      min-height: 500px;
+      border: 1px solid #ddd;
+    }
+
+    .fb-main input[type=text] {
+      height: 26px;
+      margin-bottom: 3px;
+    }
+
+    .fb-main select {
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .ui-datepicker {
+      z-index: 1050 !important;;
+    }
+
+    #thumbnail-dealio {
+      width: 325px;
+      margin: 0;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #thumbnail-crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+<link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-datepicker.css" rel="stylesheet">
+
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.scrollWindowTo/index.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/moment.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/transition.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/collapse.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-timepicker-addon.js"></script>	 
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/adapters/jquery.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/underscore/underscore.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/underscore.mixin.deepExtend/index.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/backbone/backbone.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/backbone-deep-model/distribution/deep-model.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/rivets/dist/rivets.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/formbuilder/dist/formbuilder.js"></script>
+
+
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css"
+        media="all">
+  <!--[if lt IE 9]>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+        media="all"><![endif]-->
+  <!--[if IE 9]>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                          "
+        media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jquery-ui-timepicker-addon.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/discovery/user-edit.js"></script>
+  <script type="application/javascript">
+    $(function () {
+      userChallengeEdit.init('#startDate', '#endDate', '#newScheduleStartDate', '#newScheduleEndDate', '#newScheduleDescription', '#newFeedbackDescription', '#challengeID', '{{userinfo.username}}', '#regEndDate');
+      var $avatar_dealio = $("#thumbnail-dealio"),
+        $cropButton = $('#thumbnail-crop-button'),
+        $output = $("#output"),
+        $uploadOutput = $('#thumbnail');
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $uploadOutput.val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    });
+    function isCkeditorEmpty(formId) {
+      var textBoxContents = CKEDITOR.instances[formId].getData();
+      if (textBoxContents === '') {
+        return false;
+      }
+      return true;
+    };
+    function validateAndSubmit() {
+        $('#discoveryEditForm').submit();
+        $('#missing-fields-alert').removeClass('alert alert-danger');
+        $('#missing-fields-alert').text('');
+    };
+
+    $(document).ready(function(){
+        $('#managerInputs').change(function () {
+            var element = $('#discoveryManagers');
+            var managers = element.val();
+            managers = managers.replace(/\s+/g, '');
+            managers = managers.split(",");
+            var evaluators = $('#discoveryEvaluators').val();
+            evaluators = evaluators.replace(/\s+/g, '');
+            evaluators = evaluators.split(",");
+            for (var i = 0; i < managers.length; i++) {
+                if (evaluators.indexOf(managers[i]) > -1) {
+                    var errCheck = document.getElementById('discoveryManagers-error');
+                    if (errCheck == null) {
+                        $('<label id="discoveryManagers-error" class="error" for="discoveryManagers">That user is already assigned as an Evaluator</label>').appendTo(element.parent().parent('.error-placement'));
+                    }
+                    return false;
+                } else {
+                    $('#discoveryManagers-error').remove();
+                }
+            }
+        });
+        $('#evaluatorInputs').change(function () {
+            var element = $('#discoveryEvaluators');
+            var evaluators = element.val();
+            evaluators = evaluators.replace(/\s+/g, '');
+            evaluators = evaluators.split(",");
+            var managers = $('#discoveryManagers').val();
+            managers = managers.replace(/\s+/g, '');
+            managers = managers.split(",");
+
+            for (var i = 0; i < evaluators.length; i++) {
+          
+                if (managers.indexOf(evaluators[i]) > -1) {
+                    var errCheck = document.getElementById('discoveryEvaluators-error');
+                    if (errCheck == null) {
+                        $('<label id="discoveryEvaluators-error" class="error" for="discoveryEvaluators">That user is already assigned as a Manager</label>').appendTo(element.parent().parent('.error-placement'));
+                    }
+                    return false;
+                } else {
+                    $('#discoveryEvaluators-error').remove();
+                }
+            }
+        });
+      $('#discoveryManagers').tokenfield({
+        autocomplete: {
+          source: [
+            {{#each organizationUsers}}
+              {
+                value: '{{this.id}}',
+                label: '{{this.firstName}} {{this.lastName}} ({{this.email}})'
+              },
+            {{/each}}
+          ]
+
+        },
+        showAutocompleteOnFocus: true,
+        minWidth: 210
+      });
+
+      $('#discoveryEvaluators').tokenfield({
+        autocomplete: {
+          source: [
+            {{#each organizationUsers}}
+              {
+                value: '{{this.id}}',
+                label: '{{this.firstName}} {{this.lastName}} ({{this.email}})'
+              },
+            {{/each}}
+          ],
+
+
+        },
+        showAutocompleteOnFocus: true,
+        minWidth: 210
+      });
+
+      $('#discoveryManagers').tokenfield('setTokens', [
+        {{#each managers}}
+          {
+            value: '{{this.id}}',
+            label: '{{this.firstName}} {{this.lastName}} ({{this.email}})'
+          },
+        {{/each}}
+      ]);
+
+      $('#discoveryEvaluators').tokenfield('setTokens', [
+        {{#each evaluators}}
+          {
+            value: '{{this.id}}',
+            label: '{{this.firstName}} {{this.lastName}} ({{this.email}})'
+          },
+        {{/each}}
+      ]);
+
+      $('#discoveryEditForm').dirtyForms('setClean');
+    });
+  </script>
+
+  <!-- Scoring -->
+  <script>
+
+    function clearRadioButtons() {
+      $('#radio-categories').prop('checked', false);
+      $('#radio-stars').prop('checked', false);
+      $('#radio-passfail').prop('checked', false);
+    }
+
+    $('.btn-toggle').click(function() {
+      $(this).find('.btn').toggleClass('active');
+
+      if ($(this).find('.btn-primary').size()>0) {
+        $(this).find('.btn').toggleClass('btn-primary');
+      }
+      if ($(this).find('.btn-danger').size()>0) {
+        $(this).find('.btn').toggleClass('btn-danger');
+      }
+      if ($(this).find('.btn-success').size()>0) {
+        $(this).find('.btn').toggleClass('btn-success');
+      }
+      if ($(this).find('.btn-info').size()>0) {
+        $(this).find('.btn').toggleClass('btn-info');
+      }
+
+      $(this).find('.btn').toggleClass('btn-default');
+
+    });
+  </script>
+{{/contentFor}}

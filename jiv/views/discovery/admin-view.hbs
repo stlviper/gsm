@@ -1,0 +1,179 @@
+<div id="main-content" class="container maincontent-container">
+  {{#unless discovery.approved}}
+    <div class="container">
+      <div class="alert alert-info">
+        NOTE: This discovery is not approved and will not appear on the marketspace until it is marked approved.
+      </div>
+    </div>
+  {{/unless}}
+  <div class="container">
+  <h1 class="indent pull-left"><span class="hidden-xs">View:</span> {{discovery.name}} </h1>
+    </div>
+
+  <div method="POST" class="form-horizontal form-padding">
+    {{#with discovery}}
+      <input type="hidden" id="challengeID" value="{{id}}">
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Problem Title</label>
+        <div class="col-sm-10">
+          <input class="form-control" type="text" name="name" id="name" value="{{name}}" readonly/>
+        </div>
+      </div>
+      
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Problem Dates</label>
+        <div class="col-sm-4">
+            <div class="input-group add-date">
+                <input class="form-control" type="text" name="startDate" id="startDate" value="{{dateFormatter startDate 'short'}}" readonly/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+        <label class="col-sm-1 control-label" style="text-align: center;"> to </label>
+        <div class="col-sm-4">
+            <div class="input-group add-date">
+                <input class="form-control" type="text" name="endDate" id="endDate" value="{{dateFormatter endDate 'short'}}" readonly/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+    </div>
+      
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Stage</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="orgName" id="orgName" value="{{getFriendlyStage stage}}" readonly/>
+        </div>
+    </div>
+      
+    <div class="form-group">
+        <label class="col-sm-2 control-label">POC Name</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="pocName" id="pocName" value="{{pocName}}" readonly/>
+        </div>
+    </div>
+      
+    <div class="form-group">
+        <label class="col-sm-2 control-label">POC Email</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="pocEmail" id="pocEmail" value="{{pocEmail}}" readonly/>
+        </div>
+    </div>
+          
+    <div class="form-group">
+        <label class="col-sm-2 control-label">POC Organization</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="orgName" id="orgName" value="{{orgName}}" readonly/>
+        </div>
+    </div>
+      
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Need help with content?</label>
+        <div class="col-sm-10">
+            <textarea rows="3" class="form-control" id="requirements" name="requirements" readonly>{{{trim requirementDescription}}}</textarea>
+        </div>
+    </div>
+      
+        <div class="form-group">
+        <label class="col-sm-2 control-label">Categories</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" name="categories" id="categories" value="{{categories}}" readonly/>
+        </div>
+    </div>
+      
+        <hr />
+    <h2><i class="fa fa-list fa-fw jivango-dkgray"></i> Description</h2>
+      
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Summary<br><span class="muted small" style="font-weight: normal">(Provide a short description for the Problem listing page.)</span></label>
+        <div class="col-sm-10">
+            <textarea rows="4" class="form-control" id="summary" name="summary" readonly>{{trim summary}}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Full Description</label>
+        <div class="col-sm-10">
+            <div class="boxed-input">{{{trim description}}}</div>
+        </div>
+    </div>
+
+    <hr />
+    <h2><i class="fa fa-calendar fa-fw baseline-shift jivango-dkgray"></i> Event Schedule</h2>
+      
+    <div class="form-group" style="margin-left: -5px;">
+        <div class="col-sm-12">
+            <ul id="scheduleDates" class="list-group">
+    {{#if schedule}}
+    {{#each schedule}}
+                <li class="list-group-item" style="background-color: #eee;">
+                    <div class="row">
+                        
+                        <span class="mark">{{dateFormatter startDate 'short'}}{{#if endDate}}
+                    &ndash; {{dateFormatter endDate 'short'}}{{/if}}:</span> 
+                      <span>{{description}}</span>
+                    </div>
+                  </li>
+    {{/each}}
+    {{else}}
+<li class="list-group-item" style="background-color: #eee;">
+                    <div class="row">
+                        <span>No events have been entered.</span>
+                    </div>
+                  </li>
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+
+          <hr />
+          <h2><i class="fa fa-comment fa-flip-horizontal fa-fw baseline-shift jivango-dkgray"></i> Feedback Criteria</h2> 
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Feedback Overview </label>
+        <div class="col-sm-10">
+            <div class="boxed-input">{{{trim evaluationCriteria}}}</div>
+        </div>
+    </div>
+      
+    {{#if feedbackArea}}
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Feedback Criteria</label>
+        <div class="col-sm-10">
+            <ol id="feedbackInputs" class="list-group">
+            {{#each feedbackArea}}
+                <li class="list-group-item" style="background-color: #eee;">
+                    <div class="row">
+                        <span>{{{description}}}</span>
+                    </div>
+                </li>
+            {{/each}}
+            </ol>
+        </div>
+    </div>
+    {{/if}}
+
+          <hr />
+          <h2><i class="fa fa-file-text fa-fw jivango-dkgray"></i> Supporting Documents</h2>  
+          
+		  <div class="form-group" style="margin-left: -5px;">
+            <div class="col-sm-12">
+              <ul class="list-group">
+                {{#if documents}}
+                {{#each documents}}
+                  <li class="list-group-item" style="background-color: #eee;">
+                    <a href="{{path}}"><i class="fa fa-file-text-o"></i>  {{name}}</a>
+                  </li>
+                {{/each}}
+                {{else}}
+                <li class="list-group-item" style="background-color: #eee;">
+                    No documents have been added.
+                  </li>
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+      
+    {{/with}}
+    <a class="btn btn-info" href="/admin/problems"><span class="glyphicon glyphicon-arrow-left"></span> Back to Problems List</a>
+  </div>
+</div>

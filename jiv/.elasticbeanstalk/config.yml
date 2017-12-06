@@ -1,0 +1,12 @@
+branch-defaults:
+  development:
+    environment: jivango-development-eb
+  master:
+    environment: jivango-demo-eb
+global:
+  application_name: jivango
+  default_ec2_keyname: JivangoKey16Sept2014
+  default_platform: Node.js
+  default_region: us-east-1
+  profile: eb-cli
+  sc: git

@@ -1,0 +1,121 @@
+<div id="main-content" class="container maincontent-container">
+  <div id="product-list-wrapper">
+    {{#if message}}
+      <div class="row">
+        <div class="col-sm-12">
+          <span class="text-center alert alert-info">{{message}}</span>
+        </div>
+      </div>
+    {{/if}}
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="productsTitle">{{{strings.Capabilities.Title}}}</h3>
+        <hr style="color:#d3d3d3;"/>
+        {{{strings.Capabilities.Caption}}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        {{#if userinfo}}
+          {{>modal_showCaseProduct}}
+        {{else}}
+          {{>modal_login signInLink=false linkText=strings.Capabilities.Buttons.SubmitNew}}
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-3 productCategory">
+        <span class="blackTitle">{{{strings.Capabilities.CategoryLabel}}}:</span>
+
+        <hr style="color:#d3d3d3;"/>
+        <div class="product-category-list">
+          {{#each filters}}
+            <span style="font-size:15px;">
+              <a class="product-category-btn" onClick="catFilter('{{value}}'); "
+                 href="javascript:void(0);">{{value}}</a>
+            </span>
+          {{/each}}
+        </div>
+      </div>
+      <div class="col-sm-9 productList">
+
+        <ul id="product-card-list" style="list-style-type: none; margin:0 auto;">
+        <span class="grayBkg" id="productHeader">
+				<span class="float-left">
+          {{{strings.Capabilities.Title}}}
+        </span>
+		<span class="float-right">
+          {{{strings.Capabilities.QuantityLabel}}}: <span id="qty">{{lengthOf products}}</span>
+        </span>
+		</span>
+
+
+          <hr style="color:#d3d3d3;"/>
+          <div id="clearFilters" style="display:none;" onclick="clearFilter();"><a class="catBtn"
+                                                                                   href="javascript:void(0);">Clear
+            Filter</a></div>
+
+          <div class="page-nav" style="margin-left: 10px;"></div>
+          <div id="noResults" style="display:none;">{{{strings.Capabilities.NoResults}}}</div>
+          {{#if products}}
+
+            {{#each products}}
+
+              <li class="product-card1 paginate">
+
+                {{#if logoUrl}}
+
+                <a class="pic" target="_blank" href="{{webLink}}" style="background-image:url('{{logoUrl}}');">
+                {{else}}
+                <a alt="{{name}}" target="_blank" class="appImage"
+                   style="background-image:url('{{../defaultImageUrl}}');">
+                {{/if}}
+
+
+                <div class="text">
+                  <div class="product-card-info">
+                    <div>
+                      <label>{{{../strings.Capabilities.CapabilityCards.NameLabel}}}:</label> <span>{{name}}</span>
+                    </div>
+                    <div>
+                      <label>{{{../strings.Capabilities.CapabilityCards.OrganizationLabel}}}:</label>
+                      <span>{{getOrgName orgRef ../orgs}}</span>
+                    </div>
+                    <div>
+                      <label>{{{../strings.Capabilities.CapabilityCards.CategoryLabel}}}:</label> <span
+                      class="catLink">{{#if category}} {{category}} {{else}}
+                      No {{{../strings.Capabilities.CapabilityCards.CategoryLabel}}}{{/if}}</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+                <div class="product-name">{{name}} <br/>
+                  <a
+                    href="/marketspace/capabilities/discuss/{{urlFriendlyID}}">{{{../strings.Capabilities.CapabilityCards.DisqusLinkLabel}}}
+                    <span class="glyphicon glyphicon-comment"></span></a></div>
+              </li>
+            {{/each}}
+          {{else}}
+            <div class="alert alert-info" style="margin-top: 15px;" role="alert">
+              {{{strings.Capabilities.ComeBackLater}}}
+            </div>
+          {{/if}}
+        </ul>
+      </div>
+      <div class="page-nav" style="margin-left: 245px; margin-top: 20px;"></div>
+    </div>
+
+  </div>
+</div>
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript">
+    $(window).load(function () {
+      {{#if modalMsg}}
+        $('#showcaseProductModal').modal('show');
+      {{/if}}
+    });
+  </script>
+{{/contentFor}}

@@ -1,0 +1,224 @@
+{{> dashboard_sidebar_header activeId="id-org-mgmnt" activeSubId="id-org-files"}}
+<!-- Modal for View Screenshot -->
+<div id="viewScreenshot" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title">View Screenshot</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img id="screenshotSrc" alt="" class="img-responsive">
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer actions">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal for Delete Screenshot & File Warning -->
+<div id="deleteFile" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1><span class="icon icon-warning-o"></span></h1>
+                <h3>Are you sure you want to delete this file from your organization profile page?</h3>
+            </div>
+            <div class="modal-body text-center hidden">
+            </div>
+            <div class="modal-footer actions">
+                <button id="deleteBtn" type="button" class="btn btn-primary"><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal for Add Screenshot -->
+<div id="addScreenshot" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form id="screenShots_uploadForm" method="post" class="form-horizontal" style="margin-top: 15px;"
+                  action="/profile/{{userinfo.username}}/manage/addImage" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title">Add a Screenshot</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" name="orgRef" value="{{userinfo.orgRef}}" />
+                            <div class="form-group col-lg-12">
+                                <div style="height: 175px;" class="file-uploader errPlacement">
+                                    <label for="uploadFile">File input</label>
+                                    <input type="file" id="screenShots" name="screenShots">
+                                    <p class="help-block">A maximum of five screenshots are allowed. Each screenshot has a 2mb size restriction.</p>
+                                </div>
+                            </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer actions">
+                    <p id="spinnerScreenshot" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-upload"></i> Upload</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+             </form>
+       </div>
+    </div>
+</div>
+<!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+<div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+        <h1>Organization Management <small>File Manager</small></h1>
+
+    </section>
+    <!-- Widgets content -->
+    <section class="content">
+        <div class="row">
+            <!-- SCREENSHOTS -->
+            <section class="col-lg-12 connectedSortable organization-management">
+                <div class="box box-orange file_manager screenshots">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Screenshots</h3>
+                        <div class="box-tools actions pull-right">
+                            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#addScreenshot"><i class="fa fa-plus"></i> Add a Screenshot</a>
+                            <a href="#" data-toggle="tooltip" title="Public" class="btn btn-box-tool"><span class="icon icon-globe"></span></a>
+                        </div>
+                    </div><!-- /.box-header -->
+                    <div id="screenShots_wrapper" class="box-body">
+                    {{#each screenShots}}
+                        <!-- Start tile -->
+                        <div id="{{this}}" class="col-lg-3 col-xs-12">
+                            <div class="well">
+                                <div class="crop-wrapper">
+                                    <div class="crop"><a data-toggle="modal" data-target="#viewScreenshot" onclick="getScreenshot('{{this}}')"><img src="{{this}}" alt="" class="timeline-thumb"></a></div>
+                                </div>
+                                <div class="actions">
+                                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#viewScreenshot" onclick="getScreenshot('{{this}}')"><i class="fa fa-eye"></i> View</a>
+                                    <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteFile" onclick="getDeleteID('{{this}}')">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End tile -->
+                       {{/each}}
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </section><!-- ./col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+{{> dashboard_sidebar_footer}}
+{{#contentFor "pageCSS"}}
+
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/user-manage.js"></script>
+<script>
+function getDeleteID(id){
+    $('#deleteBtn').attr('onclick', "userManage.removeScreenshot(event, '" + id + "')");
+}
+function getScreenshot(id) {
+    $('#screenshotSrc').attr('src', id);
+}
+</script>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+<script type="application/javascript">
+    $(document).ready(function () {
+	var _settings = {
+    orgRef: '{{../userinfo.orgRef}}',
+    username: '{{../userinfo.username}}',
+    msgSltr: '#manageMsg',
+    screenShotFileInputSltr: '#screenShots',
+    screenShotWrapperSltr: '#screenShots_wrapper',
+    screenShotUploadFormSltr: '#screenShots_uploadForm', //Renamed this value to prevent broken submit listener from firing
+    removeImageUrl: null
+  };
+
+
+
+$.validator.addMethod('filesize', function(value, element, param) {
+    return this.optional(element) || (element.files[0].size <= param)
+});
+$.validator.addMethod('imageCount', function(value, element, param) {
+	var uploadFileCnt = $(_settings.screenShotFileInputSltr)[0].files.length;
+      var curImgCnt = $(_settings.screenShotWrapperSltr).children().length;
+	if (uploadFileCnt > 5 || curImgCnt >= 5 || (uploadFileCnt + curImgCnt) > 5) {
+
+		return false;
+      }else{
+		  return true;
+	  }
+});
+$(_settings.screenShotUploadFormSltr).validate({
+    rules: {
+	  screenShots: { filesize: 2097152, imageCount: true  }
+      },
+	  messages: { screenShots: {filesize: "File must not exceed 2MB", imageCount: "You cannot upload more than 5 images" } },
+    submitHandler: function (form) {
+      var $form = $(form);
+      var formData = new FormData($form[0]);
+	  var $spinner = $('#spinnerScreenshot');
+	  $spinner.show();
+      $.ajax({
+        url: "/profile/{{../userinfo.username}}/manage/addImage",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data, jqXHR) {
+          $spinner.hide();
+              var htmlTemplate = "<div id=\"{0}\" class='col-lg-3 col-xs-12'>" +
+                "<div class='well'>" +
+                "<div class='crop-wrapper'>" +
+                "<div class='crop'><a data-toggle='modal' data-target='#viewScreenshot' onclick='getScreenshot(\"{0}\")'><img src='{0}' alt='' class='timeline-thumb'></a></div>" +
+                "</div>" +
+                "<div class='actions'>" +
+                "<a class='btn btn-warning btn-sm' data-toggle='modal' data-target='#viewScreenshot' onclick='getScreenshot(\"{0}\")'><i class='fa fa-eye'></i> View</a>" +
+                "<a class='btn btn-default btn-sm' data-toggle='modal' data-target='#deleteFile' onclick='getDeleteID(\"{0}\")'>Delete</a>" +
+                "</div></div></div>";
+              for (var i = 0; i < data.imagesUrl.length; i++) {
+                $(_settings.screenShotWrapperSltr).append(htmlTemplate.format(data.imagesUrl[i]));
+              }
+
+              userManage.resetFileUploadValue();
+              $('#addScreenshot').modal('hide');
+        },
+        error: function (jqXHR, errorThrown) {
+            $spinner.hide();
+            var errorMessage = JSON.parse(jqXHR.responseText);
+         var errorHtml = "<label id='screenShots-error' class='error' for='screenShots'>" + errorMessage.message + "</label>";
+         $('.errPlacement').append(errorHtml);
+
+        }
+      });
+    },
+    errorPlacement: function(error, element) {
+      error.appendTo(element.parent('.errPlacement'));
+    }
+
+  });
+
+      $('[data-toggle="tooltip"]').tooltip();
+      userManage.init('{{../userinfo.orgRef}}', '{{../userinfo.username}}');
+
+
+
+    });
+</script>
+{{/contentFor}}

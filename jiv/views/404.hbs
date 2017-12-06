@@ -1,0 +1,25 @@
+<div id="main-content" class="container-fluid maincontent-container error-page">
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="">
+        <h1>Oops!</h1>
+        <div class="error-details">
+          <p>Sorry, a 404 error has occured. <br class="visible-xs" />Your requested page was not found!</p>
+        </div>
+        <div class="error-actions" style="margin-top: 20px;">
+          <a href="/" class="btn btn-primary" style="margin-right:5px;"><i class="fa fa-home"></i> Take Me Home </a>
+          <a href="/contact" class="btn btn-default"><i class="fa fa-envelope-o"></i> Contact Support </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="error-footer"></div>
+
+{{#contentFor 'pageCSS'}}
+    <link href='//fonts.googleapis.com/css?family=Lato:300'
+        rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-error.css"/>
+{{/contentFor}}

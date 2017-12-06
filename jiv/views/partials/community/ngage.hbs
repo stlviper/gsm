@@ -1,0 +1,105 @@
+<div id="customTab2" class="tab-pane" role="tabpanel">
+
+  <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/gsm-engage.png" alt="" class="img-responsive gsm-header"/>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+
+          <div id="sidebar" class="sidebar-header" data-spy="affix" data-offset-top="340">
+            <div class="list-group my-communities">
+
+              <p class="list-group-item">
+                <strong>Quick Links</strong>
+              </p>
+
+              <a href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/pdfs/eNGAge-Specific-Requirements.pdf" target="_blank"><p onClick="" class="list-group-item linked">
+                <i class="fa fa-file-pdf-o fa-fw"></i> Open Opportunities</span>
+              </p></a>
+              <a href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/pdfs/02161050_eNGAge_Slicksheet_ge_FINAL.pdf" target="_blank"><p onClick="" class="list-group-item linked">
+                <i class="fa fa-file-pdf-o fa-fw"></i> Slick Sheet</span>
+              </p></a>
+              <a href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/pdfs/02161050_eNGAge_Slicksheet_ge_FAQs_FINAL.pdf" target="_blank"><p onClick="" class="list-group-item linked">
+                <i class="fa fa-file-pdf-o fa-fw"></i> FAQs</span>
+              </p></a>
+
+
+            </div>
+
+<a href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/pdfs/SolutionSubmission_NGAge.pdf" target="_blank" id="" class="btn btn-info btn-xl btn-block btn-apply">Submit Your Solution</a>
+
+</div>
+
+        </div>
+                <div class="row" style="margin-bottom:20px;margin-top:20px;">
+              <div class="col-lg-8">
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/_zmA_M3mrSE" frameborder="0" allowfullscreen></iframe>
+              </div>
+          </div>
+      <div class="row">
+
+      {{#if editMode}}
+        <form name="customTabForm2" id="customTabForm2" class="form-horizontal"
+              action="/engage/update"
+              enctype="multipart/form-data" method="POST">
+          <div class="col-sm-12 col-md-3 col-lg-3 sidebar right hidden">
+            <div id="sidebar" data-spy="affix" data-offset-top="15">
+              <!--<div class="form-group">-->
+              <!--<label for="customTabContent">Show Tab</label>-->
+              <!--<div class="errPlacement">-->
+              <!--<input type="checkbox" id="hideTab" data-checkbox="hideTab" name="hideTab"-->
+              <!--value="{{../community.showTab2}}" data-hideTab="{{../community.showTab2}}"-->
+              <!--data-on-color="success" data-on-text="Yes" data-off-text="No"-->
+              <!--{{#if ../community.showTab2}}checked{{/if}}/>-->
+              <!--</div>-->
+              <!--</div>-->
+            </div>
+          </div>
+          <div class="col-md-8 col-sm-12">
+            <div class="form-group errPlacement">
+              <label for="customTabTitle2" data-original-title="20 characters or less" data-placement="top"
+                     data-toggle="tooltip">Page Header <span class="glyphicon glyphicon-question-sign"></span></label>
+              <input id="tabTitle2" name="tabTitle2" maxlength="200" value="{{community.tabTitle2}}" class="form-control"/>
+
+            </div>
+            <div class="form-group">
+              <label for="customTabContent2">Page Content</label>
+              <div class="col-sm-12 errPlacement" style="border: 1px #a9a9a9 dashed;"><textarea rows="4"
+                                                                                                class="form-control ckeditor"
+                                                                                                id="customTabContent2"
+                                                                                                name="customTabContent2"
+                                                                                                value="">{{{../community.tabContent2}}}</textarea>
+              </div>
+            </div>
+            <button class="btn btn-info" id="submitNewBtn" type="submit">Save</button>
+          </div>
+        </form>
+
+      {{else}}
+      {{!#if ../community.showTab}}
+        <div id="customTabContent2ReadOnly" class="col-md-9 col-sm-12">
+          <h1>{{../community.tabTitle2}}</h1>
+          {{{../community.tabContent2}}}
+        </div>
+      {{!/if}}
+      {{/if}}
+
+      <div class="col-xs-8">
+        <br/>
+        {{#if canEdit}}
+          {{#if editMode}}
+            <a href="/engage" id="editDoneTag" class="btn btn-primary btn-lg">Return
+              to Normal View</a>
+          {{/if}}
+          {{#unless editMode}}
+            <a href="/engage/edit" id="editTag" class="btn btn-primary btn-lg">Edit
+              This Page</a>
+          {{/unless}}
+        {{/if}}
+      </div>
+
+    </div>
+  </div>
+</div>

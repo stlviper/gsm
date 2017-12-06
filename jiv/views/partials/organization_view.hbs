@@ -1,0 +1,254 @@
+{{#with organization}}
+  <!-- Main content area -->
+  <div id="" class="container maincontent-container organization-view">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-3 col-lg-3">
+          <div id="sidebar" class="detail_page" data-spy="affix" data-offset-top="0">
+            <div class="sidebar thumb"
+                 data-0="height: 200px; width: 200px;"
+                 data-500="height: 180px; width: 180px;"><img src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" alt="" class="img-responsive"/></div>
+
+            <div class="organization-toggle">
+              <ul class="nav">
+
+                <li class="active"><a href="#details" role="tab" data-toggle="tab"
+                                      class="btn btn-default organization-toggle" data-0="width:200px;"
+                                      data-500="width:180px;"><i class="fa fa-file-text fa-fw"></i> Organization Details</a>
+                </li>
+
+                {{#if ../products}}
+                  <li><a href="#capabilities" role="tab" data-toggle="tab" class="btn btn-default organization-toggle"
+                         data-0="width:200px;" data-500="width:180px;"><i class="fa fa-puzzle-piece fa-fw"></i>
+                    Capabilities</a></li>
+                {{/if}}
+
+              </ul>
+            </div>
+
+            <div class="hidden-sm hidden-xs">
+              <h5>Contact Us</h5>
+              <ul class="fa-ul font-12">
+                <li><i class="fa-li fa fa-map-marker"></i>{{orgAddress}}</li>
+                <li><i class="fa-li fa fa-link"></i><span class="text-lowercase"><a href="{{orgWebsite}}"
+                                                                                    target="_blank">{{orgWebsite}}</a></span>
+                </li>
+              </ul>
+              {{#if businessPocLastName}}
+               <h5>Business POC</h5>
+              <ul class="fa-ul font-12">
+                <li>
+                    {{#if businessPocLastName}}
+                    <i class="fa-li fa fa-user"></i>{{businessPocFirstName}} {{businessPocLastName}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if businessPocLastName}}
+                    <i class="fa-li fa fa-phone"></i>{{businessPocPhone}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if businessPocLastName}}
+                    <i class="fa-li fa fa-envelope-o"></i><span class="text-lowercase"><a
+                  href="mailto:{{businessPocEmail}}">{{businessPocEmail}}</a></span>
+                    {{/if}}
+                </li>
+              </ul>
+              {{/if}}
+              {{#if technicalPocLastName}}
+                <h5>Technical POC</h5>
+              <ul class="fa-ul font-12">
+                <li>
+                    {{#if technicalPocLastName}}
+                    <i class="fa-li fa fa-user"></i>{{technicalPocFirstName}} {{technicalPocLastName}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if technicalPocPhone}}
+                    <i class="fa-li fa fa-phone"></i>{{technicalPocPhone}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if technicalPocEmail}}
+                    <i class="fa-li fa fa-envelope-o"></i><span class="text-lowercase"><a
+                  href="mailto:{{technicalPocEmail}}">{{technicalPocEmail}}</a></span>
+                    {{/if}}
+                </li>
+              </ul>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-9 col-lg-9">
+
+          <div class="pull-right">
+            {{#notEqualsTo orgRole 'both'}}
+              {{#equalsTo orgRole 'client'}}
+                <span class="badge jivango-explorer-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+              {{/equalsTo}}
+              {{#equalsTo orgRole 'provider'}}
+                <span class="badge jivango-provider-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+              {{/equalsTo}}
+              {{#equalsTo orgRole 'communityowner'}}
+                <span class="badge jivango-owner-bkgd hidden">{{getOrganizationRoleFriendly orgRole}}</span>
+              {{/equalsTo}}
+            {{else}}
+              <span class="badge jivango-explorer-bkgd hidden">{{getOrganizationRoleFriendly 'client'}}</span>
+              <span class="badge jivango-provider-bkgd hidden">{{getOrganizationRoleFriendly 'provider'}}</span>
+            {{/notEqualsTo}}
+          </div>
+
+          <div class="tab-content">
+
+            <div id="details" class="tab-pane active">
+              <h1>{{orgName}}</h1>
+
+              <h3 class="tagline">{{tagline}}</h3>
+
+              <p><label>Market Area:</label> {{marketArea}}<br/>
+                <label>Founded:</label> {{yearFounded}}<br/>
+                <label>Location:</label> {{location}}<br/>
+                <label>Size:</label> {{size}}</p>
+              {{#if screenShots}}
+                <ul class="bxslider">
+                  {{#each screenShots}}
+                    <li><img src="{{this}}" alt=""/></li>
+                  {{/each}}
+                </ul>
+              {{/if}}
+              <h3>About Us</h3>
+              {{{description}}}
+            </div>
+
+            <div id="capabilities" class="tab-pane">
+              <h3>{{orgName}}</h3>
+
+              <h1>Capabilities</h1>
+              {{#each ../products}}
+                <!-- Capabilities tile -->
+                <div class="item col-xs-12 col-sm-6 col-md-5 col-lg-4 capability-item">
+                  <div class="well tile">
+                    <a href="/capabilities/{{urlFriendlyID}}">
+                      <div class="thumb"><img src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" class="img-responsive" alt="{{name}}"/></div>
+                    </a>
+
+                    <div class="capabilities-list">
+                      <a href="/capabilities/{{urlFriendlyID}}">
+                        <h3 class="capabilityName">{{name}}</h3>
+                      <span class="categories"
+                            style="display:none;"> {{#if category}}                          {{category}}
+                      {{else}}
+                      {{/if}}</span>
+
+                        <p class="category-tag">
+                          {{#each category}}
+                            <span class="label jivango-category-bkgd category-tag">{{this}} </span>
+                          {{/each}}
+                        </p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Capabilities tile -->
+              {{/each}}
+            </div>
+
+          </div>
+
+          <div class="hidden-md hidden-lg">
+            <h4>Contact Us</h4>
+            <ul class="fa-ul">
+              <li><i class="fa-li fa fa-map-marker"></i>{{orgAddress}}</li>
+              <li><i class="fa-li fa fa-link"></i><span class="text-lowercase"><a href="{{orgWebsite}}"
+                                                                                  target="_blank">{{orgWebsite}}</a></span>
+              </li>
+            </ul>
+            {{#if businessPocLastName}}
+               <h4>Business POC</h4>
+              <ul class="fa-ul font-12">
+                <li>
+                    {{#if businessPocLastName}}
+                    <i class="fa-li fa fa-user"></i>{{businessPocFirstName}} {{businessPocLastName}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if businessPocLastName}}
+                    <i class="fa-li fa fa-phone"></i>{{businessPocPhone}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if businessPocLastName}}
+                    <i class="fa-li fa fa-envelope-o"></i><span class="text-lowercase"><a
+                  href="mailto:{{businessPocEmail}}">{{businessPocEmail}}</a></span>
+                    {{/if}}
+                </li>
+              </ul>
+              {{/if}}
+              {{#if technicalPocLastName}}
+                <h4>Technical POC</h4>
+              <ul class="fa-ul font-12">
+                <li>
+                    {{#if technicalPocLastName}}
+                    <i class="fa-li fa fa-user"></i>{{technicalPocFirstName}} {{technicalPocLastName}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if technicalPocPhone}}
+                    <i class="fa-li fa fa-phone"></i>{{technicalPocPhone}}
+                    {{/if}}
+                </li>
+                <li>
+                    {{#if technicalPocEmail}}
+                    <i class="fa-li fa fa-envelope-o"></i><span class="text-lowercase"><a
+                  href="mailto:{{technicalPocEmail}}">{{technicalPocEmail}}</a></span>
+                    {{/if}}
+                </li>
+              </ul>
+              {{/if}}
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container -->
+
+  </div><!-- /.maincontent-container -->
+  <!-- /Main content area -->
+{{/with}}
+{{#contentFor "postJqueryScripts"}}
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.bxslider.min.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    if(window.location.href.indexOf("community") > -1){
+	$('.communityBC').show();
+	}else {
+	$('.orgBC').show();
+	}
+  });
+    $('.bxslider').bxSlider({
+      mode: 'fade',
+      adaptiveHeight: true
+    });
+  </script>
+  <!-- Skrollr -->
+<!--
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.menu.min.js"></script>
+-->
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.matchHeight-min.js"></script>
+  <script type="text/javascript">
+//    setTimeout(function () {
+//      var s = skrollr.init({
+//        forceHeight: false
+//      });
+      //skrollr.menu.init(s, {
+      //	});
+//    }, 500);
+    $('#capabilities').children('.item').matchHeight({byRow: false});
+
+  </script>
+  <!-- /Skrollr -->
+{{/contentFor}}

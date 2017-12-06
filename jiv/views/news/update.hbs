@@ -1,0 +1,157 @@
+<div id="main-content" class="container maincontent-container">
+  <div class="news-item">
+    {{!-- {{#if newsArticle.image.path}}
+      <div class="pull-left thumb hidden-xs news-list-image crop">
+        <img src="{{newsArticle.image.path}}" class="img-responsive logo" alt="{{newsArticle.headline}}">
+      </div>
+    {{/if}} --}}
+      <h4>Manage News:</h4>
+      <h1><span class="news-name">{{newsArticle.headline}}</span></h1>
+      <p class="text-muted"><span class="small required-field">*Required fields</span></p>
+  </div>
+
+  <form name="newsPostForm" id="newsPostForm" class="form-horizontal indent"
+        action="/profile/{{userinfo.username}}/manage/{{community.urlFriendlyID}}/news/{{newsArticle.urlFriendlyID}}"
+        enctype="multipart/form-data" method="POST">
+    <div class="newsAlert">
+    </div>
+    <input type="hidden" name="communityID" value="{{community.id}}"/>
+    <input type="hidden" name="newsID" value="{{newsArticle.urlFriendlyID}}"/>
+
+    {{#with newsArticle}}
+      
+      <div class="form-group">
+        <label class="control-label col-sm-2">
+        Approved 
+        </label>
+        <div class="col-sm-10">
+            <input type="checkbox" name="approved" data-on-color="success" data-on-text="Yes" data-off-text="No" 
+                   {{#if approved}}checked{{/if}}>            
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-sm-2">Headline<span class="required-field">*</span></label>
+        <div class="col-sm-10">
+                <input class="form-control" type="text" name="headline" id="headline" placeholder="Headline"
+                 value="{{headline}}"/>
+                <div class="errorTxt">
+                    {{#if ../errorMessage}}
+                        <label id="headline-error" class="error" for="headline">{{../../errorMessage}}</label>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+      
+      <div class="form-group">
+          <label class="col-sm-2 control-label">Published On<span class="required-field">*</span></label>
+          <div class="col-sm-6">
+              <div class="input-group add-date">
+                  <input type="text" class="form-control" name="releaseDate" id="releaseDate" placeholder="Published On"
+                   value="{{dateFormatter releaseDate 'short'}}">
+                  <span id="releaseDateIcon" class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+              </div>
+              <div class="errorTxt"></div>
+          </div>
+      </div>
+      
+      <div class="form-group">
+          <label class="col-sm-2 control-label" data-original-title="Start typing any tag you wish and press 'Enter' or 'Tab' to save it. Enter as many as you like." data-placement="right" data-toggle="tooltip">Category Tags <span class="glyphicon glyphicon-question-sign"></span></label>
+          <div class="col-sm-10">
+              <input class="form-control" type="text" name="categories" id="newsCategories" placeholder="Category Tags" value="{{categories}}"/>
+          </div>
+      </div>
+      
+      <div class="form-group">
+          {{#if image.path}}
+            <label class="col-sm-2 control-label">Current Image</label>
+            <div class="news-image col-sm-10" style="margin-top:0;">
+                <img src="{{image.path}}" class="img-responsive logo" alt="{{headline}}" style="max-height: 200px;">
+            </div>
+          {{/if}}          
+          <label for="showcaseImage" class="col-sm-2 control-label" data-original-title="10MB file restriction" data-placement="right" data-toggle="tooltip">Upload New Image <span class="glyphicon glyphicon-question-sign"></span></label>
+          <div class="col-sm-10">
+              <input type="file" class="form-control" name="image" id="image">
+          </div>
+      </div>     
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Body Content</label>
+        <div class="col-sm-10">
+              <textarea rows="4" class="form-control ckeditor" id="content" name="content" value="">{{content}}</textarea>
+        </div>
+        <div class="errorTxt"></div>
+      </div>
+      <h1><i class="fa fa-file-text fa-fw jivango-dkgray"></i> Attachment</h1>
+
+          <div class="form-group" style="margin-left: -5px;">
+            <div class="col-sm-12">
+              
+              <ul id="documentsList" class="list-group">
+                  
+                {{#if attachment.path.length}}
+                  <li class="list-group-item">
+                    <a href="{{attachment.path}}"><i class="fa fa-file-text-o"></i> {{attachment.name}}</a>
+                    <a href="#" data-id="{{attachment.path}}" onclick="removeAttachment(event);"
+                       class="glyphicon glyphicon-remove pull-right"></a>
+                  </li>
+                {{/if}}
+              </ul>
+            </div>
+			
+			<div class="form-group">
+            <label class="col-sm-2 control-label">New Attachment</label>
+            <div id="fileWrapper" class="col-sm-10 error-placement" style="height:25px;">
+              <input class="form-control" type="file" name="attachment" id="attachment" multiple />
+            </div>
+          </div>
+          </div>
+    {{/with}}
+      
+      <div class="text-center">
+        <button class="btn btn-primary" id="submitNewBtn" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span>  Update this News Story</button>
+        <a href="#" class="btn btn-default" data-dismiss="modal" style=""><span class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard</a>
+      </div>
+  </form>
+</div>
+
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <style>
+    #ui-datepicker-div {
+      z-index: 2000 !important;
+    }
+  </style>
+<link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+<link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-datepicker.css" rel="stylesheet">
+
+{{/contentFor}}
+{{#contentFor "postJqueryScripts"}}
+<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+<script>
+    $("[name='approved']").bootstrapSwitch();
+    function removeAttachment (event) {
+        event.preventDefault();
+        var $link = $(event.target);
+        var comminityID = '{{community.id}}';
+        var newsID = $link.attr('data-id');
+        var postData = {newsID: newsID, communityID: comminityID };
+        $.post('/community/removeNewsAttachment', postData).done(
+            function (data) {
+                $link.parent().remove();
+            }).fail(function (data) {
+            });
+    };
+</script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+{{/contentFor}}
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/manage/news-update.js"></script>
+{{/contentFor}}

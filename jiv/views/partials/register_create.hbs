@@ -1,0 +1,114 @@
+<div class="form-group">
+  <div class="col-sm-12">
+    <p class="alert alert-default"><span class="icon-warning icon" style="font-size: 150%; position: relative; top:2px;"></span> All information provided here is protected and will only be directly shared with the Problem owner!
+    </p>
+  </div>
+</div>
+{{#if discovery.customRegistrationFields}}
+  {{#each discovery.customRegistrationFields}}
+    {{> customField}}
+  {{/each}}
+{{/if}}
+
+{{#if discovery.addWhitepaper}}
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Attachment <span class="muted small" style="font-weight: normal;">(if applicable)</span></label>
+
+    <div class="col-sm-9" style="height:25px;">
+      <div class="">
+        <input type="file" name="whitepaper" id="whitepaper" class="form-control"/>
+      </div>
+      <div class="errorText" id="fileTypeError"></div>
+    </div>
+  </div>
+{{/if}}
+
+{{#if discovery.addProduct}}
+  <div class="form-group">
+    <label class="col-sm-3 control-label" data-toggle="tooltip" data-placement="right"
+           data-original-title="{{#unless products}}{{strings.Solutions.Messages.NoCapabilities}}{{else}}Only approved capabilities are available to select.  If you would like yours added, please submit a capability request.{{/unless}}">Capability Name <span class="glyphicon glyphicon-question-sign" data-target=".organizationLogo" data-toggle="modal"></span><br /><span class="muted small" style="font-weight: normal;">(if applicable)</span></label>
+
+    <div class="col-sm-9">
+      <div class="">
+        <select name="capabilityId" id="productDrpDwn" class="form-control" data-toggle="tooltip" data-placement="top"
+                data-original-title="{{#unless products}}{{strings.Solutions.Messages.NoCapabilities}}{{else}}Only approved capabilities are available to select.  If you would like yours added, please submit a capability request.{{/unless}}"
+                {{#unless products}}disabled{{/unless}}>
+          <option value="">{{#unless products}}{{strings.Solutions.Messages.NoCapabilities}}{{else}}
+            Select one{{/unless}}</option>
+          {{#each products}}
+            <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="errorTxt"></div>
+    </div>
+  </div>
+
+  {{#if products}}
+    <div id="productDescFields" style="display: none;">
+      <div class="form-group">
+        <div class="col-sm-12">
+          <p class="alert alert-default">
+            <span class="icon-warning icon" style="font-size: 150%; position: relative; top:2px;"></span> Please provide instructions with how the Problem owner should <u><i>access</i></u> your capability. An
+            example could be a URL with username and password, a link to the Google Play Store for a free trial, or that someone will contact them directly to get setup.
+          </p>
+        </div>
+        <label class="col-sm-12">
+            Capability Access Instructions<span class="required-field">*</span><span class="muted small" style="font-weight: normal;">(less than 200 words)</span>
+        </label>
+        <div class="col-sm-12">
+          <div class="">
+          <textarea rows="2" class="form-control" id="accessInstructions" style="margin-bottom: 10px;" placeholder="Capability Access Instructions"
+                    name="accessInstructions">{{formData.accessInstructions}}</textarea>
+          </div>
+          <div class="errorTxt"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-12">
+          <p class="alert alert-default">
+            <span class="icon-warning icon" style="font-size: 150%; position: relative; top:2px;"></span> Please provide a description to guide the Problem owner on how to <u><i>use</i></u> your capability. Attach any supporting documentation that could include screenshots with instructions or other training related guidance.
+          </p>
+        </div>
+        <label class="col-sm-3 control-label">Other Documentation</label>
+        <div class="col-sm-9" style="height:25px;">
+          <div class="">
+            <input type="file" name="otherDocumentation" id="otherDocumentation" class="form-control" multiple/>
+          </div>
+          <div class="errorText" id="fileTypeErrorOther"></div>
+        </div>
+        <div class="col-sm-12">
+          <ul id="otherDocumentationList"></ul>
+        </div>
+
+      </div>
+    </div>
+  {{/if}}
+{{/if}}
+
+<div class="modal-footer text-center">
+  <p id="spinnerRegister" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+  <button class="btn btn-primary" id="submitChallengeBtn" type="submit" style="margin-bottom:0;"><span class="glyphicon glyphicon-envelope"></span> Submit Solution</button>
+  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+</div>
+
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript">
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(function () {
+      var $productDrpDwn = $('#productDrpDwn');
+      $productDrpDwn.change(function () {
+        var $productDescFields = $('#productDescFields');
+        if ($productDrpDwn.val() === '') {
+          $productDescFields.hide('slow');
+          return;
+        }
+        $productDescFields.show('slow');
+      });
+    });
+  </script>
+{{/contentFor}}

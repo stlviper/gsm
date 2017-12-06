@@ -1,0 +1,50 @@
+<div id="main-content" class="container maincontent-container">
+  {{>message}}
+  {{debug log}}
+  {{#with log}}
+    <div class="form-horizontal" style="padding-top: 50px;">
+      <div class="form-group">
+        <label class="col-sm-2 control-label">ID</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{_id}}" disabled>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Level</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{level}}" disabled>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Time Stamp</label>
+
+        <div class="col-sm-10">
+          <input type="text" class="form-control" value="{{dateFormatter timestamp 'long' 'America/New_York'}}" disabled>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Message</label>
+
+        <div class="col-sm-10">
+          <pre>{{{prettyPrintJSON message}}}</pre>
+        </div>
+      </div>
+      {{#if trace}}
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Stack</label>
+
+          <div class="col-sm-10">
+            <pre>{{stack}}</pre>
+          </div>
+        </div>
+      {{/if}}
+
+      <a href="/admin/logs" class="btn btn-primary long-btn">Back To List</a>
+    </div>
+  {{/with}}
+</div>

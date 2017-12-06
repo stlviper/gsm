@@ -1,0 +1,385 @@
+<div id="main-content" class="container maincontent-container" style="padding-left: 30px; margin-top: 5px; margin-bottom: 30px;">
+  <div class="row">
+    <div id="manageMsg" class="alert  alert-info hide "></div>
+  </div>
+  <!-- Submission Confirmation Modal -->
+  <div id="confirmFeedbackSubmissionModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body">
+          <h1 class="icon"><span class="icon icon-question-o"></span></h1>
+          <h2 class="text-center">Are you sure you want to do that?</h2>
+          <p class="text-center">The feedback comments and attachments will be sent directly to the provider.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" name="submitFeedbackBtnModal" onclick="submitFeedback(this.value)"> <span class="glyphicon glyphicon-envelope"></span> Yes. Send it!</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left:0;">No. Don't send it.</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="registrationListingsMessage" class="alert {{#if isAlert}} alert-danger {{else}} alert-info {{/if}}
+        {{#unless message}} hide {{/unless}}">
+        {{message}}
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 24px; margin-top: 0; margin-bottom: 0;">Solutions for</h3>
+  <h1 style="font-size: 36px; margin-top: 0; margin-bottom: 10px;">{{challenge.name}}</h1>
+
+  <label>Problem Manager(s):</label>
+  {{#if challenge.discoveryManagers}}
+    {{#each challenge.discoveryManagers}}
+      <span class="label label-default">{{getAccountNameById this ../accounts}}</span>
+    {{/each}}
+  {{else}}
+    <span class="label label-default">None</span>
+  {{/if}}
+  <br />
+
+  <label>Problem Evaluator(s):</label>
+  {{#if challenge.discoveryEvaluators}}
+    {{#each challenge.discoveryEvaluators}}
+      <span class="label label-default">{{getAccountNameById this ../../accounts}}</span>
+    {{/each}}
+  {{else}}
+    <span class="label label-default">None</span>
+  {{/if}}
+  <br />
+
+  <div class="registration-list">
+    <div class="row">
+      <div class="col-sm-12 text-center">
+      </div>
+    </div>
+    <table id="discoverTbl" class="jiv-table table table-striped table-bordered table-hover registration">
+      <thead>
+      <tr class="table-title">
+        <td>Registered Organization</td>
+        <td>Date Registered</td>
+        <td>Step 1 &ndash; Internal Assessment</td>
+        <td>Step 2 &ndash; External Feedback</td>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each registrations}}
+        <tr>
+          <td class="registration-name">
+            <div id="output" class="aui-avatar aui-avatar-standard">
+              <div class="aui-avatar-inner thumb">
+                <img src="{{getOrgLogoURL orgRef ../orgs}}" class="img-responsive logo" alt="{{getOrgName orgRef ../orgs}}">
+              </div>
+            </div>
+            <div class="provider-info">
+              <span class="provider-name">{{getOrgName orgRef ../orgs}}</span><br />
+              <a href="/profile/{{../userinfo.username}}/manage/solutions/{{_id}}">View Solution</a>
+            </div>
+          </td>
+          <td class="registration-date">{{dateFormatter date_created 'short'}}</td>
+          <td class="registration-actions">
+
+            {{#isPermittedForInternalAssessment ../challenge.discoveryManagers ../challenge.discoveryEvaluators ../userinfo.id}}
+              {{#hasStartedInternalAssessment ../../userinfo.id internalAssessments}}
+                <a class="btn btn-default btn-start" href="/profile/{{../../../userinfo.username}}/manage/solutions/{{id}}/{{getInternalAssessmentId ../../../userinfo.id internalAssessments}}/updateinternalassessment">
+                  <span class="glyphicon glyphicon-edit"></span> Edit My Internal Assessment</a>
+              {{else}}
+                <a class="btn btn-success btn-start" href="/profile/{{../../../userinfo.username}}/manage/solutions/{{id}}/createinternalassessment">
+                  <i class="fa fa-pencil"></i> Start My Internal Assessment</a>
+              {{/hasStartedInternalAssessment}}
+
+              <a data-toggle="collapse" href="#{{_id}}" class="evaluator-toggle collapsed">View Assessment(s) <span class="badge badge-primary">{{getNumberOfSubmittedInternalAssessments internalAssessments}}</span></a>
+              <div id="{{_id}}" class="collapse">
+                <table class="jiv-table table table-striped table-bordered table-hover evaluator">
+                  {{#hasStartedInternalAssessment ../../userinfo.id internalAssessments}}
+                    <tr>
+                      <td class="evaluator-name">My Assessment</td>
+                      {{#equalsTo ../../../challenge.scoringScale "categories"}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "2"}}
+                          <td class="evaluator-score"><span class="label score score-black">Unsatisfactory</span></td>
+                        {{/equalsTo}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "4"}}
+                          <td class="evaluator-score"><span class="label score score-red">Poor</span></td>
+                        {{/equalsTo}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "6"}}
+                          <td class="evaluator-score"><span class="label score score-yellow">Fair</span></td>
+                        {{/equalsTo}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "8"}}
+                          <td class="evaluator-score"><span class="label score score-green">Good</span></td>
+                        {{/equalsTo}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "10"}}
+                          <td class="evaluator-score"><span class="label score score-blue">Excellent</span></td>
+                        {{/equalsTo}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "Not Scored Yet"}}
+                          <td class="evaluator-score"><span class="label score score-disabled">&nbsp;</span></td>
+                        {{/equalsTo}}
+                      {{/equalsTo}}
+                      {{#equalsTo ../../../challenge.scoringScale "stars"}}
+                        <td class="evaluator-score">
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="1" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "1"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="2" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "2"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="3" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "3"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="4" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "4"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="5" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "5"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="6" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "6"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="7" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "7"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="8" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "8"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="9" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "9"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                          <input type="radio" name="ratingRadioBtnMe-{{../../../id}}" value="10" disabled="disabled"
+                                 class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "10"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                        </td>
+                      {{/equalsTo}}
+                      {{#equalsTo ../../../challenge.scoringScale "passfail"}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "5"}}
+                          <td class="evaluator-score"><span class="label score score-red">Needs Improvement</span></td>
+                        {{/equalsTo}}
+                        {{#equalsTo (getInternalAssessmentScore ../../../../userinfo.id internalAssessments) "10"}}
+                          <td class="evaluator-score"><span class="label score score-green">Acceptable</span></td>
+                        {{/equalsTo}}
+                      {{/equalsTo}}
+
+                      {{#equalsTo (getInternalAssessmentScore ../../../userinfo.id internalAssessments) "Not Scored Yet"}}
+                        <td class="evaluator-score"><span class="label score score-disabled">&nbsp;</span></td>
+                      {{/equalsTo}}
+
+                      <td class="evaluator-btn"><a class="btn btn-lite btn-xs" href="/profile/{{../../../userinfo.username}}/manage/solutions/{{id}}/{{getInternalAssessmentId ../../../userinfo.id internalAssessments}}/readinternalassessment">View</a></td>
+                    </tr>
+                  {{/hasStartedInternalAssessment}}
+
+                  {{#doesExistOtherEvaluators ../../challenge.discoveryManagers ../../challenge.discoveryEvaluators}}
+                    {{#each ../../../challenge.discoveryManagers}}
+                      {{#notEqualsTo this ../../../../userinfo.id}}
+                        {{#hasStartedInternalAssessment ../this ../../internalAssessments}}
+                          <tr>
+                            <td class="evaluator-name">{{getAccountNameById ../../this ../../../../../../accounts}}</td>
+                            {{#equalsTo ../../../../../../challenge.scoringScale "categories"}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "2"}}
+                                <td class="evaluator-score"><span class="label score score-black">Unsatisfactory</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "4"}}
+                                <td class="evaluator-score"><span class="label score score-red">Poor</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "6"}}
+                                <td class="evaluator-score"><span class="label score score-yellow">Fair</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "8"}}
+                                <td class="evaluator-score"><span class="label score score-green">Good</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "10"}}
+                                <td class="evaluator-score"><span class="label score score-blue">Excellent</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "Not Scored Yet"}}
+                                <td class="evaluator-score"><span class="label score score-disabled">&nbsp;</span></td>
+                              {{/equalsTo}}
+                            {{/equalsTo}}
+                            {{#equalsTo ../../../../../../challenge.scoringScale "stars"}}
+                              <td class="evaluator-score">
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="1" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "1"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="2" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "2"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="3" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "3"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="4" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "4"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="5" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "5"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="6" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "6"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="7" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "7"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="8" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "8"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="9" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "9"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnManager-{{../../../../../../id}}" value="10" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "10"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                              </td>
+                            {{/equalsTo}}
+                            {{#equalsTo ../../../../../../challenge.scoringScale "passfail"}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "5"}}
+                                <td class="evaluator-score"><span class="label score score-red">Needs Improvement</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "10"}}
+                                <td class="evaluator-score"><span class="label score score-green">Acceptable</span></td>
+                              {{/equalsTo}}
+                            {{/equalsTo}}
+
+                            <td class="evaluator-btn"><a class="btn btn-lite btn-xs" href="/profile/{{../../../../../../userinfo.username}}/manage/solutions/{{../../../../../id}}/{{getInternalAssessmentId ../../this ../../../internalAssessments}}/readinternalassessment">View</a></td>
+                          </tr>
+                        {{/hasStartedInternalAssessment}}
+                      {{/notEqualsTo}}
+                    {{/each}}
+                    {{#each ../../../challenge.discoveryEvaluators}}
+                      {{#notEqualsTo this ../../../../userinfo.id}}
+                        {{#hasStartedInternalAssessment ../this ../../internalAssessments}}
+                          <tr>
+                            <td class="evaluator-name">{{getAccountNameById ../../this ../../../../../../accounts}}</td>
+                            {{#equalsTo ../../../../../../challenge.scoringScale "categories"}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "2"}}
+                                <td class="evaluator-score"><span class="label score score-black">Unsatisfactory</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "4"}}
+                                <td class="evaluator-score"><span class="label score score-red">Poor</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "6"}}
+                                <td class="evaluator-score"><span class="label score score-yellow">Fair</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "8"}}
+                                <td class="evaluator-score"><span class="label score score-green">Good</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "10"}}
+                                <td class="evaluator-score"><span class="label score score-blue">Excellent</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "Not Scored Yet"}}
+                                <td class="evaluator-score"><span class="label score score-disabled">&nbsp;</span></td>
+                              {{/equalsTo}}
+                            {{/equalsTo}}
+                            {{#equalsTo ../../../../../../challenge.scoringScale "stars"}}
+                              <td class="evaluator-score">
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="1" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "1"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="2" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "2"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="3" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "3"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="4" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "4"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="5" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "5"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="6" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "6"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="7" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "7"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="8" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "8"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="9" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "9"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                                <input type="radio" name="ratingRadioBtnEvaluator-{{../../../../../../id}}" value="10" disabled="disabled"
+                                       class="star {{#greaterThanOrEqualTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "10"}}star-rating-on{{/greaterThanOrEqualTo}} {half:true}"/>
+                              </td>
+                            {{/equalsTo}}
+                            {{#equalsTo ../../../../../../challenge.scoringScale "passfail"}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "5"}}
+                                <td class="evaluator-score"><span class="label score score-red">Needs Improvement</span></td>
+                              {{/equalsTo}}
+                              {{#equalsTo (getInternalAssessmentScore ../../../this ../../../../internalAssessments) "10"}}
+                                <td class="evaluator-score"><span class="label score score-green">Acceptable</span></td>
+                              {{/equalsTo}}
+                            {{/equalsTo}}
+
+                            <td class="evaluator-btn"><a class="btn btn-lite btn-xs" href="/profile/{{../../../../../../userinfo.username}}/manage/solutions/{{../../../../../id}}/{{getInternalAssessmentId ../../this ../../../internalAssessments}}/readinternalassessment">View</a></td>
+
+                          </tr>
+                        {{/hasStartedInternalAssessment}}
+                      {{/notEqualsTo}}
+                    {{/each}}
+                  {{/doesExistOtherEvaluators}}
+                </table>
+              </div>
+            {{else}}
+              <a class="btn btn-default btn-start" href="" disabled>
+                <i class="fa fa-pencil"></i> Start My Internal Assessment</a>
+            {{/isPermittedForInternalAssessment}}
+          </td>
+          <td class="registration-actions">
+            {{#isPermittedForProviderFeedback ../challenge.discoveryManagers ../userinfo.id}}
+              {{#isAtLeastOneInternalAssessmentSubmitted ../internalAssessments}}
+                {{#if ../../feedback.0.isDraft}}
+                  <a class="btn btn-default btn-start" href="/profile/{{../../../../userinfo.username}}/manage/solutions/{{../this.id}}/resumefeedback">
+                    <span class="glyphicon glyphicon-edit"></span> Edit Feedback to Provider</a>
+                  <br />
+                  <div class="text-center"><small><a data-route="{{../../this.id}}/{{../../feedback.0.id}}" data-toggle="modal" href="#confirmFeedbackSubmissionModal"><span class="glyphicon glyphicon-envelope"></span> Send Feedback to Provider</a></small></div>
+                {{else}}
+                  {{#if ../../feedback.0.date_created}}
+                    <a class="btn btn-start btn-lite" href="/profile/{{../../../../../userinfo.username}}/manage/solutions/{{../this.id}}/feedback/{{../../feedback.0.id}}/{{getOrganizationRoleForDiscovery ../this.orgRef ../../../../../orgs}}">
+                      <span class="glyphicon glyphicon-eye-open"></span> View Feedback to Provider</a><br />
+                    {{#if ../../feedback.0.date_submitted}}<div class="text-center"><small>Sent to provider: {{dateFormatter ../../feedback.0.date_submitted 'short'}}</small></div>{{/if}}
+                  {{else}}
+                    <a class="btn btn-success btn-start" href="/profile/{{../../../../../userinfo.username}}/manage/solutions/{{../this.id}}/leavefeedback"><i class="fa fa-pencil"></i> Start Feedback to Provider</a>
+                  {{/if}}
+                {{/if}}
+              {{else}}
+                <a class="btn btn-default btn-start" href="" disabled><i class="fa fa-pencil"></i> Start Feedback to Provider</a>
+              {{/isAtLeastOneInternalAssessmentSubmitted}}
+            {{else}}
+              <a class="btn btn-default btn-start" href="" disabled><i class="fa fa-pencil"></i> Start Feedback to Provider</a>
+            {{/isPermittedForProviderFeedback}}
+          </td>
+        </tr>
+      {{/each}}
+
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center" style="margin-left:-5px;">
+    <div class="col-sm-12">
+      <a class="btn btn-default" href="javascript:history.back()"
+         style="margin-top:5px;"><span class="glyphicon glyphicon-arrow-left"></span> Back to Problems List</a>
+    </div>
+  </div>
+
+  {{#contentFor 'pageCSS'}}
+    <!-- Scoring  -->
+    <style type="text/css">
+      .aui-avatar-standard,
+      .aui-avatar-standard .aui-avatar-inner {
+        height: 60px;
+        width: 60px;
+      }
+    </style>
+
+    <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-scoring.css" type="text/css" media="screen"/>
+    <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
+    <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css" type="text/css" rel="stylesheet"/>
+  {{/contentFor}}
+
+  {{#contentFor 'pageScripts'}}
+    <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/star-rating/jquery.MetaData.js" type="text/javascript" language="javascript"></script>
+    <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/star-rating/jquery.rating.js" type="text/javascript" language="javascript"></script>
+    <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+
+    <script type="application/javascript" language="javascript">
+      // Enable dataTable
+      $('#discoverTbl').dataTable();
+
+      $('#confirmFeedbackSubmissionModal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var route = $(e.relatedTarget).data('route');
+
+        // Set the value to the id so it can be passed to the modal
+        $(e.currentTarget).find('button[name="submitFeedbackBtnModal"]').val(route);
+      });
+
+      function submitFeedback (route) {
+        $.ajax({
+          type: 'POST',
+          url: 'view/'+route+'/submitproviderfeedback',
+          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+          dataType: 'json',
+          success: function(response) {
+            $('#confirmFeedbackSubmissionModal').modal('hide');
+            location.reload();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alert(thrownError);
+          }
+        });
+      }
+    </script>
+  {{/contentFor}}
+</div>

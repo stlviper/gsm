@@ -1,0 +1,78 @@
+<div id="main-content" class="container maincontent-container">
+  {{#if message}}
+    <div class=" alert {{#if isAlert}} alert-danger {{else}} alert-info {{/if}}">
+      {{message}}
+    </div>
+  {{/if}}
+
+  <form class="form-horizontal check-dirty" id="new-user-form" action="/admin/users/create" method="post"
+        enctype="application/x-www-form-urlencoded">
+    <h2>New User</h2>
+    <hr/>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Display Name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="username" id="new-user-screenname"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2  control-label">First Name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="firstName" id="new-user-firstname"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2  control-label">Last Name</label>
+
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="lastName" id="new-user-lastname"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+
+      <div class="col-sm-10">
+        <input class="col-sm-2 form-control" type="text" name="email" id="new-user-email"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Password</label>
+
+      <div class="col-sm-10">
+        <input class="col-sm-2 form-control" type="password" name="password"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Confirm</label>
+
+      <div class="col-sm-10">
+        <input class="col-sm-2 form-control" type="password" name="confPassword"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Roles</label>
+
+      <div class="col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="admin"> Admin
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="user"> User
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <input class="btn btn-primary" type="submit" id="new-user-submit"/>
+  </form>
+</div>
+

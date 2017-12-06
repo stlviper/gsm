@@ -1,0 +1,156 @@
+<div id="main-content" class="container maincontent-container">
+  <!--{{>message}}-->
+  <h4 style="margin-bottom: 5px;">Feedback for</h4>
+  <h1>{{registration.challengeName}}</h1>
+  <div class="container">
+    <form method="post" enctype="multipart/form-data" class="form-horizontal form-padding check-dirty">
+      <div class="row">
+        <div class="col-sm-12">
+
+          <div class="alert alert-info">
+            Leave a Comment here but for more detailed feedback please attach a feedback document with the "Feedback" field.
+            If additional documents are needed outside of the feedback or summary use the "other documents".
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label>Feedback Overview</label>
+        </div>
+
+      {{#greaterThan registration.feedback.length 0}}
+        {{#isAFeedbackInDraft registration.feedback}}
+          {{#each registration.feedback}}
+            {{#if this.isDraft}}
+              <div class="col-sm-10">
+                <textarea class="form-control ckeditor" type="text" name="summary">{{this.summary}}</textarea>
+              </div>
+            {{/if}}
+          {{/each}}
+        {{else}}
+          <div class="col-sm-10">
+            <textarea class="form-control ckeditor" type="text" name="summary"></textarea>
+          </div>
+        {{/isAFeedbackInDraft}}
+      {{else}}
+        <div class="col-sm-10">
+          <textarea class="form-control ckeditor" type="text" name="summary"></textarea>
+        </div>
+      {{/greaterThan}}
+      </div>
+
+      {{#each challenge.feedbackArea}}
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label>Feedback Criteria:</label>
+          </div>
+          <div class="col-sm-10">
+            {{{this.description}}}
+          </div>
+
+          <div class="col-sm-2 control-label">
+            <label>Feedback Response:</label>
+          </div>
+          <div class="col-sm-10">
+            <textarea class="form-control ckeditor" type="text" name="feedbackArea-{{this._id}}">{{getFeedbackResponse this._id ../registration}}</textarea>
+          </div>
+        </div>
+      {{/each}}
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Feedback</label>
+
+        <div class="col-sm-10">
+          <input type="file" name="feedbackDoc" id="feedbackDoc" class="form-control"/>
+            {{#if registration.feedback}}
+              {{#each registration.feedback}}
+                {{#if isDraft}}
+                  {{#if feedbackDoc}}
+                    <br>
+                    <div class="documentContainer">
+                      <a class="btn-sm btn-default" onclick="deleteFeedbackDocument(this,'{{_id}}', '{{feedbackDoc.name}}')" href="#" style="color:#fff;"><span class="glyphicon glyphicon-remove"></span>&nbsp&nbsp{{feedbackDoc.name}}</a>
+                    </div>
+                  {{/if}}
+                {{/if}}
+              {{/each}}
+            {{/if}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Other Documents</label>
+
+        <div class="col-sm-10" style="margin-bottom: 10px;">
+          <input type="file" name="otherDocuments" id="otherDocuments" class="form-control" multiple/>
+          {{#if registration.feedback}}
+            {{#each registration.feedback}}
+              {{#if isDraft}}
+                {{#each this.otherDocuments}}
+                  <br>
+                  <div class="documentContainer">
+                    <a class="btn-sm btn-default" onclick="deleteOtherDocument(this,'{{../_id}}', '{{name}}')" style="color:#fff;"><span class="glyphicon glyphicon-remove"></span>&nbsp&nbsp{{name}}</a>
+                  </div>
+                {{/each}}
+              {{/if}}
+            {{/each}}
+          {{/if}}
+        </div>
+      </div>
+     <br>
+      <div class="col-sm-2 hidden-xs"></div>
+      <div class="col-sm-10">
+        <label for="saveDraftBtn" class="btn btn-warning" style="margin-bottom: 10px;"><i class="glyphicon glyphicon-hdd"></i> Save Draft</label>
+        <input type="submit" name="operation" value="Save Draft" class="hidden" id="saveDraftBtn"/>
+        <label for="submitBtn" class="btn btn-success" style="margin-bottom: 10px;"><i class="fa fa-comment"></i> Submit Feedback</label>
+        <input type="submit" name="operation" value="Submit Feedback" class="hidden" id="submitBtn"/>
+        <a class="btn btn-info" href="/profile/{{userinfo.username}}/manage/solutions/{{registration.id}}">
+          <span class="glyphicon glyphicon-eye-open"></span> View Solution Details
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-form-v3.51.0.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script>
+    function deleteFeedbackDocument (element, id, name) {
+      $.ajax({
+        type: 'POST',
+        url: 'resumefeedback/' + id + '/' + name + '/deletefeedbackdocument',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        success: function(response) {
+          removeElementFromPage(response, element)
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          displayErrorMessage(thrownError);
+        }
+      });
+    }
+    function removeElementFromPage (response, element) {
+      $('#manageRegisterMsg').attr('class', 'alert alert-info');
+      $('#manageRegisterMsg').text(response.message);
+      element.remove();
+    }
+    function displayErrorMessage (thrownError) {
+      $('#manageRegisterMsg').attr('class', 'alert alert-danger');
+      $('#manageRegisterMsg').text('File deletion failed. Please try again at a later time.');
+    }
+
+    function deleteOtherDocument (element, id, name) {
+      $.ajax({
+        type: 'POST',
+        url: 'resumefeedback/' + id + '/' + name + '/deleteotherdocument',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        success: function(response) {
+          removeElementFromPage(response, element)
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          displayErrorMessage(thrownError);
+        }
+      });
+    }
+  </script>
+{{/contentFor}}

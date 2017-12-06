@@ -1,0 +1,83 @@
+<div class="form-group custom-form-field ">
+  <label class="col-sm-3 control-label" data-original-title="{{field_options.description}}" data-placement="top"
+         data-toggle="tooltip">
+    {{label}}{{#if required}}<span class="required-field">*</span>{{/if}}
+    {{#if field_options.description}}
+      <span class="glyphicon glyphicon-question-sign" data-toggle="modal" data-target=".organizationLogo"></span>
+    {{/if}}
+  </label>
+
+  <div class="col-sm-9 ">
+    <div class="{{#equalsTo field_type 'number'}}input-group{{/equalsTo}}">
+      {{#inArray field_type 'text,date,email,number'}}
+        <input type="{{field_type}}" value="{{field_value}}" placeholder="{{label}}"
+               class="form-control {{field_type}} {{#if ../field_options.size}}rf-size-{{{../../field_options.size}}}{{/if}}"
+               id="{{replaceSpacesWith label '-' true}}-{{_id}}"
+               name="custom-{{../field_type}}-{{../_id}}"
+               {{#if ../required}}required{{/if}}
+          {{#equalsTo ../field_options.min_max_length_units 'words'}}
+            {{#if../../field_options.maxlength}} maxwordcount="{{../../../field_options.maxlength}}" {{/if}}
+            {{#if../../field_options.minlength}} minwordcount="{{../../../field_options.minlength}}" {{/if}}
+               minmaxlengthunit="words"
+          {{else}}
+            {{#if ../../field_options.maxlength}}maxlength="{{../../../field_options.maxlength}}"{{/if}}
+            {{#if ../../field_options.minlength}}minlength="{{../../../field_options.minlength}}"{{/if}}
+          {{/equalsTo}}
+          {{#if ../field_options.max}}max="{{../../field_options.max}}"{{/if}}
+          {{#if ../field_options.min}}min="{{../../field_options.min}}"{{/if}}
+          />
+        {{#equalsTo field_type 'number'}}
+          <div class="input-group-addon">{{../field_options.units}}</div>
+        {{/equalsTo}}
+      {{else}}
+        {{#equalsTo field_type 'checkboxes'}}
+          {{#each field_options.options}}
+            <label class="fb-option">
+              <input type="checkbox" value="{{label}}" class="" {{#inArray label ../field_value}}checked{{/inArray}}
+                     id="{{replaceSpacesWith label '-' true}}-{{_id}}"
+                     name="custom-{{../field_type}}-{{../_id}}" {{#if ../required}}required{{/if}}/>
+              {{label}}
+            </label>
+          {{/each}}
+        {{/equalsTo}}
+
+        {{#equalsTo field_type 'paragraph'}}
+          <textarea class="form-control rf-size-{{../field_options.size}}"
+                    id="{{replaceSpacesWith label '-' true}}-{{_id}}"
+                    name="custom-{{../field_type}}-{{../_id}}"
+                    placeholder="{{label}}"
+                    {{#if ../required}}required{{/if}}>{{field_value}}</textarea>
+        {{/equalsTo}}
+
+        {{#equalsTo field_type 'radio'}}
+          {{#each field_options.options}}
+            <label class="fb-option">
+              <input type="radio" value="{{label}}" {{#equalsTo label ../field_value}}checked{{/equalsTo}}
+                     id="{{replaceSpacesWith label '-' true}}-{{_id}}"
+                     name="custom-{{../field_type}}-{{../_id}}" {{#if ../required}}required{{/if}}/>
+              {{label}}
+            </label>
+          {{/each}}
+        {{/equalsTo}}
+
+        {{#equalsTo field_type 'dropdown'}}
+          <select class="form-control"
+                  id="{{replaceSpacesWith label '-' true}}-{{_id}}"
+                  name="custom-{{../field_type}}-{{../_id}}" {{#if ../required}}required{{/if}}>
+
+            {{#if field_options.include_blank_option}}
+              <option value="">-</option>
+            {{/if}}
+            {{#each field_options.options}}
+              <option value="{{label}}" {{#equalsTo label ../field_value}}selected{{/equalsTo}}>{{label}}</option>
+            {{/each}}
+          </select>
+        {{/equalsTo}}
+
+      {{/inArray}}
+    </div>
+    <div class="errorTxt"></div>
+  </div>
+</div>
+
+

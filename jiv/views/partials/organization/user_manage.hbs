@@ -1,0 +1,399 @@
+{{#with organization}}
+  <div class="row">
+    {{#unless displayable}}
+      {{#unless approved}}
+        <div class="alert alert-warning">
+          Your organization will not be displayed in the catalog until it receives approval from an admin.
+        </div>
+      {{else}}
+        <!--<div class="alert alert-warning">
+          Your organization will not be displayed in the catalog listing until all of the required fields are completed.
+        </div>-->
+      {{/unless}}
+    {{/unless}}
+  </div>
+
+ <div class="container">
+      <div id="output" class="aui-avatar aui-avatar-standard pull-left" style="margin: 0 10px 10px 0;">
+        <div class="aui-avatar-inner thumb">
+          <img
+            src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContextFullPrefixPath}}/images/logo-default.png{{/if}}"/>
+        </div>
+      </div>
+     
+     <h4 style="font-size:18px;margin:0 0 .5em 0;">My Organization:</h4>
+     <h1 style="font-size:36px;margin:0 0 .5em 0;">{{orgName}}</h1>
+     <p class="text-muted" style="margin-top:-1em;"><span class="small required-field">*Required fields</span></p>
+</div>
+
+  <form method="post" class="form-horizontal check-dirty" id="user-manage-org" enctype="multipart/form-data"
+        action="/profile/{{../userinfo.username}}/manage">
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="orgName" value="{{orgName}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Tag Line</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="tagline" value="{{tagline}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Address<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="orgAddress" value="{{orgAddress}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Website<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="orgWebsite" value="{{orgWebsite}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Market Area(s)</label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="marketArea" value="{{marketArea}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="showcaseImage" data-toggle="tooltip" data-placement="right"
+             data-original-title="10MB file restriction">
+        Upload New Logo <span class="glyphicon glyphicon-question-sign"></span>
+      </label>
+      <div class="col-sm-10 pull-left">
+        <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+        <div id="avatar_dealio">
+          <button type="button" id="crop-button" class="aui-button aui-button-primary">Crop</button>
+        </div>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Description</label>
+      <div class="col-sm-10">
+        <textarea class="form-control" type="text" id="description" name="description"
+                  {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}>{{{trim description}}}</textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Location</label>
+      <div class="col-sm-4">
+        <input class="form-control" type="text" name="location" value="{{location}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Year Founded</label>
+      <div class="col-sm-4">
+        <input class="form-control" type="text" name="yearFounded" value="{{yearFounded}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label class="col-sm-2 control-label size"><span data-toggle="tooltip" data-placement="right" data-original-title="Small: 1-50 employees; Medium: 51-500 employees; Large: Over 500 employees">Size<span class="required-field">*</span>  <span
+        class="glyphicon glyphicon-question-sign"></span></span></label>
+
+      <div class="col-sm-4">
+        <select class="form-control" name="size" {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}} required>
+          <option value="">-</option>
+          <option {{#equalsTo size 'Small'}}selected='selected'{{/equalsTo}} value="Small">Small</option>
+          <option {{#equalsTo size 'Medium'}}selected='selected'{{/equalsTo}} value="Medium">Medium</option>
+          <option {{#equalsTo size 'Large'}}selected='selected'{{/equalsTo}} value="Large">Large</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Role</label>
+      <div class="col-sm-4">
+        <input class="form-control" type="hidden" name="orgRole" value="{{orgRole}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+        <input class="form-control" type="text" name="orgRoleDisplay" value="{{getOrganizationRoleFriendly orgRole}}"
+               readonly/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Type</label>
+      <div class="col-sm-4">
+        <input class="form-control" type="hidden" name="orgType" value="{{orgType}}"/>
+        <input class="form-control" type="text" name="orgTypeDisplay" value="{{getOrganizationTypeFriendly orgType}}"
+               readonly/>
+      </div>
+    </div>
+
+  {{#equalsTo orgId.name 'orgDuns'}}
+      <div class="form-group">
+        <label class="col-sm-2 control-label">DUNS Number</label>
+        <div class="col-sm-4">
+          <input class="form-control" type="hidden" name="orgRouteId" value="{{orgId.value}}"
+                 {{#unless ../../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+          <input class="form-control" type="text" name="orgRouteIdDisplay" value="{{orgId.value}}" readonly/>
+        </div>
+      </div>
+  {{/equalsTo}}
+      
+    <hr />
+    <h1 style="margin-bottom: 10px; margin-left: -10px;"><span class="glyphicon glyphicon-user"></span> Business POC</h1>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="businessPocFirstName" value="{{businessPocFirstName}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="businessPocLastName" value="{{businessPocLastName}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone Number<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="businessPocPhone" value="{{businessPocPhone}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="businessPocEmail" value="{{businessPocEmail}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+
+    <hr />
+    <h1 style="margin-bottom: 10px; margin-left: -10px;"><span class="glyphicon glyphicon-user"></span> Technical POC</h1>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="technicalPocFirstName" value="{{technicalPocFirstName}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="technicalPocLastName" value="{{technicalPocLastName}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="technicalPocPhone" value="{{technicalPocPhone}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email<span class="required-field">*</span></label>
+      <div class="col-sm-10">
+        <input class="form-control" type="text" name="technicalPocEmail" value="{{technicalPocEmail}}"
+               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+      </div>
+    </div>
+{{/with}}
+
+{{#if userinfo.isOrgAdmin}}
+
+        <div class="form-group text-center" style="margin-left:-5px;">
+            <div class="col-sm-12">
+                <button class="btn btn-primary" id="submit_new_product_btn" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span> Update My Organization Profile</button>
+              <button class="btn btn-default" type="button" value="Cancel"
+              onclick="window.location.href='/profile/{{userinfo.username}}/manage'">Cancel
+      </button>
+            </div>
+        </div>
+      
+{{/if}}
+</form>
+
+
+{{#contentFor 'pageCSS'}}
+  <style type="text/css">
+    #avatar_dealio {
+      width: 324px;
+      margin: 0;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    .aui-avatar img {
+      height: auto;
+    }
+
+    #crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+      label.size .tooltip {
+          width: 200px;
+      }
+  </style>
+
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+<script type="application/javascript" src="{{strings.PublicStaticContentFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+<script type="application/javascript">
+$(document).ready(function(){
+	$('#user-manage-org').validate({
+        rules: {
+          orgName: {
+            required: true
+          },
+		  orgAddress: {
+            required: true
+          },
+		  orgWebsite: {
+            required: true
+          },
+		  businessPocFirstName: {
+            required: true
+          },
+		  businessPocLastName: {
+            required: true
+          },
+		  businessPocEmail: {
+            required: true
+          },
+		  businessPocPhone: {
+            required: true
+          },
+		  technicalPocLastName: {
+            required: true
+          },
+		  technicalPocFirstName: {
+            required: true
+          },
+		  technicalPocEmail: {
+            required: true
+          },
+		  technicalPocPhone: {
+            required: true
+          }
+        },
+        highlight: function (element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        }
+      });
+	});
+</script>
+{{/contentFor}}
+{{#contentFor "pageScripts"}}
+
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css"
+        media="all">
+  <!--[if lt IE 9]>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+        media="all"><![endif]-->
+  <!--[if IE 9]>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                          "
+        media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+  <script type="application/javascript"
+          src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script type="application/javascript"
+          src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+
+  <script type="application/javascript">
+    
+    $(function(){
+      CKEDITOR.replace("description",{
+        removePlugins: 'elementspath,allowsave'
+      });
+    });
+
+    (function ($) {
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    })(AJS.$);
+
+      $('[data-toggle="tooltip"]').tooltip();   
+
+  </script>
+
+{{/contentFor}}

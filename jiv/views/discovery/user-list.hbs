@@ -1,0 +1,87 @@
+<div id="main-content" class="container maincontent-container">
+  <h3>{{{strings.Problems.Title}}}</h3>
+  <hr style="color:#d3d3d3;">
+  {{{strings.Problems.Caption}}}
+
+  <img id="processImg" alt="" height="145" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/theme/ChallengeGraphic.png" width="870">
+
+  <div class="container">
+    {{#if userinfo}}
+      {{#isClient userinfo.orgRole}}
+        {{>modal_createChallenge}}
+      {{/isClient}}
+    {{/if}}
+  </div>
+  {{#unless challenges}}
+    <div class="alert alert-info" style="margin-top:25px; text-align:center;">
+      {{{strings.Problems.NoProblems}}}
+    </div>
+  {{/unless}}
+
+  {{#each challenges}}
+    <div class="challengeRow" tabindex="0">
+      <article class="mainArticle" id="challenge_02">
+        <section class="leftSection">
+
+
+          <div class="challengeInfo columns">
+            <h3 class="challengeTitle"><a href="/marketspace/problems/{{id}}">{{name}}</a></h3>
+
+            <p class="challengeOverview" tabindex="0">
+              {{summary}}
+            </p>
+          </div>
+
+        </section>
+
+        <section class="rightSection">
+          <div class="row">
+            <div class="challengeAward">
+              <div class="row">
+                <div class="challengeImage columns"><a class="challengeLink" href="#"><img alt=""
+                                                                                           src="{{getOrgLogoURL orgRef ../orgs}}"/></a>
+                </div>
+              </div>
+            </div>
+            <div class="challengeAward">
+              <div class="row">
+                <div class="awardInfo">
+                  <p class="challengeCompany">Submitted by: {{getOrgName orgRef ../orgs}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="challengeAward">
+              <div class="row">
+                <div class="awardInfo">
+                  <p>Start Date: {{dateFormatter startDate 'short'}}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="challengeDate">
+              <div class="row">
+                <div class="dateInfo">
+                  <p>End Date: {{addDays startDate dayCount 'short'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+    </div>
+  {{/each}}
+  <br><br>
+</div>
+
+{{#contentFor "pageScripts"}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+
+  <script type="application/javascript">
+    $(window).load(function () {
+      {{#if isChallengeModalMsg}}
+        $('#createChallengeModal').modal('show');
+      {{/if}}
+
+    });
+  </script>
+{{/contentFor}}

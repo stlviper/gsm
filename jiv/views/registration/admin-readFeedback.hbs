@@ -1,0 +1,94 @@
+<div id="main-content" class="container maincontent-container">
+  {{> message}}
+  <h4 style="margin-bottom: 5px;">Feedback for</h4>
+
+  <h1>{{registration.challengeName}}</h1>
+
+  <div class="container">
+    <div class="form-horizontal form-padding">
+      {{#with feedback}}
+        {{#if summary}}
+          <div class="form-group">
+            <label class="col-sm-2">Feedback Overview</label>
+          </div>
+          <div class="form-group">
+
+            <div class="col-sm-10" style="margin-top:8px;">
+              {{{summary}}}
+            </div>
+          </div>
+        {{/if}}
+        {{#each ../challenge.feedbackArea}}
+
+          <div class="form-group">
+            <label class="col-sm-2">Feedback Criteria:</label>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-10">
+              <span>{{{this.description}}}</span>
+            </div>
+          </div>
+
+
+          {{#each ../../feedback.feedbackAreas}}
+            {{#idEqualsTo this.feedbackRef ../this._id}}
+              <div class="form-group">
+                <label class="col-sm-2">Feedback Response:</label>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <span>{{{this.response}}}</span>
+                </div>
+              </div>
+            {{/idEqualsTo}}
+
+          {{/each}}
+
+
+
+
+        {{/each}}
+        {{#if feedbackDoc}}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Feedback</label>
+
+            <div class="col-sm-10">
+              <div id="whitepaperContainer">
+                {{#with feedbackDoc}}
+                  <span class="documentContainer">
+                    <a class="btn-sm btn-default" href="{{path}}" style="color:#fff;">{{name}}</a>
+                  </span>
+                {{/with}}
+              </div>
+            </div>
+          </div>
+        {{/if}}
+        {{#if otherDocuments}}
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Other Documents</label>
+
+            <div class="col-sm-10">
+              <div id="documentContainer">
+                {{#each otherDocuments}}
+                  <span class="documentContainer">
+                    <a class="btn-sm btn-default" href="{{path}}" style="color:#fff;">{{name}}</a>
+                  </span>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      {{/with}}
+
+      <div class="col-sm-2 hidden-xs"></div>
+      <div class="col-sm-10">
+        <a class="btn btn-info" href="/admin/solutions/{{registration.id}}/" style="margin-left:-10px;">
+          <span class="glyphicon glyphicon-arrow-left"></span> Solution Details
+        </a>
+        <a class="btn btn-info" href="/admin/solutions/{{registration.id}}/feedback" >
+           Other Feedback <span class="glyphicon glyphicon-arrow-right"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

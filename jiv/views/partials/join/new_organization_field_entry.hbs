@@ -1,0 +1,57 @@
+<div id="formPage2" class="formPage">
+
+  <div id="formContainer">
+    
+    <div class="form-group" id="dunsEntryFoundString">
+      <h3>We found your organization DUNS number!</h3>
+    </div>
+
+    <br>
+
+    <div class="form-group">
+      <input type="text" name="dunsEntryReadOnly" id="dunsEntryReadOnly" class="big-orange-field"
+             placeholder="DUNS number" disabled>
+    </div>
+
+    <div class="form-group">
+      <h1>Organization Profile</h1>
+    </div>
+
+    <div class="form-group">
+      <label>What is your organization role?</label>
+      <br>
+      <input type="radio" name="orgRole" value="client"><p class="signupOrgType">
+      Explorer{{#if strings.Organization.RoleDescription.Client}}
+      - {{strings.Organization.RoleDescription.Client}}{{/if}}</p>
+      <br>
+      <input type="radio" name="orgRole" value="provider"><p class="signupOrgType">
+      Provider{{#if strings.Organization.RoleDescription.Provider}}
+      - {{strings.Organization.RoleDescription.Provider}}{{/if}}</p>
+      <br>
+      <input type="radio" name="orgRole" value="both"><p class="signupOrgType">
+      Both{{#if strings.Organization.RoleDescription.Both}} - {{strings.Organization.RoleDescription.Both}}{{/if}}</p>
+      <br>
+      <input type="radio" name="orgRole" value="communityOwner"><p class="signupOrgType">
+      Community Owner{{#if strings.Organization.RoleDescription.CommunityOwner}}
+      - {{strings.Organization.RoleDescription.CommunityOwner}}{{/if}}</p><br>
+    </div>
+
+    <br>
+
+    <div class="form-group">
+      <input type="text" name="orgName" id="orgName" class="big-orange-field" placeholder="Organization Name"><br><br>
+      <input type="text" name="orgAddress" id="orgAddress" class="big-orange-field"
+             placeholder="Organization Address"><br><br>
+      <input type="text" name="orgWebsite" id="orgWebsite" class="big-orange-field"
+             placeholder="Organization Website"><br>
+    </div>
+	{{> message}}
+    <div class="form-group">
+      <input type="button" class="big-orange-btn" value="NEXT">
+    </div>
+  </div>
+  <!-- TODO Create the right text to fill here. -->
+  <div id="signupFormSidebarRight" class="roleSidebar">
+    {{{strings.Join.newOrganization.SidebarRight.RoleText}}}
+  </div>
+</div>

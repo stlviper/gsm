@@ -1,0 +1,213 @@
+{
+  "sam_data": {
+    "registration": {
+      "govtBusinessPoc": {
+        "lastName": "HUGHES",
+        "fax": "7039350760",
+        "email": "gsmhelp@geoint.community",
+        "address": {
+          "Line1": "14900 CONFERENCE CENTER DR",
+          "Zip": "20151",
+          "Country": "USA",
+          "stateorProvince": "VA",
+          "City": "CHANTILLY"
+        },
+        "usPhone": "7033287223",
+        "firstName": "BILL"
+      },
+      "dunsPlus4": "0000",
+      "activationDate": "2015-01-15 17:40:01.0",
+      "fiscalYearEndCloseDate": "12/31",
+      "businessTypes": [
+        "LJ",
+        "VW",
+        "2X"
+      ],
+      "pastPerformancePoc": {
+        "lastName": "HUGHES",
+        "email": "gsmhelp@geoint.community",
+        "address": {
+          "Line1": "14900 CONFERENCE CENTER DR",
+          "Zip": "20151",
+          "Country": "USA",
+          "stateorProvince": "VA",
+          "City": "Chantilly"
+        },
+        "usPhone": "7033287223",
+        "firstName": "BILL"
+      },
+      "certificationsURL": {"pdfUrl": "https://www.sam.gov/SAMPortal/filedownload?reportType=2&orgId=QmhHDzT8Qio7BCCYNkJa5E6%2FJ1J8xqiiiC8lM7SKjSWpQxh5eDHROZ8CUAmGZlMg&pitId=le%2FyxiBPSL5dY8XoKrN7jGktIuEHM93rxwfQFYGSIGi1XBa%2BNg4EgRvS3pkX%2FcOgzxCh8jq95SL8%0As6TFUKj2zw%3D%3D&requestId=1gP0eE0ynCBQrbB"},
+      "registrationDate": "2004-10-29 00:00:00.0",
+      "hasDelinquentFederalDebt": false,
+      "duns": "169169435",
+      "altElectronicBusinessPoc": {
+        "lastName": "HUGHES",
+        "fax": "7039350760",
+        "email": "gsmhelp@geoint.community",
+        "address": {
+          "Line2": "SUITE 500",
+          "Line1": "14900 CONFERENCE CENTER DR",
+          "Zip": "20151",
+          "Country": "USA",
+          "stateorProvince": "VA",
+          "City": "CHANTILLY"
+        },
+        "usPhone": "7037258119",
+        "firstName": "BILL"
+      },
+      "cage": "32WR4",
+      "hasKnownExclusion": false,
+      "publicDisplay": true,
+      "expirationDate": "2016-01-15 17:05:27.0",
+      "altPastPerformancePoc": {
+        "lastName": "HUGHES",
+        "email": "gsmhelp@geoint.community",
+        "address": {
+          "Line1": "14900 CONFERENCE CENTER DR",
+          "Zip": "20151",
+          "Country": "USA",
+          "stateorProvince": "VA",
+          "City": "Chantilly"
+        },
+        "usPhone": "7037258119",
+        "firstName": "BILL"
+      },
+      "status": "ACTIVE",
+      "corporateStructureCode": "2L",
+      "stateOfIncorporation": "VA",
+      "corporateStructureName": "Corporate Entity (Not Tax Exempt)",
+      "legalBusinessName": "OGSYSTEMS, LLC",
+      "congressionalDistrict": "10",
+      "businessStartDate": "2004-08-27",
+      "statusMessage": "Active",
+      "lastUpdateDate": "2015-05-02 20:10:50.0",
+      "submissionDate": "2015-01-15 17:05:27.0",
+      "samAddress": {
+        "Zip4": "3840",
+        "Line1": "14900 CONFERENCE CENTER DR STE 500",
+        "Zip": "20151",
+        "Country": "USA",
+        "stateorProvince": "VA",
+        "City": "CHANTILLY"
+      },
+      "naics": [
+        {
+          "isPrimary": false,
+          "naicsCode": "339999",
+          "naicsName": "ALL OTHER MISCELLANEOUS MANUFACTURING"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541330",
+          "naicsName": "ENGINEERING SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541360",
+          "naicsName": "GEOPHYSICAL SURVEYING AND MAPPING SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541511",
+          "naicsName": "CUSTOM COMPUTER PROGRAMMING SERVICES"
+        },
+        {
+          "isPrimary": true,
+          "naicsCode": "541512",
+          "naicsName": "COMPUTER SYSTEMS DESIGN SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541513",
+          "naicsName": "COMPUTER FACILITIES MANAGEMENT SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541519",
+          "naicsName": "OTHER COMPUTER RELATED SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541611",
+          "naicsName": "ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541612",
+          "naicsName": "HUMAN RESOURCES CONSULTING SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541618",
+          "naicsName": "OTHER MANAGEMENT CONSULTING SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541690",
+          "naicsName": "OTHER SCIENTIFIC AND TECHNICAL CONSULTING SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541712",
+          "naicsName": "RESEARCH AND DEVELOPMENT IN THE PHYSICAL, ENGINEERING, AND LIFE SCIENCES (EXCEPT BIOTECHNOLOGY)"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "541990",
+          "naicsName": "ALL OTHER PROFESSIONAL, SCIENTIFIC, AND TECHNICAL SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "561110",
+          "naicsName": "OFFICE ADMINISTRATIVE SERVICES"
+        },
+        {
+          "isPrimary": false,
+          "naicsCode": "561990",
+          "naicsName": "ALL OTHER SUPPORT SERVICES"
+        }
+      ],
+      "corporateUrl": "http://www.ogsystems.com",
+      "altGovtBusinessPoc": {
+        "lastName": "HUGHES",
+        "fax": "7039350760",
+        "email": "gsmhelp@geoint.community",
+        "address": {
+          "Line2": "SUITE 500",
+          "Line1": "14900 CONFERENCE CENTER DR",
+          "Zip": "20151",
+          "Country": "USA",
+          "stateorProvince": "VA",
+          "City": "CHANTILLY"
+        },
+        "usPhone": "7037258119",
+        "firstName": "BILL"
+      },
+      "creditCardUsage": false,
+      "countryOfIncorporation": "USA",
+      "electronicBusinessPoc": {
+        "lastName": "HUGHES",
+        "fax": "7039350760",
+        "email": "gsmhelp@geoint.community",
+        "address": {
+          "Line2": "SUITE 500",
+          "Line1": "14900 CONFERENCE CENTER DR",
+          "Zip": "20151",
+          "Country": "USA",
+          "stateorProvince": "VA",
+          "City": "CHANTILLY"
+        },
+        "usPhone": "7033287223",
+        "firstName": "BILL"
+      },
+      "mailingAddress": {
+        "Line1": "14900 CONFERENCE CENTER DR STE 500",
+        "Zip": "20151",
+        "Country": "USA",
+        "stateorProvince": "VA",
+        "City": "CHANTILLY"
+      },
+      "purposeOfRegistration": "ALL_AWARDS"
+    }
+  }
+}

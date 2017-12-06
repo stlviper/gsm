@@ -1,0 +1,46 @@
+<div class="container-fluid maincontent-container clouds-container">
+  <div id="login-form" class="container">
+    <h1>Please Log In</h1>
+
+    {{#if error}}
+      <div class="row">
+          <div class="visible-lg col-lg-3"></div>
+          <div class="alert col-lg-6" id="loginErrorMessage">
+              <h1 class="icon"><span class="icon-warning-o"></span></h1>
+              {{error}}
+          </div>
+      </div>
+    {{/if}}
+    {{#if info}}
+      <div class="row">
+          <div class="visible-lg col-lg-3"></div>
+          <div class="alert col-lg-6" id="loginErrorMessage">
+              {{info}}
+          </div>
+      </div>
+    {{/if}}
+
+    <form id="new-user-form" class="form-horizontal form-sign" action="/signin" method="post" enctype="application/x-www-form-urlencoded">
+
+    <div class="row">
+        <div class="visible-lg col-lg-3"></div>
+        <div class="form-group col-lg-6" style="margin-left: 0;">
+            <input class="form-control" type="text" name="username" id="username" placeholder="Email"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="visible-lg col-lg-3"></div>
+        <div class="form-group col-lg-6" style="margin-left: 0;">
+            <input class="form-control" type="password" name="password" id="password" placeholder="Password"/>
+          <div class="forgotPassword pull-left" style="margin-top: 5px;">
+            <a href="/forgot">Forgot your password?</a><br />
+          </div>
+
+        </div>
+    </div>
+        
+      <input class="btn btn-lg btn-primary btn-block col-sm-offset-2" type="submit" id="login-submit" value="Log In" style="width: auto; margin: 0 auto; padding: 6px 12px;     border-radius: 4px;"/>
+    </form>
+  </div>
+</div>

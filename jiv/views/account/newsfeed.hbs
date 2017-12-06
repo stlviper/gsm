@@ -1,0 +1,493 @@
+{{> dashboard_sidebar_header activeId="id-newsfeed"}}
+<!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+<div class="content-wrapper">
+
+  <!-- Dashboard header -->
+  <section class="content-header">
+    <h1>Activity Feed</h1>
+    
+  </section>
+
+  <!-- Widgets content -->
+  <section class="content">
+
+    <!-- NEWSFEED row -->
+    <div class="row">
+      <section class="col-lg-12 connectedSortable">
+        <!-- NEWSFEED -->
+        <div class="box box-orange newsfeed">
+          <div class="box-header with-border">
+            <h3 class="box-title"> </h3>
+            <div class="box-tools pull-right">
+              <!-- Filters -->
+              <div class="filters">
+                <label id="everything-filter" class="radio-inline everything checked" onclick="filterSelect(this)"><i
+                  class="fa fa-file-text"></i> Everything</label>
+                <label id="organizations-filter" class="radio-inline organizations" onclick="filterSelect(this)"><i
+                  class="fa fa-institution"></i> Members</label>
+                <label id="capabilities-filter" class="radio-inline capabilities" onclick="filterSelect(this)"><i
+                  class="fa fa-puzzle-piece"></i> Capabilities</label>
+                <label id="problems-filter" class="radio-inline problems" onclick="filterSelect(this)"><i
+                  class="fa fa-bullhorn"></i> Problems</label>
+                <label id="news-filter" class="radio-inline news" onclick="filterSelect(this)"><i
+                  class="fa fa-newspaper-o"></i> News</label>
+                <br class="visible-sm visible-xs"/>
+              </div>
+            </div>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <!-- The timeline -->
+            <ul class="timeline" id="timeline-ul">
+              <!-- Content is dynamically added here -->
+            </ul>
+            <ul class="timeline" id="timeline-ul-organizations">
+              <!-- Content is dynamically added here -->
+            </ul>
+            <ul class="timeline" id="timeline-ul-capabilities">
+              <!-- Content is dynamically added here -->
+            </ul>
+            <ul class="timeline" id="timeline-ul-problems">
+              <!-- Content is dynamically added here -->
+            </ul>
+            <ul class="timeline" id="timeline-ul-news">
+              <!-- Content is dynamically added here -->
+            </ul>
+            <!-- // END timeline -->
+            <div id="id-spinner" class="text-center" hidden>Retrieving Content... <span class="fa fa-spinner fa-spin"
+                                                                                        style="font-size:24px;"></span>
+            </div>
+            <div id="id-load-btn" class="text-center"><a class="btn btn-default btn-sm"
+                                                         onclick="getNewsFeedItems()">Load More</a>
+            </div>
+          </div><!-- /.box-body -->
+        </div><!--/.Newsfeed -->
+      </section><!-- ./col -->
+    </div><!-- /.row -->
+    <!-- /.row (NEWSFEED row) -->
+
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+{{> dashboard_sidebar_footer }}
+
+{{#contentFor 'pageCSS'}}
+{{/contentFor}}
+
+{{#contentFor 'postJqueryScripts'}}
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dashboard/jquery.counterup.min.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dashboard/waypoints.min.js"></script>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <!-- Hover Text Blocks for Timeline -->
+  <script>
+    $(document).ready(function(){
+      $("li.hover").hover(function(){
+//        $("li.hover").css("cursor","pointer");
+        $(this).find(".hover-text").css("opacity",".9");
+      }, function(){
+//        $("li.hover").css("cursor","default");
+        $(this).find(".hover-text").css("opacity","0");
+      });
+    });
+  </script>
+  <script>
+    //      $.widget.bridge('uibutton', $.ui.button);
+  </script>
+
+  <!-- Counterup for Conversations Widget -->
+  <script>
+    jQuery(document).ready(function( $ ) {
+      $('.counter').counterUp({
+        delay: 100,
+        time: 1000
+      });
+    });
+  </script>
+
+  <script>
+    var monthNames = [
+      "Jan", "Feb", "March",
+      "April", "May", "June", "July",
+      "Aug", "Sept", "Oct",
+      "Nov", "Dec"
+    ];
+    var date;
+    var fullDate;
+    var offset = 0;
+    var MIN_NUM_NEWSFEED_ITEMS = 15;
+    var MAX_CHECKS = 365;
+    var iMaxChecks = 0;
+    var cCurrentItems = 0;
+    var isFirstItemForDay = true;
+    var dateStart;
+
+    function filterSelect(element) {
+      switch (element.id) {
+        case 'everything-filter':
+          $('#everything-filter').addClass('checked');
+          $('#organizations-filter').removeClass('checked');
+          $('#capabilities-filter').removeClass('checked');
+          $('#problems-filter').removeClass('checked');
+          $('#news-filter').removeClass('checked');
+          break;
+        case 'organizations-filter':
+          $('#everything-filter').removeClass('checked');
+          $('#organizations-filter').addClass('checked');
+          $('#capabilities-filter').removeClass('checked');
+          $('#problems-filter').removeClass('checked');
+          $('#news-filter').removeClass('checked');
+          break;
+        case 'capabilities-filter':
+          $('#everything-filter').removeClass('checked');
+          $('#organizations-filter').removeClass('checked');
+          $('#capabilities-filter').addClass('checked');
+          $('#problems-filter').removeClass('checked');
+          $('#news-filter').removeClass('checked');
+          break;
+        case 'problems-filter':
+          $('#everything-filter').removeClass('checked');
+          $('#organizations-filter').removeClass('checked');
+          $('#capabilities-filter').removeClass('checked');
+          $('#problems-filter').addClass('checked');
+          $('#news-filter').removeClass('checked');
+          break;
+        case 'news-filter':
+          $('#everything-filter').removeClass('checked');
+          $('#organizations-filter').removeClass('checked');
+          $('#capabilities-filter').removeClass('checked');
+          $('#problems-filter').removeClass('checked');
+          $('#news-filter').addClass('checked');
+          break
+      }
+      getNewsFeedItems();
+    }
+
+    $(document).ready(function(){
+      $('#timeline-ul-organizations').hide();
+      $('#timeline-ul-capabilities').hide();
+      $('#timeline-ul-problems').hide();
+      $('#timeline-ul-news').hide();
+      $('#id-spinner').hide();
+      getTodaysDate();
+      getNewsFeedItems();
+    });
+
+    var getTodaysDate = function () {
+      fullDate = new Date();
+      var dd = fullDate.getDate();
+      var mm = fullDate.getMonth()+1; //January is 0!
+      var yyyy = fullDate.getFullYear();
+      date = mm + "-" + dd + "-" + yyyy;
+    };
+
+    var decrementDate = function () {
+      fullDate.setDate(fullDate.getDate() - 1);
+      var dd = fullDate.getDate();
+      var mm = fullDate.getMonth()+1; //January is 0
+      var yyyy = fullDate.getFullYear();
+      date = mm + "-" + dd + "-" + yyyy;
+    };
+
+    // Look for the scroll to the bottom
+//    $(function() {
+//      $(document).scroll(function(){
+//        console.log('Scrolling');
+//        if ($(document).scrollTop()+$(window).innerHeight() >= $(document).height()-1){
+//          console.log('Bottom');
+//        }
+//      });
+//    });
+
+    var newsfeedData = '';
+
+    var getNewOrganizations = function (category, tabFilter) {
+      return $.ajax({
+        type: 'GET',
+        url: 'dashboard/organizations/' + date,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        success: function(response) {
+          switch (category) {
+            case 'all':
+              updateTimelineElement(response, tabFilter);
+              break;
+            case 'single':
+              updateTimeline(response, 'timeline-ul-organizations', tabFilter, getNewOrganizations);
+              break;
+            default:
+              break;
+          }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          console.log('Failure');
+        }
+      });
+    };
+    var getNewCapabilities = function (category, tabFilter) {
+      return $.ajax({
+        type: 'GET',
+        url: 'dashboard/capabilities/' + date,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        success: function(response) {
+          switch (category) {
+            case 'all':
+              updateTimelineElement(response, tabFilter);
+              break;
+            case 'single':
+              updateTimeline(response, 'timeline-ul-capabilities', tabFilter, getNewCapabilities);
+              break;
+            default:
+              break;
+          }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          console.log('Failure');
+        }
+      });
+    };
+    var getNewProblems = function (category, tabFilter) {
+      return $.ajax({
+        type: 'GET',
+        url: 'dashboard/problems/' + date,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        success: function(response) {
+          switch (category) {
+            case 'all':
+              updateTimelineElement(response, tabFilter);
+              break;
+            case 'single':
+              updateTimeline(response, 'timeline-ul-problems', tabFilter, getNewProblems);
+              break;
+            default:
+              break;
+          }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          console.log('Failure');
+        }
+      });
+    };
+    var getNewNews = function (category, tabFilter) {
+      return $.ajax({
+        type: 'GET',
+        url: 'dashboard/news/' + date,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        success: function(response) {
+          switch (category) {
+            case 'all':
+              updateTimelineElement(response, tabFilter);
+              break;
+            case 'single':
+              updateTimeline(response, 'timeline-ul-news', tabFilter, getNewNews);
+              break;
+            default:
+              break;
+          }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          console.log('Failure');
+        }
+      });
+    };
+
+    var updateTimelineAllCategories = function (tabFilter) {
+      if (prevFilter == tabFilter) {
+        $.when(getNewOrganizations('all', tabFilter), getNewCapabilities('all', tabFilter),
+          getNewProblems('all', tabFilter), getNewNews('all', tabFilter)).done(function () {
+          decrementDate();
+          isFirstItemForDay = true;
+          if (cCurrentItems < MIN_NUM_NEWSFEED_ITEMS && iMaxChecks < MAX_CHECKS) {
+            iMaxChecks += 1;
+            updateTimelineAllCategories(tabFilter);
+          }
+          else {
+            // Add the trailing calendar icon back on the bottom
+            $('<li id="id-cal-icon" class="load-more">' +
+              '<a href="#"><i class="fa fa-calendar bg-gray"></i></a>' +
+              '</li>').appendTo("#timeline-ul");
+            cCurrentItems = 0;
+            iMaxChecks = 0;
+            $('#id-load-btn').show();
+            $('#id-spinner').hide();
+          }
+        });
+      }
+    };
+
+    var updateTimelineElement = function (response, tabFilter) {
+      if (prevFilter == tabFilter) {
+        if (response.newsfeedHtml != '') {
+          if (isFirstItemForDay) {
+            // Remove the trailing calendar icon
+            $('#id-cal-icon').remove();
+            // Create the new date label
+            var dateElement =
+              '<li class="time-label">' +
+              '<span class="bg-gray">' +
+              monthNames[fullDate.getMonth()] + ', ' + fullDate.getDate() + ' ' + fullDate.getFullYear() +
+              '</span>' +
+              '</li>';
+            $(dateElement).appendTo('#timeline-ul');
+            isFirstItemForDay = false;
+          }
+          cCurrentItems += (response.newsfeedHtml.match(/id="org-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="com-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="cap-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="prob-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="news-/g) || []).length;
+          $(response.newsfeedHtml).appendTo('#timeline-ul');
+        }
+      }
+    };
+
+    var updateTimeline = function (response, ulId, tabFilter, recallFnc) {
+      if (prevFilter == tabFilter) {
+        if (response.newsfeedHtml != '') {
+          // Remove any previous message about no entries being found
+          $("[id^='id-no-entries']").remove();
+          // Remove the trailing calendar icon
+          $('#id-cal-icon').remove();
+          // Create the new date label
+          var dateElement =
+            '<li class="time-label">' +
+            '<span class="bg-gray">' +
+            monthNames[fullDate.getMonth()] + ', ' + fullDate.getDate() + ' ' + fullDate.getFullYear() +
+            '</span>' +
+            '</li>';
+          $(dateElement).appendTo('#' + ulId);
+          $(response.newsfeedHtml).appendTo('#' + ulId);
+          // Add the trailing calendar icon back on the bottom
+          $('<li id="id-cal-icon" class="load-more">' +
+            '<a href="#"><i class="fa fa-calendar bg-gray"></i></a>' +
+            '</li>').appendTo('#' + ulId);
+
+          // Keep track of how many items were loaded
+          //($('#timeline-ul').html().match(/id="org-/g) || []).length
+          cCurrentItems += (response.newsfeedHtml.match(/id="org-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="com-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="cap-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="prob-/g) || []).length;
+          cCurrentItems += (response.newsfeedHtml.match(/id="news-/g) || []).length;
+        }
+        else {
+          iMaxChecks += 1;
+        }
+        offset += 1;
+        if (offset > 0) {
+          decrementDate();
+        }
+        if (iMaxChecks <= MAX_CHECKS && cCurrentItems <= MIN_NUM_NEWSFEED_ITEMS) {
+          recallFnc('single', tabFilter);
+        }
+        else {
+          if (cCurrentItems === 0) {
+            // Remove the trailing calendar icon
+            $('#id-cal-icon').remove();
+            // Create the new date label
+            var dateStartSplit = dateStart.split('-');
+            var dateEndSplit = date.split('-');
+            var dateElement =
+              '<li id="id-no-entries-bubble-' + dateStart + '" class="time-label">' +
+              '<span class="bg-gray">' +
+              monthNames[dateStartSplit[0] - 1] + ', ' + dateStartSplit[1] + ' ' + dateStartSplit[2] +
+              ' through ' + monthNames[dateEndSplit[0] - 1] + ', ' + dateEndSplit[1] + ' ' + dateEndSplit[2] +
+              '</span>' +
+              '</li>';
+            $(dateElement).appendTo('#' + ulId);
+            $('<li id="id-no-entries-msg-' + dateStart + '"><div class="timeline-item"><h3 class="timeline-header no-border">There were no entries during this time period. Press Load More to search back further.</h3></div></li>').appendTo('#' + ulId);
+            // Add the trailing calendar icon back on the bottom
+            $('<li id="id-cal-icon" class="load-more">' +
+              '<a href="#"><i class="fa fa-calendar bg-gray"></i></a>' +
+              '</li>').appendTo('#' + ulId);
+          }
+          cCurrentItems = 0;
+          iMaxChecks = 0;
+          $('#id-load-btn').show();
+          $('#id-spinner').hide();
+        }
+      }
+    };
+
+    var prevFilter = 'everything-filter';
+
+    var reinitialize = function () {
+      getTodaysDate();
+      $('#timeline-ul').empty();
+      $('#timeline-ul-organizations').empty();
+      $('#timeline-ul-problems').empty();
+      $('#timeline-ul-capabilities').empty();
+      $('#timeline-ul-news').empty();
+      offset = 0;
+    };
+
+    var getNewsFeedItems = function () {
+      dateStart = date;
+      $('#id-spinner').show();
+      $('#id-load-btn').hide();
+      if ($('#everything-filter').hasClass('checked')) {
+        if(prevFilter !== 'everything-filter') {
+          reinitialize();
+        }
+        $('#timeline-ul').show();
+        $('#timeline-ul-organizations').hide();
+        $('#timeline-ul-problems').hide();
+        $('#timeline-ul-capabilities').hide();
+        $('#timeline-ul-news').hide();
+        prevFilter = 'everything-filter';
+        updateTimelineAllCategories(prevFilter);
+      }
+      else if ($('#organizations-filter').hasClass('checked')) {
+        if (prevFilter !== 'organizations-filter') {
+          reinitialize();
+        }
+        $('#timeline-ul').hide();
+        $('#timeline-ul-organizations').show();
+        $('#timeline-ul-problems').hide();
+        $('#timeline-ul-capabilities').hide();
+        $('#timeline-ul-news').hide();
+        prevFilter = 'organizations-filter';
+        getNewOrganizations('single', prevFilter);
+      }
+      else if ($('#capabilities-filter').hasClass('checked')) {
+        if (prevFilter !== 'capabilities-filter') {
+          reinitialize();
+        }
+        $('#timeline-ul').hide();
+        $('#timeline-ul-organizations').hide();
+        $('#timeline-ul-problems').hide();
+        $('#timeline-ul-capabilities').show();
+        $('#timeline-ul-news').hide();
+        prevFilter = 'capabilities-filter';
+        getNewCapabilities('single', prevFilter);
+      }
+      else if ($('#problems-filter').hasClass('checked')) {
+        if (prevFilter !== 'problems-filter') {
+          reinitialize();
+        }
+        $('#timeline-ul').hide();
+        $('#timeline-ul-organizations').hide();
+        $('#timeline-ul-problems').show();
+        $('#timeline-ul-capabilities').hide();
+        $('#timeline-ul-news').hide();
+        prevFilter = 'problems-filter';
+        getNewProblems('single', prevFilter);
+      }
+      else if ($('#news-filter').hasClass('checked')) {
+        if (prevFilter !== 'news-filter') {
+          reinitialize();
+        }
+        $('#timeline-ul').hide();
+        $('#timeline-ul-organizations').hide();
+        $('#timeline-ul-problems').hide();
+        $('#timeline-ul-capabilities').hide();
+        $('#timeline-ul-news').show();
+        prevFilter = 'news-filter';
+        getNewNews('single', prevFilter);
+      }
+    }
+  </script>
+{{/contentFor}}

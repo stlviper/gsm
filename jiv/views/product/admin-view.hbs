@@ -1,0 +1,84 @@
+<div id="main-content" class="container maincontent-container">
+  {{>message}}
+  {{#with product}}
+    <div class="form-horizontal" style="padding-top: 50px;">
+      <div class="row">
+        {{#if logoUrl}}
+          <div class="col-sm-2 fill profileImg"><img src="{{logoUrl}}"/></div>
+        {{/if}}
+      </div>
+      <div class="row">
+        <div class="col-sm-7">
+          <h1>{{name}}</h1>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Approved</label>
+
+        <div class="col-sm-7">
+          <input type="checkbox" name="admin" {{#if approved}}checked{{/if}} disabled>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Organization</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="orgName" id="organization" value="{{../organization.orgName}}"
+                 disabled/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">POC Name</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="pocName" id="pocName" value="{{pocName}}" disabled/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">POC Email</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="pocEmail" id="pocEmail" value="{{pocEmail}}" disabled/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="capabilityDescription">
+          Capability Description
+        </label>
+
+        <div class="col-sm-7">
+        <textarea rows="4" class="form-control" id="capabilityDescription" name="capabilityDescription" value=""
+                  disabled>{{description}}</textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Category</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="category" id="category" value="{{category}}" disabled/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Web Link</label>
+
+        <div class="col-sm-7">
+          <input class="form-control" type="text" name="webLink" id="webLink" value="{{webLink}}" disabled/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Create Date</label>
+
+        <div class="col-sm-7">
+          <span class="form-control" disabled>{{dateFormatter date_created "short"}}</span>
+        </div>
+      </div>
+
+      <a href="/admin/capabilities" class="btn btn-primary long-btn">Back To Capabilities List</a>
+    </div>
+  {{/with}}
+</div>

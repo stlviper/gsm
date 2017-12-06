@@ -1,0 +1,181 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* JIVANGO DISCOVERY ASSESSMENT SCORING */
+/*-------------------------------------------------------*/
+
+.score-default {
+    background-color: gray;
+}
+.score-black {
+    background-color: black;
+}
+.score-red {
+    background-color: darkred;
+}
+.score-yellow {
+    background-color: goldenrod;
+}
+.score-green {
+    background-color: green;
+}
+.score-blue {
+    background-color: navy;
+}
+.score-disabled {
+    background-color: #d1d2d4;
+}
+.score {
+    min-width: 90px;
+    display: inline-block;
+    padding: .6em .5em;
+}
+.score-wide {
+    min-width: 120px;
+}
+.score-default {
+    opacity: .25;
+}
+.score-default:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+#discoveryEditForm #scoring .fa-star {
+    color: goldenrod;
+}
+
+/* DISCOVERY EDIT FORM */
+/*-------------------------------------------------------*/
+#discoveryEditForm #scoring {
+    margin-top: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    padding: 15px;
+}
+#discoveryEditForm #scoring .radio {
+    margin-top: 10px;
+}
+
+/* DISCOVERY ASSESSMENT & FEEDBACK FORMS */
+/*-------------------------------------------------------*/
+.internalAssessment .alert {
+    margin-right: -10px;
+}
+.internalAssessment h2, .internalAssessment h4 {
+    margin: .1em;
+}
+#feedbackModal h1 .icon {  /*icon-pencil-rocket-o*/
+    font-size: 110px;
+    line-height: 120px;
+}
+
+/* REGISTRATIONS LIST */
+/*-------------------------------------------------------*/
+.registration-list table.registration .registration-name {
+    position: relative;
+    width: 35%;
+}
+.registration-list table.registration .provider-info {
+    position: relative;
+    top: 10px;
+    left: 70px;
+    padding-right: 5px;
+    height: auto;
+    display: block;
+    margin-top: -70px;
+    margin-right: 65px;
+    padding-bottom: 24px;
+} 
+.registration-list table.registration .provider-name {
+    font-weight: bold;
+    font-size: 110%;
+    color: #6d6e70;
+}
+.registration-list table.registration .registration-actions {
+    width: 30%;
+}
+.registration-list table.registration .registration-actions:last-child {
+    width: 20%;
+}
+.registration-list table.registration .registration-actions .badge {
+    font-size: 11px;
+    color: #fff;
+    font-weight: normal;
+    background-color: #ef4722;
+    padding: 2px 4px;
+    position: relative;
+    top: -2px;
+}
+.registration-list table.registration a.btn-start {
+    width: 100%;
+}
+.registration-list table.registration a.btn-mdgray{
+    background-color: #9fa0a2;
+    border: 1px solid #d1d2d4;
+    color: #fff !important;
+}
+.registration-list table.registration a.btn-lite {
+    background-color: #eaeaea;
+    border: 1px solid #d1d2d4;
+    color: #6d6e70 !important;
+}
+.registration-list table.registration a.btn-mdgray:hover,
+.registration-list table.registration a.btn-lite:hover {
+    background-color: #d8d8d8;
+}
+.registration-list table.registration hr {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.registration-list  table.evaluator {
+    margin-bottom: 0;
+}
+.registration-list  table.evaluator td {
+    padding: 3px;
+}
+.registration-list  table.evaluator a.btn {
+    margin-bottom: 0;
+}
+.registration-list  table.evaluator .evaluator-name,
+.registration-list  table.evaluator .evaluator-score,
+.registration-list  table.evaluator .evaluator-btn {
+    vertical-align: middle;
+}
+.registration-list  table.evaluator .evaluator-name {
+    font-size: 13px;
+}
+.registration-list  table.evaluator .evaluator-score {
+    width: 80px;
+}
+.registration-list  table.evaluator .evaluator-btn {
+    width: 40px;
+}
+.registration-list  table.evaluator .evaluator-btn .btn {
+    font-size: 13px;
+    width: 50px;
+}
+.registration-list  table.evaluator .evaluator-btn .btn-default[disabled] {
+    background-color: #d1d2d4;
+    border: 1px solid #d1d2d4;
+}
+.registration-list  table.registration a.evaluator-toggle {
+    font-weight: bold;
+    color: #6d6e70;
+}
+.registration-list  table.registration a.evaluator-toggle:hover {
+    color: #f16521;
+}
+/* Icon when the collapsible content is shown */
+.evaluator-toggle:after {
+    font-family: "Glyphicons Halflings";
+    content: "\e114";
+    margin-left: 2px;
+}
+
+/* Icon when the collapsible content is hidden */
+.evaluator-toggle.collapsed:after {
+    content: "\e080";
+}

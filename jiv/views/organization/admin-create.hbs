@@ -1,0 +1,345 @@
+<div id="main-content" class="container maincontent-container">
+  {{#if error}}
+    <div class="alert alert-danger" id="updateErrorMessage">{{error}}</div>
+  {{/if}}
+
+  {{#with organization}}
+    <div class="row">
+      <div class="col-sm-2 fill profileImg">
+        <div id="output" class="aui-avatar aui-avatar-standard ">
+          <div class="aui-avatar-inner">
+            <img src="{{logoUrl}}"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-7">
+        <h1>{{orgName}}</h1>
+      </div>
+    </div>
+  <form method="post" class="form-horizontal" id="admin-update-org" enctype="multipart/form-data"
+        action="/admin/organizations/create">
+    <div class="form-group">
+      <div class="col-sm-2">
+        <label class="control-label" for="showcaseImage">
+          Change Logo:
+        </label>
+        {{> help_modal id='organizationLogo' message='2MB File size restriction for the organization logo' }}
+      </div>
+      <div class="col-sm-7">
+        <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+
+        <div id="avatar_dealio">
+          <button type="button" id="crop-button" class="aui-button aui-button-primary">Crop</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2">Type</label>
+
+      <div class="col-sm-9">
+        <select class="col-sm-9" name="orgType" id="orgType">
+          <option value="government" {{#equalsTo orgType 'government'}}selected='selected'{{/equalsTo}}> Government
+          </option>
+          <option value="industry" {{#equalsTo orgType 'industry'}}selected='selected'{{/equalsTo}}> Industry</option>
+          <option value="academia" {{#equalsTo orgType 'academia'}}selected='selected'{{/equalsTo}}>Academia</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgName" value="{{orgName}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Address</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgAddress" value="{{orgAddress}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Website URL</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgWebsite" value="{{orgWebsite}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2">Role</label>
+
+      <div class="col-sm-9">
+        <select class="col-sm-9" name="orgRole" id="orgRole" value="{{orgRole}}">
+          <option value="provider" {{#equalsTo orgRole 'provider'}}selected='selected'{{/equalsTo}}>
+            Provider{{#if ../strings.Organization.RoleDescription.Provider}}
+            - {{../../strings.Organization.RoleDescription.Provider}}{{/if}}
+          </option>
+          <option value="client" {{#equalsTo orgRole 'client'}}selected='selected'{{/equalsTo}}>
+            Client {{#if ../strings.Organization.RoleDescription.Client}}
+            - {{../../strings.Organization.RoleDescription.Client}}{{/if}}
+          </option>
+
+          <option value="both" {{#equalsTo orgRole 'both'}}selected='selected'{{/equalsTo}}>
+            Both{{#if ../strings.Organization.RoleDescription.Both}}
+            - {{../../strings.Organization.RoleDescription.Both}}{{/if}}
+          </option>
+          <option value="communityOwner" {{#equalsTo orgRole 'communityowner'}}selected='selected'{{/equalsTo}}>
+            Community
+            Owner{{#if ../strings.Organization.RoleDescription.CommunityOwner}}
+            - {{../../strings.Organization.RoleDescription.CommunityOwner}}{{/if}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label" id="org-duns-label">DUNS Number</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgRouteId" id="org-duns"
+               value="{{#equalsTo orgId.name 'orgDuns'}}{{orgId.value}}{{/equalsTo}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label" id="org-naics-label">NAICS Number</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="orgNaics" id="org-naics"
+               value="{{#equalsTo orgId.name 'orgDuns'}}{{orgNaics}}{{/equalsTo}}"/>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Tag Line</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="tagline" value="{{tagline}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Location</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="location" value="{{location}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Market Area</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="marketArea" value="{{marketArea}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Year Founded</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="yearFounded" value="{{yearFounded}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Size</label>
+
+      <div class="col-sm-7">
+
+        <select class="form-control" name="size">
+          <option {{#equalsTo size 'Small'}}selected='selected'{{/equalsTo}} value="Small">Small</option>
+          <option {{#equalsTo size 'Medium'}}selected='selected'{{/equalsTo}} value="Medium">Medium</option>
+          <option {{#equalsTo size 'Large'}}selected='selected'{{/equalsTo}} value="Large">Large</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Description</label>
+
+      <div class="col-sm-7">
+        <textarea class="form-control ckeditor" type="text" name="description">{{{trim description}}}</textarea>
+      </div>
+    </div>
+    <h3>Business POC</h3>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocFirstName" value="{{businessPocFirstName}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocLastName" value="{{businessPocLastName}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone Number</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocPhone" value="{{businessPocPhone}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="businessPocEmail" value="{{businessPocEmail}}"/>
+      </div>
+    </div>
+    <h3>Technical POC</h3>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">First Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocFirstName" value="{{technicalPocFirstName}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Last Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocLastName" value="{{technicalPocLastName}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Phone Number</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocPhone" value="{{technicalPocPhone}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="technicalPocEmail" value="{{technicalPocEmail}}"/>
+      </div>
+    </div>
+  {{/with}}
+  <button class="btn btn-primary" id="admin-update-org-button" type="submit">
+    Update
+  </button>
+  <a href="/admin/organizations" class="btn btn-danger">Cancel</a>
+</form>
+</div>
+
+{{#contentFor 'pageCSS'}}
+  <style type="text/css">
+    #avatar_dealio {
+      width: 324px;
+      margin: 0 auto;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+{{/contentFor}}
+
+
+{{#contentFor "pageScripts"}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css" media="all">
+  <!--[if lt IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie.css" media="all"><![endif]-->
+  <!--[if IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]><script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-ie.js"></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('select').change(function () {
+        $('select option:selected').each(function () {
+          if ($(this).attr('value') == 'Government') {
+            $('#org-duns-label').hide();
+            $('#org-duns').hide();
+            $('#org-naics-label').hide();
+            $('#org-naics').hide();
+          }
+          if ($(this).attr('value') == 'Industry') {
+            $('#org-duns-label').show();
+            $('#org-duns').show();
+            $('#org-naics-label').show();
+            $('#org-naics').show();
+          }
+          if ($(this).attr('value') == 'Academic') {
+            $('#org-duns-label').show();
+            $('#org-duns').show();
+            $('#org-naics-label').show();
+            $('#org-naics').show();
+          }
+        });
+      }).change();
+    });
+    (function ($) {
+
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    })(AJS.$);
+  </script>
+
+{{/contentFor}}

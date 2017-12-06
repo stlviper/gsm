@@ -1,0 +1,88 @@
+<div class="modal fade" id="{{modalName}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="newsModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title indent" id="myModalLabel">Add a News Item</h3>
+      </div>
+      <div id="newPostMessage" class="hide">
+        <div class="modal-body indent">
+            <h1 class="text-center"><span class="icon icon-thank-you-o"></span></h1>
+            <p class="text-center">{{strings.News.NewsPost}}</p>
+        </div>
+        <div class="modal-footer">
+          <button id="newsModalClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <form name="newsPostForm" id="newsPostForm" class="form-horizontal" action="{{formAction}}"
+            enctype="multipart/form-data" method="POST">
+        <div class="modal-body indent">
+          <div id="newsAlert" class="alert alert-warning"></div>
+          <input type="hidden" name="communityID" value="{{communityID}}"/>
+          <input type="hidden" name="communityurlFriendlyUrl" value="{{community.urlFriendlyID}}"/>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label class="col-sm-12" style="padding-left:0px">Headline<span class="orange">*</span></label>
+              <input class="form-control" type="text" name="headline" id="headline" placeholder="Headline"/>
+            </div>
+            <div class="errorTxt"></div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-6">
+              <label>Publish Date<span class="orange">*</span></label>
+              <div class="input-group">
+                <div id="releaseDateIconNew" class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <div class="add-date">
+                  <input style="z-index: 10000" type="text" class="form-control pull-right" name="releaseDate"
+                         id="releaseDateNew" placeholder="Publish Date">
+                </div>
+              </div>
+              <div class="errorTxt"></div>
+            </div>
+          </div>
+
+          <label class="col-sm-12">Categories</label>
+          <div class="form-group col-sm-12">
+            <input class="form-control" type="text" name="categories" id="newsCategories" placeholder="Categories"/>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-12">Body content<span class="orange">*</span></label>
+
+            <div class="col-sm-12">
+              <textarea rows="4" class="form-control ckeditor" id="content" name="content" value=""></textarea>
+            </div>
+            <div class="errorTxt"></div>
+          </div>
+		  <div class="form-group" style="height:30px;">
+		  
+		  
+            <div class="col-sm-12">
+                <label class="col-sm-12" for="image">Upload image (File size limit of 2MB)</label>
+              <input class="form-control" type="file" name="image" id="image" />
+            </div>
+            <div class="errorTxt"></div>
+          </div>
+        <div class="form-group" style="padding-top:45px">		  
+            <div class="col-sm-12">
+                <label class="col-sm-12" for="image">Upload attachment (File size limit of 20MB)</label>
+              <input class="form-control" type="file" name="attachment" id="attachment" />
+            </div>
+            <div class="errorTxt"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="submitNewBtn" type="submit">Submit</button>
+		  <p id="spinnerNews" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

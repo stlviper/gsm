@@ -1,0 +1,220 @@
+<div id="main-content" class="container maincontent-container">
+  <div class="row">
+    <div class="col-sm-7">
+      <h1>New Capability</h1>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-sm-2 fill profileImg">
+      <div id="output" class="aui-avatar aui-avatar-standard ">
+        <div class="aui-avatar-inner">
+          <img src="{{logoUrl}}"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{>message}}
+  <form name="updateproduct_form" id="productUpdate" class="form-horizontal check-dirty" enctype="multipart/form-data"
+        method="POST">
+    <div class="form-group">
+      <div class="col-sm-2">
+        <label class="control-label" for="organizationLogo">
+          Change Logo:
+        </label>
+        {{> help_modal id='organizationLogo' message='2MB File size restriction for the organization logo' }}
+      </div>
+      <div class="col-sm-7">
+        <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+
+        <div id="avatar_dealio">
+          <button type="button" id="crop-button" class="aui-button aui-button-primary">Save</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Approved</label>
+
+      <div class="col-sm-7">
+        <input type="checkbox" name="approved" {{#if formData.approved}}checked{{/if}}>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="capabilityName" id="name" value="{{formData.name}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Organization</label>
+
+      <div class="col-sm-7">
+        <select class="form-control" name="orgRef" id="organization">
+
+          <option value="">-</option>
+          {{#each organizations}}
+            <option value="{{id}}">{{orgName}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">POC Name</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="pocName" id="pocName" value="{{formData.pocName}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">POC Email</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="pocEmail" id="pocEmail" value="{{formData.pocEmail}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="capabilityDescription">
+        Capability Description
+      </label>
+
+      <div class="col-sm-7">
+        <textarea rows="4" class="form-control" id="capabilityDescription" name="capabilityDescription"
+                  value="">{{trim formData.description}}</textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Category</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="category" id="category" value="{{formData.category}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Web Link</label>
+
+      <div class="col-sm-7">
+        <input class="form-control" type="text" name="webLink" id="webLink" value="{{formData.webLink}}"/>
+      </div>
+    </div>
+
+
+    <button class="btn btn-primary" id="submit_new_product_btn" type="submit">
+      Create
+    </button>
+    <a href="/admin/capabilities" class="btn btn-danger">Cancel</a>
+  </form>
+</div>
+
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <style type="text/css">
+    #avatar_dealio {
+      width: 324px;
+      margin: 0 auto;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css" media="all">
+  <!--[if lt IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie.css" media="all"><![endif]-->
+  <!--[if IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]><script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-ie.js"></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+  <script type="application/javascript">
+    $(window).load(function () {
+      $('#category').tokenfield({
+        autocomplete: {
+          source: [
+            'Analytics',
+            'Collaboration',
+            'Cyber Security',
+            'GIS',
+            'Image Processing',
+            'Infrastructure',
+            'Modeling',
+            'Remote Sensing',
+            'Search',
+            'Visualization'
+          ],
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+      });
+    });
+    (function ($) {
+
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    })(AJS.$);
+  </script>
+{{/contentFor}}

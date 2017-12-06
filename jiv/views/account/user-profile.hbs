@@ -1,0 +1,262 @@
+{{> dashboard_sidebar_header activeId="id-profile"}}
+<!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+<div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+        <h1>My Profile</h1>  
+    </section>
+    <!-- Widgets content -->
+    <section class="content">
+
+        <div class="row">
+            <section class="col-lg-4 connectedSortable">
+                <!-- USER PROFILE WIDGET -->
+                <div class="box box-orange user-profile">
+                    <div class="box-body box-profile">
+                        <img class="profile-user-img img-responsive img-circle" src="{{#if organization.logoUrl}}{{organization.logoUrl}}{{else}}{{strings.PublicStaticContextFullPrefixPath}}/images/logo-default.png{{/if}}" alt="{{organization.orgName}}">
+                        <h3 class="profile-username text-center">{{userinfo.firstName}} {{userinfo.lastName}}</h3>
+                        <p class="text-muted text-center">{{userinfo.email}}</p>
+                        <ul class="list-group list-group-unbordered">
+                            <li class="list-group-item text-center">
+                                <b>{{organization.orgName}}</b>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fa fa-fw fa-map-marker"></i> {{organization.orgAddress}}
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fa fa-fw fa-link"></i> <a href="{{organization.orgWebsite}}">{{organization.orgWebsite}}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fa fa-fw fa-user"></i> {{userinfo.firstName}} {{userinfo.lastName}}<small> &ndash; {{#isOrgAdmin userinfo.isOrgAdmin}}Organization Manager{{else}}User{{/isOrgAdmin}}</small>
+                            </li>
+                        </ul>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </section><!-- ./col -->
+            <section class="col-lg-8 connectedSortable">
+                <!-- PROFILE SETTINGS TAB CONTENT -->
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#user_settings" data-toggle="tab">User Settings</a></li>
+                        <li><a href="#reset_password" data-toggle="tab">Reset Password</a></li>
+                    </ul>
+                    <div class="tab-content user-settings">
+                        <!-- USER SETTINGS TAB -->
+                        <div class="active tab-pane" id="user_settings">
+                            <!-- Update successful alert -->
+                            <div id="userInfoSuccess" style="display:none;" class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-check"></i> Your profile has been updated!</h4>
+                            </div>
+                            <div id="userInfoError" style="display:none;" class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-check"></i> There was a problem with your request, please try again.</h4>
+                            </div>
+                            <form name="user-Info-Form" id="userInfoForm" class="form-horizontal"
+                                  enctype="multipart/form-data"
+                                  method="POST" action="/profile/{{userinfo.username}}/updateProfile">
+                                  <input type="hidden" name="username" id="username" value="{{userinfo.username}}" />
+                                <div class="form-group">
+                                    <label for="firstName" class="col-sm-2 control-label">First Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{userinfo.firstName}}" value="{{userinfo.firstName}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{userinfo.lastName}}" value="{{userinfo.lastName}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="{{userinfo.email}}" value="{{userinfo.email}}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10 actions">
+                                        <p id="spinnerInfo" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Update Profile</button>
+                                        <button type="button" class="btn btn-default">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- /.tab-pane -->
+                        <!-- RESET PASSWORD TAB -->
+                        <div class="tab-pane" id="reset_password">
+                            <!-- Update successful alert -->
+                            <div id="passwordSuccessMessage" class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-check"></i> Your password has been updated!</h4>
+                            </div>
+                            <!-- Password Match alert -->
+                            <div id="passwordMatchMessage" class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-check"></i> Your password does not match</h4>
+                            </div>
+                            <!-- Password warning alert -->
+                            <div id="passwordErrorMessage" class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-exclamation-triangle"></i> Your password needs to:</h4>
+                                <ol>
+                                    <li>Be between 6 to 20 characters.</li>
+                                    <li>Contain at least one numeric digit.</li>
+                                    <li>Contain one uppercase AND one lowercase letter.</li>
+                                </ol>
+                            </div>
+                            <form class="form-horizontal">
+                                <div class="input-group col-sm-offset-2 col-sm-8">
+                                    <input id="newpass" name="newpass" type="password" class="form-control" placeholder="New Password">
+                                    <span class="input-group-addon"><i class="fa fa-fw fa-lock"></i></span>
+                                </div>
+                                <br>
+                                <div class="input-group col-sm-offset-2 col-sm-8">
+                                    <input id="confirmpass" name="confirmpass" type="password" class="form-control" placeholder="Confirm Password">
+                                    <span class="input-group-addon"><i class="fa fa-fw fa-repeat"></i></span>
+                                </div>
+                                <input type="hidden" name="id" value="{{userinfo.id}}">
+                                <br>
+                                <div class="form-group">
+                                    <div class="actions text-center">
+                                        <button type="button" onclick="savePasswordReset('{{currentRoute}}')" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                                        <button type="button" class="btn btn-default">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-content -->
+                </div><!-- /.nav-tabs-custom -->
+            </section><!-- ./col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{{> dashboard_sidebar_footer}}
+{{#contentFor "pageCSS"}}
+
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+<script>
+    $(document).ready(function () {
+        PostPageLoadPrep();
+        createEventBindings();
+        $('#userInfoForm').validate({
+            rules: {
+                firstName: {
+                    required: true
+                },
+                lastName: {
+                    required: true                    
+                },
+                email: {
+                    email: true
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.control-group').removeClass('success').addClass('error');
+            },
+            submitHandler: function (form) {
+
+
+                var form = $("#userInfoForm");
+                var $spinner = $('#spinnerInfo');
+                $spinner.show();
+                $.ajax({
+                    url: form.attr("action"),
+                    type: "POST",
+                    dataType: 'json',
+                    data: form.serialize(),
+
+                    success: function (data) {
+
+                        $spinner.hide();
+                        $('#userInfoSuccess').show();
+                    },
+                    error: function (xhr, status, error) {
+                        $spinner.hide();
+                        $('#userInfoError').show();
+                    }
+
+                });
+
+            }
+        });
+    });
+
+    function PostPageLoadPrep() {
+        $('#passwordErrorMessage, #passwordSuccessMessage, #passwordMatchMessage').hide();
+
+    }
+
+    function createEventBindings() {
+
+        $(':input[name="newpass"]').on("keyup", function (event) {
+            if (event.keyCode == '13') {
+                savePasswordReset($('#routeName').text());
+                return;
+            }
+            checkPassword($(this).val());
+            checkIfPasswordsMatch();
+        });
+        $(':input[name="confirmpass"]').on("keyup", function (event) {
+            if (event.keyCode == '13') {
+                savePasswordReset($('#routeName').text());
+                return;
+            }
+            checkIfPasswordsMatch();
+        });
+
+    }
+
+    function checkIfPasswordsMatch() {
+        if ($(':input[name="confirmpass"]').val() === $(':input[name="newpass"]').val()) {
+            $('#passwordMatchMessage').hide();
+        } else {
+            $('#passwordMatchMessage').show();
+        }
+    }
+    function checkPassword(inputtxt) {
+        var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if (!inputtxt.match(passw)) {
+            $('#passwordErrorMessage').show();
+            return true;
+        }
+        else {
+            $('#passwordErrorMessage').hide();
+            return false;
+        }
+    }
+
+    function savePasswordReset(route) {
+        $('#passwordSuccessMessage, #passwordErrorMessage').hide();
+        var payload = {
+            id: $(':input[name="id"]').val(),
+            newpass: $(':input[name="newpass"]').val(),
+            confirmpass: $(':input[name="confirmpass"]').val()
+        };
+
+        var postPassReset = $.post('',
+          payload,
+          null,
+          "json")
+          .done(function (data) {
+              if (data.error) {
+                  $('#passwordErrorMessage').show();
+              }
+              else if (data.redirectUrl) {
+                  window.location = data.redirectUrl;
+              }
+              else {
+                  $('.disposable').hide();
+                  $('#resetPassMessage').hide();
+                  $('#newpass').val("");
+                  $('#confirmpass').val("");
+                  $('#passwordSuccessMessage').show();
+              }
+          });
+
+    }
+</script>
+{{/contentFor}}

@@ -1,0 +1,149 @@
+<div class="container">
+    <!-- Action buttons ============================================= -->
+      <div class="row actions-toggle page-title">
+          <div class="col-md-9 col-sm-12">
+        <h1 class="pull-left">News</h1>
+        {{#if userinfo}}
+          {{#orCond userinfo.isAdmin canEdit}}
+            <a class="label label-default pull-right" data-toggle="modal" data-target="#AddNews"><i class="fa fa-plus"></i> Add a News Item</a>
+          {{/orCond}}
+        {{/if}}  
+          </div>
+      </div>
+<!-- /Action buttons ============================================= -->
+    <div id="news-list" class="row">
+    <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+      <div id="sidebar" data-spy="affix" data-offset-top="0">
+        <div class="form-group has-feedback">
+          <label>Search News</label>
+          <input id="search-box" type="text" class="form-control search" placeholder="Search" value="{{newsKeyword}}">
+          <i class="glyphicon glyphicon-search form-control-feedback"></i>
+        </div>
+    {{#if community.news}}
+      <label>Top News</label>
+            <ul class="news-categories">
+              {{#each newsTopStories}}
+                <li class="panel">
+                  <a href="/news/{{newsUrlFriendlyID}}"><i class="fa fa-newspaper-o"></i> <div class="news-title">{{headline}}</div></a>
+                </li>
+              {{/each}}
+          </ul>
+      <label>Filters</label>      
+          <ul>
+          {{#each newsTopCategories}}
+            <li class="news-filters">
+                <input class="news-filter" type="checkbox" value="{{this._id}}"
+                       {{#equalsTo this._id ../newsFilter}}checked{{/equalsTo}}>
+                {{this._id}}
+            </li>
+          {{/each}}
+          </ul>
+          
+    {{/if}}
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-9 col-lg-9">
+      <ul class="list news-list">
+        {{#each allNews}}
+
+          {{#if approved}}
+            {{#onOrPastDate releaseDate}}
+                <li>
+                <span class="news-categories" style="display:none;">{{categories}}</span>
+
+                <div class="border-bottom">
+                  {{#if image.path}}
+                    <a href="/news/{{newsUrlFriendlyID}}">
+                      <div class="pull-left thumb news hidden-xs news-list-image">
+                        <div class="crop">
+                          <img src="{{image.path}}" alt="{{headline}}">
+                        </div>
+                      </div>
+                    </a>
+                  {{/if}}
+
+                  <div class="news-list">
+				  {{#youngerThanOneWeek releaseDate}}
+                          <span class="label gsm-teal-bg baseline-shift pull-right">NEW</span>
+                      {{/youngerThanOneWeek}}
+                    <a href="/news/{{newsUrlFriendlyID}}">
+                      <h2>
+                        <span class="news-name">{{headline}}</span>
+                      </h2>
+
+                      <p class="labels">
+                        <i class="fa fa-calendar fa-fw fa-lg jivango-dkgray"></i> Published:
+                        <span class="label jivango-mdgray-bkgd">{{dateFormatter releaseDate 'MMMM D, YYYY'}}</span><br>
+                        <i class="fa fa-tags fa-fw fa-lg jivango-dkgray"></i>
+                        Categories:
+                      <span class="categories">
+                        {{#each categories}}
+                          <span class="label jivango-category-bkgd category-tag">
+                            {{this}} </span>
+                        {{/each}}
+                      </span>
+                      </p>
+
+                    </a>
+                    <div class="news-summary">
+                      {{{onlyTakeNCharacters content 200}}}
+                    </div>
+                      
+
+                  </div>
+                </div>
+              </li>
+            {{/onOrPastDate}}
+          {{/if}}
+          {{else}}
+          <div class="null-notification" id="null-news">
+            <h1 class="icon"><i class="fa fa-newspaper-o"></i></h1>
+            <h2 class="text-center">There is no News posted yet in the community.<br />
+                Please check back soon!</h2>
+          </div>
+        {{/each}}
+      </ul>
+
+    {{#if community.news}}
+      <div class="jiv-pagination-controls">
+        <ul class="news-pagination pagination pagination-sm"></ul>
+        <ul class="pagination pagination-sm">
+          <li><a id="news-showall" href="#" data-showall="false">Show All</a></li>
+        </ul>
+        <select class="form-control" name="type" id="news-itemsperpage">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+    {{/if}}
+      </div>
+  </div>
+</div>
+
+{{> community/newspost_create_modal modalName="AddNews" formAction="/community/add-news-post" communityID=community.id}}
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-datepicker.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community/add-news-post.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/community/news-list.js"></script>
+  <script type="application/javascript">
+    $('#releaseDateIconNew').click(function () {
+      $('#releaseDateNew').datepicker('show');
+    });
+  </script>
+{{/contentFor}}
+
+{{#contentFor "postJqueryScripts"}}
+  <script type="application/javascript">
+    $(document).ready( function () {
+      $('#releaseDateNew').datepicker();
+    });
+  </script>
+{{/contentFor}}

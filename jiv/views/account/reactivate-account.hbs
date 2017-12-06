@@ -1,0 +1,54 @@
+<div id="main-content" class="container-fluid maincontent-container clouds-container pass-reset">
+  {{#equalsTo status 'successful'}}
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+          <h2 class="text-center hidden-xs"><img src="/images/gsm-members-success.png" alt=""></h2>
+          {{#equalsTo message 'successful'}}
+            <h2 class="text-center">Thank you for joining the GEOINT Solutions Marketplace and reactivating your account!</h2>
+          {{/equalsTo}}
+          {{#equalsTo message 'alreadyApproved'}}
+            <h2 class="text-center">Your account has already been reactivated!</h2>
+          {{/equalsTo}}
+          <h2 class="text-center">You may now log in.</h2>
+        </div>
+        <form id="new-user-form" class="form-horizontal form-sign" action="/signin" method="post" enctype="application/x-www-form-urlencoded">
+          <div class="row">
+            <div class="form-group col-lg-6 col-lg-push-3" style="margin-left: 0;">
+              <input class="form-control" type="text" name="username" id="username" placeholder="Email">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6 col-lg-push-3" style="margin-left: 0;">
+              <input class="form-control" type="password" name="password" id="password" placeholder="Password">
+              <div class="forgotPassword pull-left" style="margin-top: 5px;">
+                <a href="/forgot">Forgot your password?</a><br>
+              </div>
+            </div>
+          </div>
+          <input class="btn btn-lg btn-primary btn-block col-sm-offset-2" type="submit" id="login-submit" value="Log In" style="width: auto; margin: 0 auto; padding: 6px 12px;     border-radius: 4px;">
+        </form>
+      </div>
+    </div>
+
+  {{/equalsTo}}
+  {{#equalsTo status 'failed'}}
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+          <h1 class="icon"><span class="icon-warning-o"></span></h1>
+          <h2 class="text-center">There was an issue reactivating your account. </h2>
+          <h2 class="text-center">Please contact <a href="mailto:gsmhelp@geoint.community?Subject=Error%20activating%20account">gsmhelp@geoint.community</a> for additional help.</h2>
+          <div class="error-actions" style="margin-top: 20px;">
+            <a href="/" class="btn btn-primary" style="margin-right:5px;"><i class="fa fa-home"></i> Take Me Home </a>
+            <a href="/contact" class="btn btn-default"><i class="fa fa-envelope-o"></i> Contact Support </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/equalsTo}}
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/welcome.js"></script>
+{{/contentFor}}

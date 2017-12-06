@@ -1,0 +1,988 @@
+<div id="main-content" class="container maincontent-container"
+     style="padding-left: 30px; margin-top: 5px; margin-bottom: 30px;">
+  <div class="row">
+    {{#unlessAnd isCapabilityModalMsg isChallengeModalMsg}}
+      <div id="manageMsg" class="alert {{#if isAlert}} alert-danger {{else}} alert-info {{/if}}
+        {{#unless message}} hide {{/unless}}">
+        {{message}}
+      </div>
+    {{/unlessAnd}}
+  </div>
+  <h1 style="font-size: 36px; margin-top: 0; margin-bottom: 10px;">My Dashboard</h1>
+
+  <div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
+      <li role="presentation" class="active">
+        <a href="#organization" aria-controls="organization" role="tab" data-toggle="tab">Organization Data</a>
+      </li>
+
+      <li role="presentation">
+        <a href="#orgAdmin" aria-controls="orgAdmin" role="tab" data-toggle="tab">Organization Users</a>
+      </li>
+
+      <li role="presentation">
+        <a href="#orgScreenShots" aria-controls="orgScreenShots" role="tab" data-toggle="tab">Screen Shots</a>
+      </li>
+      <li role="presentation">
+        <a href="#capabilities" aria-controls="products" role="tab" data-toggle="tab">Capabilities</a>
+      </li>
+      {{#inArray userinfo.orgRole 'client, communityowner, both'}}
+        <li role="presentation">
+          <a href="#problems" aria-controls="challenges" role="tab" data-toggle="tab">Problems</a>
+        </li>
+      {{/inArray}}
+      {{#if registrations}}
+        <li role="presentation">
+          <a href="#solutionSubmissions" aria-controls="registeredChallenges" role="tab" data-toggle="tab">Solution
+            Submissions</a>
+        </li>
+      {{/if}}
+      {{#inArray userinfo.orgRole 'communityowner'}}
+        <li role="presentation">
+          <a href="#news" aria-controls="news" role="tab" data-toggle="tab">News</a>
+        </li>
+      {{/inArray}}
+    </ul>
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="organization">
+        {{#if organization}}
+          {{>organization/user_manage}}
+        {{else}}
+          <div class="alert alert-info" style="margin-top:25px;">
+            You do not belong to a valid organization. Please contact the Help Desk.
+          </div>
+        {{/if}}
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="orgScreenShots">
+
+        {{#unless screenShots}}
+          <div class="alert alert-info" style="margin-top:25px;">
+            You currently have no screen shots to manage.
+          </div>
+        {{/unless}}
+        <div class="col-sm-12">
+          <form id="screenShots_uploadForm" method="post" class="form-horizontal" style="margin-top: 15px;"
+                action="/profile/{{userinfo.username}}/manage/addImage" enctype="multipart/form-data">
+            <input type="hidden" name="orgRef" value="{{organization._id}}"/>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="screenShots" data-toggle="tooltip" data-placement="top"
+                     data-original-title="A maximum of 5 image uploads are allowed.">Screenshots <span
+                class="glyphicon glyphicon-question-sign"></span>
+              </label>
+
+              <div class="col-sm-7 errPlacement" style="margin-bottom: 10px;">
+                <input type="file" class="form-control screenshots" name="screenShots" id="screenShots">
+              </div>
+              <div class="col-sm-2">
+                <button class="btn btn-primary screenshots" type="submit">
+                  Upload
+                </button>
+                <p id="spinnerScreenshot" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div id="screenShots_wrapper" class="row">
+          {{#each screenShots}}
+            <div class="col-lg-2 col-md-2 col-sm-4">
+              <img class="screenshotManage" src="{{this}}"/>
+              <a href="#" onclick="userManage.removeImage(event, '{{this}}')">
+                <span class="glyphicon glyphicon-trash"></span> delete
+              </a>
+            </div>
+          {{/each}}
+
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="capabilities">
+        {{#if products}}
+          <table id="productTbl" class="jiv-table table table-striped table-bordered table-hover">
+            <thead>
+            <tr class="table-title">
+              <td>Capability Name</td>
+              <td>Categories</td>
+              <td>POC</td>
+              <td>Web Link</td>
+              <td>Create Date</td>
+              <td>Actions</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each products}}
+              <tr class="user-row">
+                <td>{{name}}</td>
+                <td>{{category}}</td>
+                <td>{{pocName}}</td>
+                <td>
+                  {{#if webLink}}
+                    <a href="{{webLink}}" target="_blank">{{webLink}}</a>
+                  {{/if}}
+                </td>
+                <td>{{dateFormatter date_created 'short'}}</td>
+                <td>
+                  <a class="btn btn-success" style="margin-bottom: 5px;"
+                     href="/profile/{{../userinfo.username}}/manage/capabilities/{{_id}}"><span
+                    class="glyphicon glyphicon-edit"></span> Manage</a>
+                  <a class="btn btn-danger" style="margin-bottom: 5px;"
+                     href="/profile/{{../userinfo.username}}/manage/capabilities/{{_id}}/delete"><span
+                    class="glyphicon glyphicon-trash"></span> Delete</a>
+                </td>
+              </tr>
+            {{/each}}
+            </tbody>
+          </table>
+        {{else}}
+          <div class="alert alert-info" style="margin-top:25px;">
+            You currently have no capabilities to manage.
+          </div>
+        {{/if}}
+      </div>
+      {{#inArray userinfo.orgRole 'client, communityowner, both'}}
+        <div role="tabpanel" class="tab-pane" id="problems">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              {{!<button type="button" style="margin-bottom: 15px;" class="btn btn-success add-product-btn"
+                      data-toggle="modal"
+                      data-target="#createChallengeModal">
+                <span class="glyphicon glyphicon-plus"></span> Request a Problem
+              </button>}}
+            </div>
+          </div>
+          {{#if challenges}}
+            <div id="customSearchDiv" class="pull-right">
+              <span>
+              <label for="customSearch"
+                     style="margin-right: 5px; margin-top: 4px;">Search Solution Submissions: </label></span>
+              <input id="customSearch" class="typeahead" type="text"
+                     placeholder= "Search Solution Submissions...">
+            </div>
+            <br><br>
+            <table id="discoverTbl" class="jiv-table table table-striped table-bordered table-hover">
+              <thead>
+              <tr class="table-title">
+                <td>Problem</td>
+                <td>Stage</td>
+                <td>Actions</td>
+              </tr>
+              </thead>
+              <tbody>
+              {{#each challenges}}
+                {{#isOrgAdmin ../../userinfo.isOrgAdmin}}
+                  <tr class="user-row">
+                    <td>{{name}}</td>
+                    <td>{{getFriendlyStage stage}}</td>
+                    <td>
+                      <a class="btn btn-info"
+                         href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}/challengeview"><span
+                        class="glyphicon glyphicon-eye-open"></span> View</a>
+                      <a class="btn btn-success"
+                         href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}"><span
+                        class="glyphicon glyphicon-edit"></span> Edit</a>
+                      <a class="btn btn-warning"
+                         href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}/view"><span
+                        class="glyphicon glyphicon-list-alt"></span> Solution Submissions</a>
+                      <a class="btn btn-danger"
+                         href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}/delete"><span
+                        class="glyphicon glyphicon-trash"></span> Delete</a>
+                    </td>
+                  </tr>
+                {{else}}
+                  {{#isIdInArray ../../userinfo.id discoveryManagers}}
+                    <tr class="user-row">
+                      <td>{{name}}</td>
+                      <td>{{getFriendlyStage stage}}</td>
+                      <td>
+                        <a class="btn btn-info"
+                           href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}/challengeview"><span
+                          class="glyphicon glyphicon-eye-open"></span> View</a>
+                        <a class="btn btn-success"
+                           href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}"><span
+                          class="glyphicon glyphicon-edit"></span> Edit</a>
+                        <a class="btn btn-warning"
+                           href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}/view"><span
+                          class="glyphicon glyphicon-list-alt"></span> Solutions</a>
+                        <a class="btn btn-danger"
+                           href="/profile/{{../../../userinfo.username}}/manage/problems/{{_id}}/delete"><span
+                          class="glyphicon glyphicon-trash"></span> Delete</a>
+                      </td>
+                    </tr>
+                  {{else}}
+                    {{#isIdInArray ../../../userinfo.id discoveryEvaluators}}
+                      <tr class="user-row">
+                        <td>{{name}}</td>
+                        <td>{{getFriendlyStage stage}}</td>
+                        <td>
+                          <a class="btn btn-info"
+                             href="/profile/{{../../../../userinfo.username}}/manage/problems/{{_id}}/challengeview"><span
+                            class="glyphicon glyphicon-edit"></span> View</a>
+                          <a class="btn btn-warning"
+                             href="/profile/{{../../../../userinfo.username}}/manage/problems/{{_id}}/view"><span
+                            class="glyphicon glyphicon-list-alt"></span> Solutions</a>
+                        </td>
+                      </tr>
+                    {{else}}
+                      <tr class="user-row">
+                        <td>{{name}}</td>
+                        <td>{{getFriendlyStage stage}}</td>
+                        <td>
+                          <a class="btn btn-info"
+                             href="/profile/{{../../../../userinfo.username}}/manage/problems/{{_id}}/challengeview"><span
+                            class="glyphicon glyphicon-edit"></span> View</a>
+                        </td>
+                      </tr>
+                    {{/isIdInArray}}
+                  {{/isIdInArray}}
+                {{/isOrgAdmin}}
+
+              {{/each}}
+              </tbody>
+            </table>
+          {{else}}
+            <div class="alert alert-info" style="margin-top:25px;">
+              You currently have no problems to manage.
+            </div>
+          {{/if}}
+        </div>
+      {{/inArray}}
+      {{#inArray userinfo.orgRole 'communityowner'}}
+        <div role="tabpanel" class="tab-pane" id="news">
+
+          {{>manage/news_list newspost=community}}
+        </div>
+      {{/inArray}}
+      {{#if registrations}}
+        <div role="tabpanel" class="tab-pane" id="solutionSubmissions">
+          <table id="registrationsTbl" class="jiv-table table table-striped table-bordered table-hover">
+            <thead>
+            <tr class="table-title">
+              <td>Problem Title</td>
+              <td>Problem Owner</td>
+              <td>Stage</td>
+              <td>Actions</td>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each registrations}}
+              <tr>
+                <td>{{challengeName}}</td>
+                <td>{{getChallengeRegistrationOrgName challengeID ../challengeDocs ../../organizationDocs}}</td>
+                <td>{{getChallengeStage challengeID ../regChallenges}}</td>
+                <td>
+                  <a class="btn btn-success"
+                     href="/profile/{{../userinfo.username}}/manage/solutions/{{id}}/update"><span
+                    class="glyphicon glyphicon-edit"></span> Edit</a>
+
+                  <a href="/profile/{{../userinfo.username}}/manage/solutions/{{id}}" class="btn btn-info"><span
+                    class="glyphicon glyphicon-eye-open"></span> View</a>
+                  {{#greaterThan feedback.length 0}}
+                    <a href="/profile/{{../../userinfo.username}}/manage/solutions/{{id}}/provider/readfeedback"
+                       class="btn btn-warning"><span
+                      class="glyphicon glyphicon-list-alt"></span> Read Feedback</a>
+                  {{else}}
+                    <a class="btn btn-transparent" data-toggle="tooltip" data-placement="top"
+                       data-original-title="You do not have any feedback yet.">
+                      <span class="glyphicon glyphicon-question-sign"></span> No Feedback
+                    </a>
+                  {{/greaterThan}}
+                  <a class="btn btn-danger long-btn"
+                     href="/profile/{{../userinfo.username}}/manage/solutions/{{id}}/delete"><span
+                    class="glyphicon glyphicon-minus-sign"></span> Unregister</a>
+                </td>
+              </tr>
+            {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{/if}}
+      <div role="tabpanel" class="tab-pane" id="orgAdmin">
+        <table id="userTbl" class="jiv-table table table-striped table-bordered table-hover">
+
+          {{#isOrgAdmin userinfo.isOrgAdmin}}
+            <thead>
+            <tr>
+              <td>First Name</td>
+              <td>Last Name</td>
+              <td>Email</td>
+              <td>User Role(s)</td>
+              <td><span data-toggle="tooltip" data-placement="top"
+                        data-original-title="You are able to activate or deactivate accounts by clicking the buttons.">Active Account  <span
+                class="glyphicon glyphicon-question-sign"></span></span></td>
+              <td><span data-toggle="tooltip" data-placement="top"
+                        data-original-title=
+                          "The Organization Manager is a &ldquo;super user&rdquo; for your organization with full privileges. They are allowed to approve and disable user accounts, edit your organization data, and interact in Problems."
+              >Organization Manager <span
+                class="glyphicon glyphicon-question-sign"></span></span></td>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{#each users}}
+              <tr class="user-row">
+                <td>{{firstName}}</td>
+                <td>{{lastName}}</td>
+                <td>{{email}}</td>
+                <td id="orgUserRoles_{{_id}}">{{getFriendlyUserRoles roles}}</td>
+                <td class="text-center">
+                  <input type="checkbox" id="approved_btn_{{_id}}" data-checkbox="{{_id}}" name="{{_id}}"
+                         class="activeAccount" data-approved="{{approved}}" data-on-color="success" data-on-text="Yes"
+                         data-off-text="No"
+                         {{#if approved}}checked{{/if}}/>
+                </td>
+                <td class="text-center">
+                  <input type="checkbox" id="orgAdmin_btn_{{_id}}" data-checkbox="{{_id}}" name="{{_id}}"
+                         data-orguser="{{../userinfo.username}}" class="activeOrgManager"
+                         data-orgAdmin="{{#ifIn 'organizationManager' roles}}true{{else}}false{{/ifIn}}"
+                         data-on-color="success" data-on-text="Yes" data-off-text="No"
+                         {{#ifIn 'organizationManager' roles}}checked{{/ifIn}}/>
+
+                </td>
+              </tr>
+            {{/each}}
+            </tbody>
+          {{else}}
+            {{#isOrgAdmin userinfo.isAdmin}}
+              <thead>
+              <tr class="table-title">
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Email</td>
+                <td>User Role(s)</td>
+                <td><span data-toggle="tooltip" data-placement="top"
+                          data-original-title="You are able to activate or deactivate accounts by clicking the buttons.">Active Account  <span
+                  class="glyphicon glyphicon-question-sign"></span></span></td>
+                <td><span data-toggle="tooltip" data-placement="top"
+                          data-original-title=
+                            "The Organization Manager is a &ldquo;super user&rdquo; for your organization with full privileges. They are allowed to approve and disable user accounts, edit your organization data, and interact in Problems."
+                >Organization Manager <span
+                  class="glyphicon glyphicon-question-sign"></span></span></td>
+              </tr>
+              </thead>
+              <tbody>
+
+              {{#each users}}
+                <tr class="user-row">
+                  <td>{{firstName}}</td>
+                  <td>{{lastName}}</td>
+                  <td>{{email}}</td>
+                  <td id="orgUserRoles_{{_id}}">{{getFriendlyUserRoles roles}}</td>
+                  <td>
+                    <a id="approved_btn_{{_id}}" data-approved="{{approved}}" style="width: 100px;"
+                       class="btn user-btn {{#if approved}}btn-success approved-btn{{else}}btn-danger denied-btn{{/if}}"
+                       onclick="approval_click('{{_id}}')">
+                      {{#if approved}}
+                        <span class="glyphicon glyphicon-check"></span>
+                      {{else}}
+                        <span class="glyphicon glyphicon-remove"></span>
+                      {{/if}}
+                    </a>
+                  </td>
+                  <td>
+                    <a id="orgAdmin_btn_{{_id}}" style="width: 100px;"
+                       data-orgAdmin="{{#ifIn 'organizationManager' roles}}true{{else}}false{{/ifIn}}"
+                       class="btn user-btn {{#ifIn 'organizationManager' roles}}btn-success orgAdmin-btn{{else}}btn-danger denied-btn{{/ifIn}}"
+                       onclick="orgAdmin_click('{{_id}}', '{{../userinfo.username}}')">
+                      {{#ifIn 'organizationManager' roles}}
+                        <span class="glyphicon glyphicon-check"></span>
+                      {{else}}
+                        <span class="glyphicon glyphicon-remove"></span>
+                      {{/ifIn}}
+                    </a>
+                  </td>
+                </tr>
+              {{/each}}
+              </tbody>
+            {{else}}
+              <thead>
+              <tr>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Email</td>
+                <td>Roles</td>
+              </tr>
+              </thead>
+              <tbody>
+              {{#each approvedUsers}}
+                <tr class="user-row">
+                  <td>{{firstName}}</td>
+                  <td>{{lastName}}</td>
+                  <td>{{email}}</td>
+                  <td id="orgUserRoles_{{_id}}">{{getFriendlyUserRoles roles}}</td>
+                </tr>
+              {{/each}}
+              </tbody>
+            {{/isOrgAdmin}}
+          {{/isOrgAdmin}}
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  {{#if organization}}
+    <!--START: Capability Modal-->
+    <div class="row" style="margin-top:25px;">
+      <div class="col-sm-12 text-center">
+
+        <!-- Modal -->
+        <div class="modal fade" id="showcaseProductModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel"
+             aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="showcaseproduct_modal">Showcase Your Capability</h4>
+              </div>
+              <div class="modal-body">
+                <form name="create-capability-form" id="capabilityCreate" class="form-horizontal"
+                      action="/profile/{{userinfo.username}}/manage/capabilities/create"
+                      enctype="multipart/form-data"
+                      method="POST">
+                  <div class="row">
+                    {{#if isCapabilityModalMsg}}
+                      <div id="manageProductMsg" class="alert {{#if isAlert}} alert-danger {{else}} alert-info {{/if}}
+                        {{#unless message}} hide {{/unless}}">
+                        {{message}}
+                      </div>
+                    {{/if}}
+                  </div>
+                  {{> product_create}}
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--END: Capability Modal-->
+    <!--START: Problem Modal -->
+    <div class="row" style="margin-top:25px;">
+      <div class="col-sm-12 text-center">
+
+        <!-- Modal -->
+        <div class="modal fade" id="createChallengeModal" tabindex="-1" role="dialog"
+             aria-labelledby="challengeCreatelabel"
+             aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="challengeCreate_modal">Create a new Problem</h4>
+              </div>
+              <div class="modal-body">
+                <form name="createChallenge_form" id="challengeCreate" class="form-horizontal"
+                      action="/profile/{{userinfo.username}}/manage/problems/create"
+                      enctype="multipart/form-data"
+                      method="POST">
+                  <div class="modal-body indent">
+                    <div class="discoveryAlert">
+                    </div>
+                    <input type="hidden" name="communityID" value="{{community.id}}"/>
+
+                    <div class="form-group col-sm-12">
+                      <label class="col-sm-3 control-label" data-original-title="2MB file restriction"
+                             data-placement="top"
+                             data-toggle="tooltip">
+                        Upload Thumbnail: <span class="glyphicon glyphicon-question-sign" data-toggle="modal"
+                                                data-target=".organizationLogo"></span>
+                      </label>
+
+                      <div class="col-sm-9" id="thumbnailDic">
+                        <input type="hidden" class="form-control" name="thumbnail" id="thumbnail">
+
+                        <div id="thumbnail-dealio">
+                          <button type="button" id="thumbnail-crop-button" class="aui-button aui-button-primary">Save
+                            Image
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                      <input class="form-control" type="text" name="name" id="name" value=""
+                             placeholder="Problem Title"/>
+                    </div>
+                    <div class="form-group col-sm-12">
+                      <input class="form-control" type="text" name="pocName" id="pocName" value=""
+                             placeholder="Point of Contact Name"/>
+                    </div>
+                    <div class="form-group col-sm-12">
+                      <input class="form-control" type="text" name="pocEmail" id="pocEmail" value=""
+                             placeholder="Point of Contact Email"/>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-sm-6">
+                        <div class="input-group add-date">
+                          <input type="text" class="form-control" name="startDate" id="startDate"
+                                 placeholder="Problem Start Date">
+
+                    <span id="startDateCalendarIcon" class="input-group-addon"><span
+                      class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="input-group add-date">
+                          <input type="text" class="form-control" name="endDate" id="endDate"
+                                 placeholder="Problem End Date">
+                    <span id="endDateCalendarIcon" class="input-group-addon"><span
+                      class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="form-group col-sm-12">
+                        <input class="form-control" type="text" name="category"
+                               id="new-discovery-categories" value=""
+                               placeholder="Categories"/>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="col-sm-12">Describe the scope of your Problem (less than 200 words):</label>
+
+                      <div class="col-sm-12"><textarea rows="4" class="form-control ckeditor" id="description"
+                                                       name="description"
+                                                       value=""></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-12">Do you need help creating content (i.e., graphics, video) to go along
+                        with the
+                        Problem posting? Please describe if so:</label>
+
+                      <div class="col-sm-12">
+                        <textarea rows="4" class="form-control" id="requirements" name="requirements"
+                                  value=""></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-12" for="showcaseImage"> Are there any existing documents, datasets, APIs,
+                        etc that
+                        will be needed to respond to the Problem?</label>
+
+                      <div class="col-sm-12">
+                        <input type="file" class="form-control" name="documents" id="documents">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary" id="submitNewBtn" type="submit">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--END: Problem Modal -->
+
+  {{/if}}
+</div>
+<link rel="stylesheet"
+      href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css">
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css"
+        rel="stylesheet">
+  <style>
+    .twitter-typeahead {
+      display: inline !important
+    }
+    .ui-datepicker {
+      z-index: 1050 !important;;
+    }
+    #thumbnail-dealio {
+      width: 325px;
+      margin: 0;
+    }
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+    #thumbnail-crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+    /*The below are for making the typeahead dropdown work properly*/
+    .tt-input,
+    .tt-hint {
+      width: 396px;
+      height: 29px;
+      padding: 0px 4px;
+      font-size: 13px;
+      line-height: 30px;
+      /*border: 2px solid #ccc;*/
+      outline: none;
+    }
+    .tt-input{
+      /*box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);*/
+      width: 250px;
+      margin-right: 1px;
+        border: 1px solid #ddd;
+    }
+      .tt-input:focus {
+          outline-offset: -2px;
+          outline: -webkit-focus-ring-color auto 5px;
+      }
+    .tt-hint {
+      color: #999;
+    }
+    .tt-menu {
+      width: 350px;
+      margin-top: 12px;
+      padding: 0 5px;
+      background-color: #fff;
+/*      border: 1px solid #ccc;*/
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 0;
+      box-shadow: 0 5px 10px rgba(0,0,0,.2);
+      max-height: 350px;
+      overflow-y: auto;
+        overflow-x: hidden;
+        left: -100px !important;
+
+    }
+    .tt-suggestion {
+      padding: 3px;
+    font-size: 12px;
+    line-height: 16px;
+    }
+      .tt-suggestion:hover {
+          cursor:pointer;
+      }
+      .tt-suggestion .org-name {
+          font-size: 13px;
+          font-weight: bold;
+      }
+    .tt-suggestion.tt-cursor {
+      color: #fff;
+      background-color: #0097cf;
+    }
+    .tt-suggestion p {
+      margin: 0;
+    }
+    .tt-highlight {
+/*        color: #2391a2;*/
+        background-color: #ffdf8f;
+        padding: 0 1px;
+/*        font-weight: normal;*/
+      }
+    .tt-suggestion small {
+    color: #939597;
+    font-size: 10px;
+/*    line-height: 1.33333333333333;*/
+    text-transform: uppercase;
+    font-weight: normal;
+}
+    .tt-suggestion hr {
+/*      border: 1px solid rgba(0, 0, 0, 0.2);*/
+/*      clear:both;*/
+/*      display:block;*/
+      width: 320px;
+/*      background-color:#CCCCCC;*/
+/*      height: 1px;*/
+      margin-top: 3px;
+      margin-bottom: 0;
+    }
+      .tt-dataset img {
+          border-radius: 50%;
+          margin-bottom: 2px;
+          margin-right: 3px;
+      }
+  </style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-form-v3.51.0.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/user-manage.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+  <!--<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-typeahead.js"-->
+  <!--type="text/javascript"></script>-->
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/typeahead.bundle.min.js"
+          type="text/javascript"></script>
+  <script>
+    $("[class='activeAccount']").bootstrapSwitch();
+    $("[class='activeOrgManager']").bootstrapSwitch();
+    $('.activeAccount').on('switchChange.bootstrapSwitch', function (event, state) {
+      var id = this.name;
+      var $btn = $('#approved_btn_' + id);
+      var newStatus = !($btn.attr('data-approved') == 'true');
+      if ($btn) {
+        $.post('/admin/users/isApproved', {id: id, approved: newStatus})
+          .done(function (data) {
+            $btn.attr('data-approved', newStatus);
+          })
+          .fail(function (data) {
+          });
+      }
+    });
+    $('.activeOrgManager').on('switchChange.bootstrapSwitch', function (event, state) {
+      var id = this.name;
+      var username = document.getElementById('orgAdmin_btn_' + id).dataset.orguser;
+      var $btn = $('#orgAdmin_btn_' + id);
+      var userRoles = document.getElementById("orgUserRoles_" + id);
+      var str = $('#orgUserRoles_' + id).text().replace('Organization Manager', '');
+      var newStatus = !($btn.attr('data-orgAdmin') == 'true');
+      if ($btn) {
+        $.post('/profile/' + username + '/orgAdmin', {id: id, orgManager: newStatus})
+          .done(function (data) {
+            $btn.attr('data-orgAdmin', newStatus);
+            if (newStatus) {
+              userRoles.innerHTML += ' Organization Manager';
+            }
+            else {
+              $('#orgUserRoles_' + id).text(str);
+            }
+
+          })
+          .fail(function (data) {
+
+          });
+      }
+    });
+  </script>
+{{/contentFor}}
+
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript">
+    $(document).ready(function () {
+      var _settings = {
+        orgRef: '',
+        username: '',
+        msgSltr: '#manageMsg',
+        screenShotFileInputSltr: '#screenShots',
+        screenShotWrapperSltr: '#screenShots_wrapper',
+        screenShotUploadFormSltr: '#screenShots_uploadForm', //Renamed this value to prevent broken submit listener from firing
+        removeImageUrl: null
+      };
+
+
+      $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+      });
+      $.validator.addMethod('imageCount', function (value, element, param) {
+        var uploadFileCnt = $(_settings.screenShotFileInputSltr)[0].files.length;
+        var curImgCnt = $(_settings.screenShotWrapperSltr).children().length;
+        if (uploadFileCnt > 5 || curImgCnt >= 5 || (uploadFileCnt + curImgCnt) > 5) {
+
+          return false;
+        } else {
+          return true;
+        }
+      });
+      $(_settings.screenShotUploadFormSltr).validate({
+        rules: {
+          screenShots: {filesize: 2097152, imageCount: true}
+        },
+        messages: {
+          screenShots: {
+            filesize: "File must not exceed 2MB",
+            imageCount: "You cannot upload more than 5 images"
+          }
+        },
+        submitHandler: function (form) {
+          var $form = $(form);
+          var formData = new FormData($form[0]);
+          var $spinner = $('#spinnerScreenshot');
+          $spinner.show();
+          $.ajax({
+            url: "/profile/{{userinfo.username}}/manage/addImage",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, jqXHR) {
+              $spinner.hide();
+              console.log("images url " + data.imagesUrl);
+              //TODO : Somemone remind me to fix this if you find this.
+              var htmlTemplate = "<div class='col-sm-2'>" +
+                "<img class='screenshotManage' src='{0}'/>" +
+                "<a href='#' onclick='userManage.removeImage(event, \"{0}\")'>" +
+                "<span class='glyphicon glyphicon-trash'></span>Delete" +
+                "</a>" +
+                "</div>";
+
+              for (var i = 0; i < data.imagesUrl.length; i++) {
+                $(_settings.screenShotWrapperSltr).append(htmlTemplate.format(data.imagesUrl[i]));
+              }
+              userManage.showMsg('Images Uploaded', false);
+              userManage.resetFileUploadValue();
+            },
+            error: function (jqXHR, errorThrown) {
+              $spinner.hide();
+              var errorMessage = JSON.parse(jqXHR.responseText);
+              var errorHtml = "<label id='screenShots-error' class='error' for='screenShots'>" + errorMessage.message + "</label>";
+              $('.errPlacement').append(errorHtml);
+
+            }
+          });
+        },
+        errorPlacement: function (error, element) {
+          error.appendTo(element.parent('.errPlacement'));
+        },
+        ignore: ':hidden:not("#description")',
+
+      });
+
+
+      $('#discoverTbl').DataTable({
+          "language": {
+              "sSearch": "Search Problems:",
+              "searchPlaceholder": "Search Problems..."
+          }
+      });
+
+      //$('#discoverTbl_filter').hide(); // Hide this so a custom search bar can be used
+      //$('#discoverTbl_filter').removeClass();
+      //$('#discoverTbl_filter').attr('id','registrationsTbl_search');
+//      $(document).ready(function () {
+//        $('#registrationsTbl_filter').removeClass();
+      //$('#discoverTbl_filter').addClass('typeahead');
+      var solutionsList = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+          url: '/solutions/search/%QUERY',
+          wildcard: '%QUERY'
+        }
+      });
+      $('#customSearchDiv .typeahead').typeahead(
+        {
+          hint: false,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'custom-search',
+          limit: 50,
+          source: solutionsList,
+          display: 'value',
+          templates: {
+            empty: [
+              '<div class="empty-message">',
+              'No search results match the current query.',
+              '</div>'].join('\n'),
+            suggestion: function(data){
+            return '<div id="'+data.problemId+'"><img src="'+data.organizationLogoUrl+'" height="42" width="42" href="/profile/{{userinfo.username}}/manage/problems/'+data.problemId+'/view"> <span class="org-name">' + 
+                data.organizationName +
+                '</span><br/><small>Problem:</small> ' + data.problemName +
+                '<br/><small>Submitted:</small> ' + data.dateSubmitted +
+                '<br/><small>' + data.customField.fieldName +
+                ':</small> ' + data.customField.response + '<hr></div>';
+            }
+          }
+        }
+      );
+
+      $('#customSearchDiv').on('typeahead:selected', function (e, data) {
+        window.location = '/profile/{{userinfo.username}}/manage/solutions/'+data.solutionId;
+      });
+
+      $('#productTbl').DataTable();
+      $('#userTbl').DataTable();
+      $('#registrationsTbl').DataTable();
+      $("#registrationsTbl").css("width", "100%");
+      $("#productTbl").css("width", "100%");
+      $("#userTbl").css("width", "100%");
+      $("#discoverTbl").css("width", "100%");
+      {{#if isCapabilityModalMsg}}
+        $('#showcaseProductModal').modal('show');
+      {{/if}}
+      {{#if isChallengeModalMsg}}
+        $('#createChallengeModal').modal('show');
+      {{/if}}
+      var hash = document.location.hash;
+      var prefix = "tab_";
+      if (hash) {
+        $('.nav-tabs a[href=' + hash.replace(prefix, "") + ']').tab('show');
+      }
+      $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash.replace("#", "#" + prefix);
+      });
+      $('[data-toggle="tooltip"]').tooltip();
+      userManage.init('{{organization._id}}', '{{userinfo.username}}', '{{modalMsg}}');
+
+      $('#user-manage-org').validate({
+        rules: {
+          orgName: {
+            required: true
+          },
+          orgAddress: {
+            required: true
+          },
+          orgWebsite: {
+            required: true
+          },
+          size: {
+            required: true
+          },
+          businessPocFirstName: {
+            required: true
+          },
+          businessPocLastName: {
+            required: true
+          },
+          businessPocPhone: {
+            required: true
+          },
+          businessPocEmail: {
+            required: true,
+            email: true
+          },
+          technicalPocFirstName: {
+            required: true
+          },
+          technicalPocLastName: {
+            required: true
+          },
+          technicalPocPhone: {
+            required: true
+          },
+          technicalPocEmail: {
+            required: true,
+            email: true
+          }
+        },
+        highlight: function (element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        }
+      });
+
+
+    });
+  </script>
+
+{{/contentFor}}

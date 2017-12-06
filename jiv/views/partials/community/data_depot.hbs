@@ -1,0 +1,82 @@
+<div id="customTab" class="tab-pane" role="tabpanel">
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <img src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/gsm-data-depot.png" alt="" class="img-responsive gsm-header"/>
+            </div>
+        </div>
+        
+        <div class="row">
+
+      {{#if editMode}}
+        <form name="customTabForm" id="customTabForm" class="form-horizontal"
+              action="/data-depot/update"
+              enctype="multipart/form-data" method="POST">
+          <div class="col-sm-12 col-md-3 col-lg-3 sidebar right">
+            <div id="sidebar" data-spy="affix" data-offset-top="0">
+              <!--<div class="form-group">-->
+                <!--<label for="customTabContent">Show Tab</label>-->
+                <!--<div class="errPlacement">-->
+                  <!--<input type="checkbox" id="hideTab" data-checkbox="hideTab" name="hideTab"-->
+                         <!--value="{{../community.showTab}}" data-hideTab="{{../community.showTab}}"-->
+                         <!--data-on-color="success" data-on-text="Yes" data-off-text="No"-->
+                         <!--{{#if ../community.showTab}}checked{{/if}}/>-->
+                <!--</div>-->
+              <!--</div>-->
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="form-group errPlacement">
+              <label for="customTabTitle" data-original-title="20 characters or less" data-placement="top"
+                     data-toggle="tooltip">Page Header <span class="glyphicon glyphicon-question-sign"></span></label>
+              <input id="tabTitle" name="tabTitle" maxlength="22" value="{{community.tabTitle}}" class="form-control"/>
+
+            </div>
+            <div class="form-group">
+              <label for="customTabContent">Page Content</label>
+              <div class="col-sm-12 errPlacement" style="border: 1px #a9a9a9 dashed;"><textarea rows="4"
+                                                                                                class="form-control ckeditor"
+                                                                                                id="customTabContent"
+                                                                                                name="customTabContent"
+                                                                                                value="">{{{../community.tabContent}}}</textarea>
+              </div>
+            </div>
+            <button class="btn btn-info" id="submitNewBtn" type="submit">Save</button>
+          </div>
+        </form>
+
+      {{else}}
+        {{!#if ../community.showTab}}
+          <div id="customTabContentReadOnly">
+            <h1>{{../community.tabTitle}}</h1>
+            {{{../community.tabContent}}}
+          </div>
+        {{!/if}}
+      {{/if}}
+
+      <div class="col-xs-8">
+        <br/>
+        {{#if canEdit}}
+          {{#if editMode}}
+            <a href="/data-depot" id="editDoneTag" class="btn btn-primary btn-lg">Return
+              to Normal View</a>
+          {{/if}}
+          {{#unless editMode}}
+            <a href="/data-depot/edit" id="editTag" class="btn btn-primary btn-lg">Edit
+              This Page</a>
+          {{/unless}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageCSS'}}
+<style>
+    .navbar-default .navbar-toggle {
+        margin-right: 40px;
+    }
+</style>
+{{/contentFor}}

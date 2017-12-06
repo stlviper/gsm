@@ -1,0 +1,19 @@
+{{#if isAdmin}}
+  <li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        <span class="hidden">Admin </span>
+        <b class="caret"></b></a>
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li><a href="/admin/users">{{{strings.Header.AdminMenu.Users}}}</a></li>
+      <li><a href="/admin/news">{{{strings.Header.AdminMenu.News}}}</a></li>
+      <li><a href="/admin/organizations">{{{strings.Header.AdminMenu.Organizations}}}</a></li>
+      <li><a href="/admin/capabilities">{{{strings.Header.AdminMenu.Capabilities}}}</a></li>
+      <li><a href="/admin/problems">{{{strings.Header.AdminMenu.Problems}}}</a></li>
+      <li><a href="/admin/communities">{{{strings.Header.AdminMenu.Communities}}}</a></li>
+      <li><a href="/admin/logs">{{{strings.Header.AdminMenu.Logs}}}</a></li>
+    </ul>
+  </li>
+{{/if}}
+
+

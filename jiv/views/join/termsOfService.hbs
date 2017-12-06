@@ -1,0 +1,87 @@
+<div id="main-content" class="container maincontent-container">
+  <div id="signupCreateUserForm" class="col-lg-9 col-md-9">
+
+    {{>message}}
+
+    <h1>{{{strings.Join.TermsOfService.Title}}}</h1>
+
+    <form id="tos-form" method="post" action="/join/tos">
+
+      <div class="form-group">
+        <div class="tosreader" readonly>{{> tos}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <p><input type="checkbox" id="tosagree" name="tosagree" class="big-checkbox" {{#if tosAgreeChecked}}checked{{/if}}>
+        <strong>I acknowledge that I have read and agree to the Terms of Service.</strong></p>
+      </div>
+
+      <div class="form-group">
+        <h3>{{{strings.Join.TermsOfService.WhatHappensNext.Title}}}</h3>
+        <p>{{{strings.Join.TermsOfService.WhatHappensNext.Caption}}}</p>
+      </div>
+
+      <div class="form-group">
+        <input type="submit" class="big-orange-btn" value="{{{strings.Join.TermsOfService.Buttons.Submit}}}">
+      </div>
+    </form>
+  </div>
+  <div id="signupFormSidebarRight" class="col-lg-3 col-md-3">
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.AccountDetails}}}</div>
+    Name: {{account.firstName}} {{account.lastName}}<br>
+    Email: {{account.email}}<br>
+    Phone Number: {{account.phoneNumber}}<br>
+    <br>
+
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.OrganizationName}}}</div>
+    {{organization.orgAddress}}<br>
+    {{organization.orgWebsite}}<br>
+    Organization Type:{{organization.orgType}} <br>
+    Role: {{getOrganizationRoleFriendly organization.orgRole}}<br>
+
+    {{#equalsTo organization.orgId.name 'orgDuns'}}
+      DUNs: {{organization.orgId.value}}<br>
+    {{/equalsTo}}
+    {{#if organization.orgNaics}}
+      NAICS Number:{{organization.orgNaics}} <br>
+    {{/if}}
+    <br>
+
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.BPOC}}}</div>
+    {{organization.businessPocFirstName}}&nbsp;{{organization.businessPocLastName}}<br/>
+    {{organization.businessPocEmail}}<br/>
+    {{organization.businessPocPhone}}<br/>
+    <br>
+
+    <div class="heading">{{{strings.Join.createUserProfile.SidebarRight.TPOC}}}</div>
+    {{organization.technicalPocFirstName}}&nbsp;{{organization.technicalPocLastName}}<br/>
+    {{organization.technicalPocEmail}}<br/>
+    {{organization.technicalPocPhone}}<br/>
+  </div>
+</div>
+
+
+{{#contentFor "pageScripts"}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js" type="application/javascript"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js" type="application/javascript"></script>
+  <script type="application/javascript">
+    $(document).ready(function () {
+
+      $('#tos-form').validate({
+        rules: {
+          tosagree: {
+            required: true
+          }
+        },
+        highlight: function (element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+          element/*.text('OK!')*/.addClass('valid')
+            .closest('.control-group').removeClass('error').addClass('success');
+        }
+      });
+    });
+  </script>
+{{/contentFor}}

@@ -1,0 +1,111 @@
+<div id="main-content" class="container maincontent-container">
+  <h4 style="margin-bottom: 5px;">Solution Submission for</h4>
+
+  <h1>{{registration.challengeName}}</h1>
+
+  <div class="form-horizontal form-padding container">
+    {{#with registration}}
+      {{#each ../challenge.customRegistrationFields}}
+        <div class="form-group">
+          <label
+            class="col-sm-2 control-label">{{label}}</label>
+
+          <div class="col-sm-10">
+            {{#inArray field_type 'paragraph'}}
+              <textarea class="form-control" rows="5"
+                        readonly>{{getResponseForCustomField _id ../../customFieldResponse}}</textarea>
+            {{else}}
+              <input class="form-control" type="text" name="pocName" id="pocName"
+                     value="{{getResponseForCustomField _id ../../customFieldResponse}}" readonly/>
+            {{/inArray}}
+          </div>
+        </div>
+      {{/each}}
+
+      {{#if whitepaper}}
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Attachment (if applicable)</label>
+
+          <div class="col-sm-2"></div>
+          <div class="col-sm-10">
+            <div id="whitepaperContainer">
+              {{#with whitepaper}}
+                <span class="documentContainer">
+            <a class="btn-sm btn-default" href="{{path}}" style="color:#fff;">{{name}}</a>
+          </span>
+              {{/with}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+
+      {{#if productID}}
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Capability Name</label>
+
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="pocEmail" id="pocEmail"
+                   value="{{getProductName productID ../../products}}" readonly/>
+          </div>
+        </div>
+
+        <div id="productDescFields">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Capability Access Instructions[less than 200 words]:</label>
+
+            <div class="col-sm-10" style="padding-top:10px;">
+      <textarea rows="2" class="form-control" id="accessInstructions" style="margin-bottom: 10px;"
+                name="accessInstructions" readonly>{{accessInstructions}}</textarea>
+            </div>
+            <div class="col-sm-2 hidden-xs"></div>
+          </div>
+
+          {{#if otherDocuments}}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Other Documents</label>
+
+              <div class="col-sm-2 hidden-xs"></div>
+              <div class="col-sm-10">
+                <div id="documentContainer">
+                  {{#each otherDocuments}}
+                    <span class="documentContainer">
+                    <a class="btn-sm btn-danger" href="{{path}}" style="color: #fff">{{name}}</a>
+                  </span>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
+    {{/with}}
+
+    <div class="col-sm-12" style="margin-top:15px;">
+
+      {{#isClient userinfo.orgRole}}
+        <a class="btn btn-info"
+           href="{{#equalsTo ../userinfo.orgRef ../challenge.orgRef}}
+           /profile/{{../userinfo.username}}/manage/problems/{{../challenge._id}}/view
+           {{else}}
+           /profile/{{../userinfo.username}}/manage/
+           {{/equalsTo}}"
+           style="margin-bottom: 5px; margin-left: 5px;">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back
+        </a>
+
+      {{/isClient}}
+
+      {{#isProvider userinfo.orgRole}}
+        <a class="btn btn-success" href="/profile/{{userinfo.username}}/manage/"
+           style="margin-bottom: 5px; margin-left: 5px;">
+          <span class="glyphicon glyphicon-dashboard"></span> Dashboard
+        </a>
+      {{/isProvider}}
+	  <a class="btn btn-success" href="/profile/{{userinfo.username}}/manage/solutions/{{registration._id}}/export"
+           style="margin-bottom: 5px; margin-left: 5px;">
+          <i class="fa fa-file-pdf-o"></i> Export to PDF
+        </a>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,360 @@
+{{> community/community_create_modal}}
+
+<!-- Main content area -->
+<div class="container maincontent-container">
+
+<!--
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><a class="btn jivango-ltorange-bkgd create-lg"
+                                                           data-toggle="modal"
+                                                           data-target="{{!--#if userinfo}}#CreateCommunity{{else}}#loginModal{{/if}}">Create
+        a
+        Community</a></div>
+      <form action="/searchresults" method="get" enctype="application/x-www-form-urlencoded">
+        <divcon- class="col-xs-12 col-sm-8 col-md-8 col-lg-8 search-lg">
+          <div class="form-group has-feedback">
+            <input type="text" class="form-control" name="name" id="communitySearch"
+                   placeholder="Find a community&hellip;" value="" autocomplete="off"/>
+            <button class="form-control-feedback" style="border:none;background:none;pointer-events:visible;"
+                    type="submit"><img src="{{strings.PublicStaticContentDirectoryFullPrefixPath--}}/images/mag-glass.png" alt="Search"/></button>
+          </div>
+
+        </divcon->
+      </form>
+    </div>
+     /.row 
+  </div>
+-->
+
+  <div class="container selling-mycommunities">
+    {{!--> community/selling_points --}}
+    {{#if userinfo}}
+      {{> community/my_communities}}
+    {{/if}}
+  </div>
+
+  <div class="container explore-communities">
+    <h1 class="indent">Explore Communities</h1>
+
+    <div id="posts" class="row">
+
+      {{#each communities}}
+        <div class="item col-sm-6 col-md-4 col-lg-3">
+                {{#equalsTo type 'private'}}
+              <div class="community-type">
+                  <a href="/community/about/{{urlFriendlyID}}#tab_about" data-toggle="tooltip" title="Private"><span class="icon-key"></span></a>
+              </div>
+                {{/equalsTo}}
+            <a style="cursor:pointer;" class="join-title btn"{{#if ../userinfo}}
+             onclick="communityHlpr.joinCommunity(this, '{{id}}')" {{else}}
+             data-toggle="modal"
+             data-target="#loginModal"{{/if}}>
+              <h3>
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                Join
+              </h3>
+          </a>
+
+          <div class="well tile">
+            <a href="/community/about/{{urlFriendlyID}}#tab_about">
+              <div class="thumb">
+                {{#if logoUrl}}
+                  <img src="{{../logoUrl}}" class="img-responsive"
+                       alt="{{../name}}"/>
+                {{else}}
+                  <img src="{{getOrgLogoURL ../owner ../../organizations}}" class="img-responsive" alt="{{../name}}"/>
+                {{/if}}
+              </div>
+              <h3 class="name">{{name}}</h3>
+
+            </a>
+
+            <div class="list-group my-communities">
+              <a href="/community/about/{{urlFriendlyID}}#tab_members" class="list-group-item">
+                <i class="fa fa-institution fa-fw"></i> Members <span class="badge">{{lengthOf members}}</span>
+              </a>
+              <a href="/community/about/{{urlFriendlyID}}#tab_capabilities" class="list-group-item">
+                <i class="fa fa-puzzle-piece fa-fw"></i> Capabilities <span
+                class="badge">{{#if productLength}}{{productLength}}{{else}}0{{/if}}</span>
+              </a>
+              <a href="/community/about/{{urlFriendlyID}}#tab_problems" class="list-group-item">
+                <i class="fa fa-bullhorn fa-fw"></i> Problems <span class="badge">{{#if discoveryLength}}{{discoveryLength}}{{else}}0{{/if}}</span>
+              </a>
+              <!--<a href="/community/about/{{urlFriendlyID}}#tab_news" class="list-group-item">
+                <i class="fa fa-newspaper-o fa-fw"></i> News <span class="badge">{{lengthOf news}}</span>
+              </a>-->
+              </div>
+            <h4 class="jivango-mdgray more-link"><a href="/community/about/{{urlFriendlyID}}#tab_about"
+                                                    class="more-link">
+                    	<span class="fa-stack">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse"
+                               aria-hidden="true"></i>
+						</span> Learn More</a></h4>
+          </div>
+        </div>
+      {{/each}}
+
+      <!-- Create tile -->
+      <div class="item col-sm-6 col-md-4 col-lg-3 create-tile">
+        <div class="well tile">
+          <a href="" data-toggle="modal" data-target="{{#if userinfo}}#CreateCommunity{{else}}#loginModal{{/if}}">
+            <div class="thumb"><img src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/create-community.png" class="img-responsive" alt="Create a community"/>
+            </div>
+            <span class="name" style="display:none">ZZZZZ</span>
+
+            <h3>Feature Your Community</h3>
+
+            <p>Create your community and connect to new markets and new discoveries.</p></a>
+
+          <div><a class="btn jivango-ltorange-bkgd create-md" data-toggle="modal"
+                  data-target="{{#if userinfo}}#CreateCommunity{{else}}#loginModal{{/if}}">Create
+            a Community</a></div>
+        </div>
+      </div>
+      <!-- /Create tile -->
+
+    </div>
+    <!-- /.row -->
+
+    <div style="display: none;">
+      <div id="explore-template" class="item col-sm-6 col-md-4 col-lg-3">
+                {{#equalsTo type 'private'}}
+              <div class="community-type">
+                  <a href="/community/about/{{urlFriendlyID}}#tab_about" data-toggle="tooltip" title="Private"><span class="icon-key"></span></a>
+              </div>
+                {{/equalsTo}}          
+          <a style="cursor:pointer;" class="join-title btn" onclick="join();">
+            <h3>
+              <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              Join
+            </h3>
+        </a>
+        <a class="about-link" href="">
+          <div class="well tile">
+            <div class="thumb">
+              <img src="" class="img-responsive" alt="name"/>
+            </div>
+            <h3 class="name">name</h3>
+
+            <div class="list-group my-communities">
+              <a href="#" class="list-group-item">
+                <i class="fa fa-institution"></i> Members <span class="badge members">{{lengthOf members}}</span>
+              </a>
+              <a href="#" class="list-group-item">
+                <i class="fa fa-bullseye"></i> Capabilities <span class="badge solutions">{{productLength}}</span>
+              </a>
+              <a href="#" class="list-group-item">
+                <i class="fa fa-bullhorn fa-fw"></i> Problems <span
+                class="badge discoveries">{{discoveryLength}}</span>
+              </a>
+              <!-- <a href="#" class="list-group-item">
+              <i class="fa fa-newspaper-o"></i> News <span class="badge news">{{lengthOf news}}</span>
+            </a> -->
+              </div>
+            <h4 class="jivango-mdgray more-link">
+              <a href="LinkToCommunitySite" class="more-link">
+                <span class="fa-stack">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="glyphicon glyphicon-option-horizontal fa-stack-1x fa-inverse" aria-hidden="true"></i>
+                </span>
+                Learn More
+              </a>
+            </h4>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade" id="communityFail" tabindex="-1" role="dialog" aria-labelledby="communityFailLabel"
+       aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+          <h1 class="modal-title errorText" id="communityFailLabel">We&rsquo;re sorry!</h1>
+            </div>
+        <div class="modal-body">
+          <h1><span class="icon icon-warning-o"></span></h1>
+          <!--<p><i class="fa fa-user-secret fa-5x jivango-mdgray"></i></p>-->
+          <div id="communityFailModal">
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default text-center" onclick='' data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-multiselect.js"></script>
+  <script type="text/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-typeahead.js"></script>
+  <script type="text/javascript"
+          src="//cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.0/isotope.pkgd.min.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.matchHeight-min.js"></script>
+  <script type='text/javascript'>
+    $(document).ready(function () {
+      $('button[name="modal_close_btn"]').click(function () {
+        $('#createCommunity_buttonn').show();
+        $('#community_form_inputs').show();
+        $('#community_form_success').hide();
+        $('#community_form_success_msg').html('');
+        $(this).closest('form').find("input[type=text], textarea").val("");
+      });
+
+      $('#newCommunityData_form').validate({
+        rules: {
+          community_name: {
+            required: true
+          },
+          community_description: {
+            required: true
+          }
+        },
+        highlight: function (element) {
+          $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+          element/*.text('OK!')*/.addClass('valid')
+            .closest('.control-group').removeClass('error').addClass('success');
+        },
+        submitHandler: function (form) {
+          $.post('/community/create', $('#newCommunityData_form').serialize())
+            .done(function (data) {
+              var message = data.message;
+              $('#createCommunity_buttonn').hide();
+              $('#community_form_inputs').hide();
+              $('#community_form_success_msg').html(message);
+              $('#community_form_success').show();
+            })
+            .fail(function (data) {
+              var errorMsg = data.message;
+            });
+        }
+      });
+
+      $('#communitySearch').typeahead({
+        ajax: {
+          url: '/getallcommunities',
+          // Time between database queries (ms)
+          timeout: 100,
+          // The field you want to show up in the search results
+          displayField: 'name',
+          triggerLength: 1,
+          method: 'get',
+          scrollBar: true,
+          loadingClass: 'loading-circle'
+        },
+        // Max items in the results list
+        items: 100
+      });
+      $('#posts').children('.item').matchHeight({byRow: false});
+      $('#my-communities-posts').children('.item').matchHeight({byRow: false});
+
+      (function (exports) {
+        var _containers = {
+          posts: null,
+          myCommunities: null
+        };
+
+
+        _containers.myCommunities = $('#my-communities-posts');
+        _containers.myCommunities.isotope({
+          itemSelector: '.item',
+          getSortData: {name: '.name'}
+        });
+
+        _containers.posts = $('#posts');
+        _containers.posts.isotope({
+          itemSelector: '.item',
+          getSortData: {name: '.name'}
+        });
+
+
+        {{#if userinfo}}
+
+          var _settings = {
+            joinUrl: '/community/join',
+            leaveUrl: '/community/leave',
+            myCommunitiesSltr: '#my-communities',
+            templateCardSltr: '#mycommunity-template',
+            exploreTemplateSltr: '#explore-template',
+            defaultLogoUrl: '/images/create-community.png'
+          };
+
+          exports.communityHlpr = {
+            leaveCommunity: function (target, communityID) {
+              $.post(_settings.leaveUrl, {id: communityID})
+                .done(function (data) {
+                  var $newCard = $($(_settings.exploreTemplateSltr).clone());
+
+                  $newCard.attr('id', '');
+                  $newCard.find('.about-link').attr('href', '/community/about/' + data.urlFriendlyID);
+                  $newCard.find('div.well> a > h3').html(data.name);
+                  $newCard.find('div.well > div > a > span.solutions').html(data.solutions);
+                  $newCard.find('div.well > div > a > span.discoveries').html(data.discoveries);
+                  $newCard.find('div.well > div > a > span.members').html(data.members);
+                  $newCard.find('div.well > a > div.thumb > img').attr('src', (data.logoUrl || _settings.defaultLogoUrl) + '?stamp=' + new Date().getTime())
+                    .attr('alt', data.name).css("visibility", "visible");
+
+                  $newCard.find('a.join-title').attr('onclick', 'communityHlpr.joinCommunity(this,\'' + data.id + '\');');
+
+                  _containers.myCommunities.isotope('remove', $(target).parent().parent()).isotope('layout').isotope({sortBy: 'name'});
+                  _containers.posts.isotope('insert', $newCard);
+                  $('#posts').children('.item').matchHeight({byRow: false});
+                  _containers.posts.isotope('layout').isotope({sortBy: 'name'});
+
+
+                })
+                .fail(function (data) {
+                });
+            },
+            joinCommunity: function (target, communityID) {
+              $.post(_settings.joinUrl, {id: communityID})
+                .done(function (data) {
+                  $(_settings.myCommunitiesSltr).show();
+                  var $newCard = $($(_settings.templateCardSltr).clone());
+
+                  $newCard.attr('id', '');
+                  $newCard.find('.about-link').attr('href', '/community/about/' + data.urlFriendlyID);
+                  $newCard.find('div.well> a > h3').html(data.name);
+                  $newCard.find('div.well > div > a > span.solutions').html(data.solutions);
+                  $newCard.find('div.well > div > a > span.discoveries').html(data.discoveries);
+                  $newCard.find('div.well > div > a > span.members').html(data.members);
+                  $newCard.find('div.well > a > div.thumb > img').attr('src', (data.logoUrl || _settings.defaultLogoUrl) + '?stamp=' + new Date().getTime())
+                    .attr('alt', data.name).css("visibility", "visible");
+
+                  $newCard.find('div > a.leave-sm').attr('onclick', 'communityHlpr.leaveCommunity(this,\'' + data.id + '\');');
+
+                  _containers.posts.isotope('remove', $(target).parent()).isotope('layout').isotope({sortBy: 'name'});
+                  _containers.myCommunities.isotope('insert', $newCard);
+                  $('#my-communities-posts').children('.item').matchHeight({byRow: false});
+                  _containers.myCommunities.isotope('layout').isotope({sortBy: 'name'});
+
+                })
+                .fail(function (data) {
+				var errorMsg = data.responseJSON.message;
+				$('#communityFailModal').html(errorMsg);
+				$('#communityFail').modal('show');
+                });
+            }
+          };
+
+        {{/if}}
+      })(window);
+    });
+  </script>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
+{{/contentFor}}

@@ -1,0 +1,420 @@
+<!-- Modal for Post a Problem -->
+<div id="postProblem" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h2 class="modal-title">Post a Problem</h2>
+        <span class="orange">* Required fields</span>
+      </div>
+      <div id="newProblemMessage" class="hide">
+        <div class="modal-body indent">
+          <h1 class="text-center"><span class="icon icon-thank-you-o" style="font-size: 120px"></span></h1>
+          <p class="text-center" style="font-size: 20px">{{strings.Problems.newProblemMessage}}</p>
+        </div>
+        <div class="modal-footer">
+          <button id="newProblemModalClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form name="newDiscovery" id="newDiscovery" class="form-horizontal" action="/my-problems"
+              enctype="multipart/form-data" method="POST">
+        {{#isClientOwner userinfo.orgRole community.owner userinfo.orgRef}}
+            <div class="modal-body indent">
+              <div class="discoveryAlert">
+              </div>
+              <div class="form-group col-md-12">
+                <label for="Community">Select Community for this Problem: </label>
+                </br>
+                <select id="id-sel-com" name="communityID">
+                  {{#each communities}}
+                    <option data-urlfriendlyid="{{urlFriendlyID}}" value="{{_id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <!-- LOGO THUMB & LOGO UPLOADER -->
+              <label class="col-md-12">Upload Thumbnail:</label>
+              <div class="row logo-uploader">
+                <div class="row">
+                  <div class="col-md-4 col-lg-3" style="margin: 15px; margin-top: 6px; display:inline-block">
+                    <input type="hidden" class="form-control" name="thumbnail" id="thumbnail">
+                    <div id="avatar_dealio">
+                      <button type="button" id="crop-button" class="image-upload-field-replacement aui-button">Save & Preview
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-3" style="margin: 15px; margin-top: 6px; display:inline-block; text-align: center">
+                    <div class="crop-wrapper">
+                      <div class="crop">
+                        <div id="output">
+                          <div class="aui-avatar-inner thumb">
+                            <img
+                              src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContextFullPrefixPath}}/images/logo-default.png{{/if}}"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <label style="margin-left: 25px">Thumbnail Preview</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Problem Title<span class="orange">*</span></label>
+                <div class="col-sm-9 errPlacement">
+                  <input class="form-control" type="text" name="name" id="name" value="" placeholder="Problem Title"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Start Date<span class="orange">*</span></label>
+                <div class="col-sm-5 errPlacement">
+                  <div class="input-group add-date">
+                    <input type="text" class="form-control" name="startDate" id="startDate"
+                           placeholder="Problem Start Date">
+                    <span id="startDateCalendarIcon" class="input-group-addon"><span
+                    class="glyphicon glyphicon-calendar"></span></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">End Date<span class="orange">*</span></label>
+                <div class="col-sm-5 errPlacement">
+                  <div class="input-group add-date">
+                    <input type="text" class="form-control" name="endDate" id="endDate"
+                           placeholder="Problem End Date">
+                  <span id="endDateCalendarIcon" class="input-group-addon"><span
+                    class="glyphicon glyphicon-calendar"></span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label"
+                       data-original-title="Start typing any tag you wish and press the comma key to add it. Enter as many as you like."
+                       data-placement="right"
+                       data-toggle="tooltip">Category Tags <span
+                  class="glyphicon glyphicon-question-sign"></span></label>
+                <div class="form-group col-sm-9">
+                  <input class="form-control" type="text" name="category"
+                         id="new-discovery-categories" value="" placeholder="Type any category you wish and press the comma key to add it."/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label" data-toggle="tooltip"
+                       data-original-title="Problem Managers have the ability to edit the discovery data, view solutions and submit feedback."
+                       data-placement="right">Problem Manager(s)<span class="orange">*</span> <span
+                  class="glyphicon glyphicon-question-sign"></span></label>
+                <div id="managerInputs" class="col-sm-9 errPlacement">
+                  <input class="form-control col-sm-11" type="text" name="discoveryManagers" id="discoveryManagers"
+                         value=""
+                         placeholder="Problem Manager(s), enter at least one"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-3 control-label" data-toggle="tooltip"
+                       data-original-title="Problem Evaluators have the ability to view solutions and save draft feedback, but NOT the ability to edit the problem or submit feedback."
+                       data-placement="right">Problem Evaluator(s) <span
+                  class="glyphicon glyphicon-question-sign"></span></label>
+                <div id="evaluatorInputs" class="col-sm-9 errPlacement">
+                  <input class="form-control" type="text" name="discoveryEvaluators" id="discoveryEvaluators" value=""
+                         placeholder="Problem Evaluator(s)"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-12">Describe the scope of your Problem (less than 200 words):<span
+                  class="orange">*</span></label>
+
+                <div class="col-sm-12 errPlacement"><textarea rows="4" class="form-control ckeditor" id="description"
+                                                 name="description"
+                                                 value=""></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-12">Do you need help creating content (i.e., graphics, video) to go along with the
+                  Problem posting? Please describe if so:</label>
+
+                <div class="col-sm-12">
+                  <textarea rows="4" class="form-control" id="requirements" name="requirements" value=""></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-12 control-label">Are there any existing documents, datasets, APIs, etc that
+                  will be needed to respond to the Problem?</label>
+                <div class="col-sm-12 errPlacement" style="height:25px;">
+                  <input type="file" class="form-control" name="documents" id="documents"/>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer actions">
+              <button type="submit" id="saveDraftBtn" class="btn btn-warning" onclick="submitAsDraft()">Save Draft</button>
+              <button type="submit" id="submitNewBtn" class="btn btn-primary" data-draft="false">Submit for Review</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><p id="spinnerDiscovery" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+            </div>
+        {{else}}
+          <div class="modal-body indent">
+            <h1 class="icon"><i class="fa fa-bullhorn"></i></h1>
+
+            <p class="text-center">{{strings.Community.Messages.NotExplorerProblemAlert}}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        {{/isClientOwner}}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal for Delete a Problem Warning-->
+<div id="deleteProblem" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h1><span class="icon icon-warning-o"></span></h1>
+        <h3>Are you sure you want to delete this problem?</h3>
+        <p>Selecting &lsquo;delete&rsquo; will remove this problem from any community where it has been posted<br>and delete all solution submissions associated with it from your records.</p>
+      </div>
+      <div class="modal-body text-center hidden">
+      </div>
+      <div class="modal-footer actions">
+        <button id="id-delete-btn" type="button" class="btn btn-primary" data-dismiss="modal" data-problem-id="" onclick="deleteProblem(this)"><i class="fa fa-trash"></i> Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{> dashboard_sidebar_header activeId="id-prob-ctr" activeSubId="id-my-probs" }}
+
+  <!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+  <div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+      <h1>Problem Center <small>My Problems</small></h1>
+    </section>
+
+    <!-- Widgets content -->
+    <section class="content">
+
+      <div class="row">
+        <section class="col-lg-12 connectedSortable problems">
+          <div class="box box-orange" id="my_problems">
+            <div class="box-body">
+              <div class="row">
+                <div class="actions pull-right">
+                  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#postProblem"><i class="fa fa-plus"></i> Post a Problem</a>
+                  <a href="#" data-toggle="tooltip" title="Public" class="panel-tooltip"><span class="icon icon-globe"></span></a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="pull-left">
+                  <!-- Filters -->
+                  <div class="filters">
+                    <label class="radio-inline"><input type="radio" name="myproblems" value="all" checked>Show All</label>
+                    <label class="radio-inline"><input type="radio" name="myproblems" value="open">Open</label>
+                    <label class="radio-inline"><input type="radio" name="myproblems" value="closed">Closed</label>
+                    <label class="radio-inline"><input type="radio" name="myproblems" value="draft">Draft</label>
+                    <br class="visible-sm visible-xs" />
+                    <div class="form-group filter-dropdown pull-right">
+                      Sort by:
+                      <select class="" id="id-sel-sort">
+                        <option>Community Name</option>
+                        <option>Problem Name</option>
+                        <option selected="selected">Start Date</option>
+                        <option>End Date</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="pull-right">
+                  <form class="form-horizontal dataTables_wrapper form-inline">
+                    <div id="fileManager_filter" class="dataTables_filter"><label>Search:<input id="id-search-bar" type="search" class="form-control input-sm" placeholder="" aria-controls="fileManager"></label></div>
+                  </form>
+                </div>
+              </div>
+              <div class="row">
+                <!-- The timeline -->
+                <ul class="timeline no-line" id="id-ul-timeline">
+                  {{#each problems}}
+                    <!-- timeline item -->
+                    <li id="id-tile-{{_id}}" data-draft="{{#if isDraft}}true{{else}}false{{/if}}">
+                      <div class="timeline-item">
+                        {{#if isDraft}}
+                            <span class="time"><a href="#" data-toggle="tooltip" data-placement="left" title="This problem has not yet been submitted for review."><span class="label label-warning">Draft</span></a></span>
+                        {{else}}
+                          {{#isDateAndTimeReached endDate}}
+                            <span class="time" data-sort="closed"><a href="#" data-toggle="tooltip" data-placement="left" title="Solution submissions are no longer being accepted."><span class="label label-default">Closed</span></a></span>
+                          {{else}}
+                            <span class="time" data-sort="open"><a href="#" data-toggle="tooltip" data-placement="left" title="Open for submissions."><span class="label label-success">Open</span></a></span>
+                          {{/isDateAndTimeReached}}
+                        {{/if}}
+                        <a href="/profile/{{../userinfo.username}}/manage/problems/{{_id}}/challengeview">
+                          <div class="crop-wrapper">
+                            <div class="crop"><img src="{{#if thumbnail.name}}/docs/{{thumbnail.name}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" alt="" class="timeline-thumb"></div>
+                          </div>
+                        </a>
+                        <h3 id="id-prob-name-{{_id}}" class="timeline-header no-border" data-sort="{{name}}"><a href="/profile/{{../userinfo.username}}/manage/problems/{{_id}}/challengeview">{{name}}</a></h3>
+                        {{#equalsTo 'None' (getCommunityNameProblemIsPosted _id ../communities)}}
+                          <p>Posted in: <span id="id-com-name-{{../_id}}" data-sort=""></span>No community</p>
+                        {{else}}
+                          <p>Posted in: <a href="/community/about/{{getCommunityUrlFriendlyIdProblemIsPosted ../_id ../../communities}}#tab_problems">
+                            <span id="id-com-name-{{../_id}}" data-sort="{{getCommunityNameProblemIsPosted ../_id ../../communities}}"></span>{{getCommunityNameProblemIsPosted ../_id ../../communities}}</a> community</p>
+                        {{/equalsTo}}
+                        <p>Dates: <span class="dates" id="id-start-date" data-sort="{{startDate}}">{{dateFormatter startDate 'short'}}</span> to <span class="dates" id="id-end-date" data-sort="{{endDate}}">{{dateFormatter endDate 'short'}}</span></p>
+                        <div class="actions">
+                          <a class="btn btn-primary btn-xs" href="/profile/{{../userinfo.username}}/manage/problems/{{_id}}"><i class="fa fa-pencil"></i> Edit</a>
+                          <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#deleteProblem"
+                             data-problem-id="{{_id}}"><i class="fa fa-trash"></i> Delete</a>
+                          <a class="btn btn-info btn-xs" href="/profile/{{../userinfo.username}}/manage/problems/{{_id}}/view"><i class="fa fa-eye"></i> View Submissions</a>
+                        </div>
+                      </div>
+                    </li>
+                    <!-- END timeline item -->
+                  {{/each}}
+                </ul>
+                <!-- // END timeline -->
+              </div>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        </section><!-- ./col -->
+      </div><!-- /.row -->
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+</div><!-- ./wrapper -->
+
+{{> dashboard_sidebar_footer }}
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css" media="all">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+  <style>
+    .ui-datepicker {
+      width: 200px;
+      z-index: 1050 !important;;
+    }
+
+    #thumbnail-dealio {
+      width: 325px;
+      margin: 0;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #thumbnail-crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+  <link href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/jivango-datepicker.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+{{/contentFor}}
+
+{{#contentFor 'pageScripts'}}
+
+  <script type="application/javascript"
+          src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <!-- Bootstrap Tokenfield -->
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+
+  <!-- Logo cropper -->
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+
+  <!-- CK Editor -->
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list.pagination-v0.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.simplePagination.js"></script>
+
+  <!-- Custom Functionality -->
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/manage/my-problems-dashboard.js"></script>
+  <script type="application/javascript">
+    $(document).ready( function() {
+      initializeSortByStartDate();
+
+      $('#discoveryManagers').tokenfield({
+        autocomplete: {
+          source: [
+            {{#each organizationUsers}}
+              {
+                value: '{{this.id}}',
+                label: '{{this.firstName}} {{this.lastName}} ({{this.email}})'
+              },
+            {{/each}}
+          ]
+        },
+        showAutocompleteOnFocus: true,
+        minWidth: 260
+      });
+
+      $('#discoveryEvaluators').tokenfield({
+        autocomplete: {
+          source: [
+            {{#each organizationUsers}}
+              {
+                value: '{{this.id}}',
+                label: '{{this.firstName}} {{this.lastName}} ({{this.email}})'
+              },
+            {{/each}}
+          ],
+        },
+        showAutocompleteOnFocus: true,
+        minWidth: 210
+      });
+    });
+  </script>
+{{/contentFor}}

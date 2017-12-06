@@ -1,0 +1,178 @@
+<div id="" class="container communityprofile-container tab-content">
+
+  <div id='problems' class="tab-pane active" role="tabpanel">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-sm-12 col-md-9 col-lg-9">
+          {{> community/ngage }}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+{{#contentFor 'pageCSS'}}
+
+  <!--[if lt IE 9]>
+  <link rel="stylesheet"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+        media="all"><![endif]-->
+  <!--[if IE 9]>
+  <link rel="stylesheet"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}"/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+  <style>
+    #customTab form {
+      margin-bottom: 20px;
+    }
+    #customTab .form-horizontal .form-group {
+      margin-left: -5px;
+      margin-right: 0;
+    }
+    #customTab #submitNewBtn {
+      margin-left: -5px;
+    }
+  </style>
+{{/contentFor}}
+{{#contentFor 'postJqueryScripts'}}
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/isotope.pkgd.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/fit-columns.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/cells-by-row.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/packery-mode.js"></script>
+<!--
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/skrollr/skrollr.menu.min.js"></script>
+-->
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dirty-forms-settings.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+  <script type="application/javascript">
+    $(document).ready(function () {
+      $('#customTabForm2').validate({
+        rules: {
+          tabTitle2: {
+            required: true
+          },
+          customTabContent2: {
+            required: function () {
+              CKEDITOR.instances.customTabContent2.updateElement();
+            }
+          }
+        },
+        submitHandler: function (form) {
+          var _CKupdate = function () {
+            for (instance in CKEDITOR.instances)
+              CKEDITOR.instances[instance].updateElement();
+          };
+          _CKupdate();
+          var $form = $(form);
+          var formData = new FormData($form[0]);
+          $.ajax({
+            url: "/data-depot/update",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, jqXHR) {
+              var notificationType = 'success';
+              $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+              var newTitle = $('#tabTitle').val();
+              $('#customTabTab').html('<i class="glyphicon glyphicon-edit"></i> ' + newTitle);
+            },
+            error: function (jqXHR, errorThrown) {
+              var notificationType = 'danger';
+              $.bootstrapGrowl(data.message, {type: notificationType, delay: 2000});
+            }
+          });
+        },
+        errorPlacement: function (error, element) {
+          error.appendTo(element.parent('.errPlacement'));
+        },
+        ignore: []
+
+      });
+      CKEDITOR.disableAutoInline = true;
+      //CKEDITOR.inline('customTabContent', {toolbar: 'tabToolbar'});
+      //var editor = CKEDITOR.instances['customTabContent'];
+      //if (editor) { editor.destroy(true); }
+      CKEDITOR.replace( 'customTabContent2' , {
+        removeButtons: 'Save'
+      });
+    });
+//    setTimeout(function () {
+//      var s = skrollr.init({
+//        forceHeight: false
+//      });
+      //skrollr.menu.init(s, {
+      //	});
+//    }, 500);
+  </script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/isotope.pkgd.min.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/fit-columns.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/cells-by-row.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/isotope/packery-mode.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-multiselect.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-validate/additional-methods.min.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list-v1.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/list.pagination-v0.1.1.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.simplePagination.js"></script>
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery.matchHeight-min.js"></script>
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+{{/contentFor}}

@@ -1,0 +1,27 @@
+<div id="main-content" class="container maincontent-container">
+  <div class="container">
+    <div class="row">
+      <h1>{{{strings.FAQ.Title}}}</h1>
+      <div class="panel-group" id="accordion">
+        {{#each strings.FAQ.Entries}}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{@index}}">
+                  {{{Question}}}
+                </a>
+              </h4>
+            </div>
+            <div id="collapse{{@index}}" class="panel-collapse collapse">
+              <div class="panel-body">
+                {{{Answer}}}
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</div><!-- /.maincontent-container -->

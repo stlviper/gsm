@@ -1,0 +1,381 @@
+{{> dashboard_sidebar_header activeId="id-org-mgmnt" activeSubId="id-org-profile"}}
+
+{{#with organization}}
+  <!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+  <div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header adjusted">
+      <h1>Organization Management
+        <small>Organization Profile</small>
+      </h1>
+      
+    </section>
+
+    <!-- Widgets content -->
+    <section class="content">
+
+      <div class="row">
+        <section class="col-lg-12 connectedSortable organization-management">
+          <div class="box box-orange" id="org_profile">
+            <div class="box-body">
+              <!-- Update successful alert -->
+
+              {{#if ../message}}
+                <div class="alert alert-success alert-dismissable">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <h4><i class="icon fa fa-check"></i> Your organization profile has been updated!</h4>
+                </div>
+              {{/if}}
+              <form method="post" class="form-horizontal check-dirty" id="user-manage-org" role="form"
+                    enctype="multipart/form-data"
+                    action="/profile/{{../userinfo.username}}/org-profile">
+                <!-- LOGO THUMB & LOGO UPLOADER -->
+                <div class="row logo-uploader">
+                  <div class="actions pull-right">
+                    <a class="btn btn-default btn-xs" href="/organization/{{urlFriendlyID}}"><i class="fa fa-eye"></i>
+                      View Page</a>
+                    <a href="#" data-toggle="tooltip" title="Public" class="panel-tooltip"><span
+                      class="icon icon-globe"></span></a>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 col-lg-3">
+                      <div class="crop-wrapper">
+                        <div class="crop">
+                          <div id="output">
+                            <div class="aui-avatar-inner thumb">
+                              <img
+                                src="{{#if logoUrl}}{{logoUrl}}{{else}}{{strings.PublicStaticContextFullPrefixPath}}/images/logo-default.png{{/if}}"/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+
+
+                      <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+                      <div id="avatar_dealio">
+
+                        <button type="button" id="crop-button" class="image-upload-field-replacement aui-button">Crop
+                        </button>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+                <!-- ORGANIZATION PROFILE DETAILS -->
+                <div class="row">
+                  <div class="col-lg-12 border-top">
+                    <p class="orange">Required fields*</p>
+                  </div>
+                  <div class="col-lg-8">
+                    <div class="form-group">
+                      <label for="orgName">Organization Name<span class="orange">*</span></label>
+                      <input class="form-control" id="orgName" name="orgName" placeholder="Organization name"
+                             value="{{orgName}}"
+                             {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                    </div>
+                    <div class="form-group">
+                      <label for="tagline">Tag Line</label>
+                      <input class="form-control" placeholder="Add a tag line" name="tagline" value="{{tagline}}"
+                             {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <textarea class="form-control ckeditor" rows="8" id="description"
+                                placeholder="Add a description for your organization" name="description"
+                                {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}>{{{trim description}}}</textarea>
+
+                    </div>
+                    <div class="col-lg-6 border-right">
+                      <div class="col-lg-12">
+                        <h3>Business Point of Contact</h3>
+                        <p class="orange">All fields are required*</p>
+                      </div>
+                      <div class="form-group col-lg-6">
+                        <input class="form-control" id="businessPocFirstName" name="businessPocFirstName"
+                               placeholder="First Name" value="{{businessPocFirstName}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                      <div class="form-group col-lg-6">
+                        <input class="form-control" id="businessPocLastName" name="businessPocLastName"
+                               placeholder="Last Name" value="{{businessPocLastName}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                      <div class="form-group col-lg-12">
+                        <input class="form-control" id="businessPocPhone" name="businessPocPhone" placeholder="Phone"
+                               value="{{businessPocPhone}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                      <div class="form-group col-lg-12">
+                        <input class="form-control" id="businessPocEmail" name="businessPocEmail" placeholder="Email"
+                               value="{{businessPocEmail}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="col-lg-12">
+                        <h3>Technical Point of Contact</h3>
+                        <p class="orange">All fields are required*</p>
+                      </div>
+                      <div class="form-group col-lg-6">
+                        <input class="form-control" id="technicalPocFirstName" name="technicalPocFirstName"
+                               placeholder="First Name" value="{{technicalPocFirstName}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                      <div class="form-group col-lg-6">
+                        <input class="form-control" id="technicalPocLastName" name="technicalPocLastName"
+                               placeholder="Last Name" value="{{technicalPocLastName}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                      <div class="form-group col-lg-12">
+                        <input class="form-control" id="technicalPocPhone" name="technicalPocPhone" placeholder="Phone"
+                               value="{{technicalPocPhone}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                      <div class="form-group col-lg-12">
+                        <input class="form-control" id="technicalPocEmail" name="technicalPocEmail" placeholder="Email"
+                               value="{{technicalPocEmail}}"
+                               {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group">
+                      <label for="marketArea">Market Area(s)</label>
+                                    <textarea class="form-control" id="marketArea"
+                                              placeholder="Add tags to help categorize your organization" rows="4"
+                                              name="marketArea"
+                                              {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}>{{marketArea}}</textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="orgWebsite">Website<span class="orange">*</span></label>
+                      <input class="form-control" id="orgWebsite" name="orgWebsite" placeholder="Website"
+                             value="{{orgWebsite}}"
+                             {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                    </div>
+                    <div class="form-group">
+                      <label for="orgAddress">Corporate Headquarters<span class="orange">*</span></label>
+                      <input class="form-control" id="orgAddress" name="orgAddress" placeholder="Address"
+                             value="{{orgAddress}}"
+                             {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+
+                    </div>
+                    <div class="form-horizontal">
+                      <div class="form-group">
+                        <label for="location" class="col-sm-4 control-label">Location</label>
+                        <div class="col-sm-7">
+                          <input class="form-control" id="location" name="location" placeholder="Location"
+                                 value="{{location}}"
+                                 {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="yearFounded" class="col-sm-4 control-label">Year Founded</label>
+                        <div class="col-sm-7">
+                          <input class="form-control" id="yearFounded" name="yearFounded" placeholder="Year founded"
+                                 value="{{yearFounded}}"
+                                 {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="size" class="col-sm-4 control-label custom-tooltip"><span data-toggle="tooltip"
+                                                                                              data-placement="right"
+                                                                                              data-original-title="Small: 1-50 employees; Medium: 51-500 employees; Large: Over 500 employees">Size  <span
+                          class="glyphicon glyphicon-question-sign"></span></span></label>
+                        <div class="col-sm-7">
+                          <select class="form-control" name="size"{{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}>
+                            <option value="">-</option>
+                            <option {{#equalsTo size 'Small'}}selected='selected'{{/equalsTo}} value="Small">Small
+                            </option>
+                            <option {{#equalsTo size 'Medium'}}selected='selected'{{/equalsTo}} value="Medium">Medium
+                            </option>
+                            <option {{#equalsTo size 'Large'}}selected='selected'{{/equalsTo}} value="Large">Large
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="orgRole" class="col-sm-4 control-label">Role</label>
+                        <div class="col-sm-7">
+                          <input class="form-control" type="hidden" name="orgRole" value="{{orgRole}}"
+                                 {{#unless ../userinfo.isOrgAdmin}}readonly{{/unless}}/>
+                          <input class="form-control" type="text" name="orgRoleDisplay"
+                                 value="{{getOrganizationRoleFriendly orgRole}}"
+                                 readonly/>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="orgType" class="col-sm-4 control-label">Type</label>
+                        <div class="col-sm-7">
+                          <input class="form-control" type="hidden" name="orgType" value="{{orgType}}"/>
+                          <input class="form-control" type="text" name="orgTypeDisplay"
+                                 value="{{getOrganizationTypeFriendly orgType}}"
+                                 readonly/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+                <div class="row">
+                  <div class="col-lg-12 text-center">
+                    {{#if ../userinfo.isOrgAdmin}}
+                      <div class="actions">
+                        <button class="btn btn-primary btn-sm" type="submit" id="submit_new_product_btn"><i
+                          class="fa fa-floppy-o"></i> Update Organization Profile
+                        </button>
+                        <a class="btn btn-default btn-sm" href="/profile/{{../../userinfo.username}}/manage">Cancel</a>
+
+                      </div>
+                    {{/if}}
+                  </div>
+                </div>
+              </form>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        </section><!-- ./col -->
+      </div><!-- /.row -->
+
+    </section><!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{{/with}}
+
+{{> dashboard_sidebar_footer}}
+
+{{#contentFor 'postJqueryScripts'}}
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+<script type="application/javascript">
+    $(document).ready(function () {
+        $('#user-manage-org').validate({
+            rules: {
+                orgName: {
+                    required: true
+                },
+                orgAddress: {
+                    required: true
+                },
+                orgWebsite: {
+                    required: true
+                },
+                businessPocFirstName: {
+                    required: true
+                },
+                businessPocLastName: {
+                    required: true
+                },
+                businessPocEmail: {
+                    required: true
+                },
+                businessPocPhone: {
+                    required: true
+                },
+                technicalPocLastName: {
+                    required: true
+                },
+                technicalPocFirstName: {
+                    required: true
+                },
+                technicalPocEmail: {
+                    required: true
+                },
+                technicalPocPhone: {
+                    required: true
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.control-group').removeClass('success').addClass('error');
+            }
+        });
+    });
+    
+</script>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css"
+        media="all">
+  <!--[if lt IE 9]>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                         "
+        media="all"><![endif]-->
+  <!--[if IE 9]>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                          "
+        media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]>
+  <script
+    src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}                                       "></script><![endif]-->
+
+  <script type="application/javascript"
+          src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script type="application/javascript"
+          src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+<!-- Logo cropper -->
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+<!-- CK Editor -->
+<script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+<!-- Bootstrap Switch for nice toggle checkboxes -->
+<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+
+<script type="application/javascript">
+  (function ($) {
+    var $avatar_dealio = $("#avatar_dealio"),
+      $cropButton = $('#crop-button'),
+      $output = $("#output");
+
+    $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+    var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+      {
+        cropButton: $cropButton,
+        onCrop: function (croppedDataURI) {
+          $output.find("img").attr('src', croppedDataURI);
+          $("#uploadLogoURI").val(croppedDataURI);
+          $output.show();
+        },
+        onImageUpload: function () {
+          $cropButton.show();
+        },
+        onImageUploadError: function () {
+          $cropButton.hide();
+        }
+      }
+    );
+  })(AJS.$);
+
+  $('[data-toggle="tooltip"]').tooltip();
+
+</script>
+{{/contentFor}}

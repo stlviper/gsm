@@ -1,0 +1,97 @@
+</div><!-- ./wrapper -->
+</body>
+
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/dashboard/AdminLTE.min.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/css/dashboard/gsm-dashboard.css">
+<!-- Fancy toggle switch -->
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+
+  <style type="text/css">
+    #avatar_dealio {
+      width: 324px;
+      margin: 0;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    .aui-avatar img {
+      height: auto;
+    }
+
+    #crop-button {
+      display: none;
+      position: relative;
+      margin-top: 10px;
+    }
+    .form-horizontal .form-group {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .btn-default {
+      background-color: #6d6e70;
+    }
+    .btn-default:hover {
+      background-color: #404041;
+      color: #fff;
+    }
+  </style>
+{{/contentFor}}
+
+{{#contentFor 'postJqueryScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentFullPrefixPath}}/js/libs/jquery-validate/jquery.validate.min.js"></script>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+  <script>
+    //      $.widget.bridge('uibutton', $.ui.button);
+  </script>
+
+  <!-- Underscore.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+  <!-- AdminLTE App -->
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/dashboard/app.js"></script>
+
+  <!-- Left Sidebar Collapse -->
+  <script>
+    $(document).ready(function () {
+      $("body").on("collapsed.pushMenu", function () {
+        $(".caret-icon").html('<i class="fa fa-angle-double-right"></i></a>');
+        $(".sidebar-toggle .hover-text").html('Expand sidebar');
+        $(".skin-jiv-light .main-sidebar .sidebar").css("width", "50px");
+      });
+      $("body").on("expanded.pushMenu", function () {
+        $(".caret-icon").html('<i class="fa fa-angle-double-left"></i></a>');
+        $(".sidebar-toggle .hover-text").html('Collapse sidebar');
+        $(".skin-jiv-light .main-sidebar .sidebar").css("width", "230px");
+      });
+      $("li.sidebar-toggle").hover(function () {
+        $("li.sidebar-toggle").css("cursor", "pointer");
+        $(this).find(".hover-text").css("opacity", ".9");
+      }, function () {
+        $("li.sidebar-toggle").css("cursor", "default");
+        $(this).find(".hover-text").css("opacity", "0");
+      });
+    });
+  </script>
+  <!-- Bootstrap Switch for nice toggle checkboxes -->
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+{{/contentFor}}

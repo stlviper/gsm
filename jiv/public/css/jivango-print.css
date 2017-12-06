@@ -1,0 +1,344 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* General */
+.maincontent-container, .communityprofile-container {
+    padding: 0;
+    padding-top: 10pt;
+    margin: 0;
+    margin-bottom: -10pt;
+}
+p {
+    font-size: 10pt;
+    line-height: 1.5em;
+    color: black;
+}
+h1, h2, h3, h4, h5 {
+    color: black;
+}
+a[href]:after {
+    content: none !important;
+}
+a.btn {
+	display: none;
+}
+div.search-lg {
+	display:none;
+}
+
+/* Navigation */
+.print-logo {
+    display: block;
+    margin-top: -30pt;
+    margin-bottom: 0;
+    height: 46pt;
+    width: 145pt;
+}
+.print-logo img {
+    height: 46pt !important;
+    width: 145pt !important;
+}
+.copyright {
+    float: none;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    font-size: 4pt;
+    margin-top: 50pt;
+}
+nav.pull-left {
+    display: none;
+}
+.jiv-pagination-controls {
+    display: none;
+}
+
+/* Homepage */
+.jumbotron.home-hero {
+    height: 100pt;
+    margin: 10pt -20pt;
+}
+.jumbotron.home-hero h1 {
+    font-size: 24pt;
+    text-align: left;
+}
+.jumbotron.home-hero p {
+    text-align: left;
+    font-size: 10pt;
+}
+.home-explorers img, .home-providers img {
+    display: none;
+}
+.home-explorers h1, .home-providers h1 {
+    font-size: 16pt;
+    text-align: left;
+}
+.home-explorers h4, .home-providers h4  {
+    font-size: 12pt;
+    text-align: left;
+    margin-left: 0 !important;
+}
+.home-explorers h3, .home-providers h3  {
+    font-size: 12pt;
+    text-align: right;
+    display: inline-block;
+    width: 80pt;
+    margin-left: -80pt;
+    margin-right: -20pt;
+}
+.home-explorers p, .home-providers p  {
+    font-size: 10pt;
+    text-align: left;
+    display: inline-block;
+}
+
+/* FAQ */
+#accordion .collapse {
+    display: block;
+}
+#accordion h4.panel-title {
+  font-size: 18px;
+}
+#accordion .panel-heading .accordion-toggle:after {
+    display: none;
+}
+#accordion img {
+    height: 190pt;
+    width: auto;
+}
+
+/* Contact form */
+#help-form input.btn {
+    display: none;
+}
+
+/* My Communities landing page */
+.selling-mycommunities {
+    margin-top: 20pt;
+}
+#my-communities, .explore-communities  {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    max-height: auto !important;
+    height: auto !important;
+    border: solid 1px white;
+}
+#my-communities {
+    margin: 10pt;
+}
+.explore-communities {
+    margin: 10pt;
+}
+.selling-mycommunities h1, #my-communities h1, .explore-communities h1 {
+    margin-left: -5pt;
+}
+.selling-mycommunities h1 {
+    margin-bottom: 30pt;
+}
+#my-communities h1 {
+    margin-bottom: 15pt;
+}
+.explore-communities h1 {
+    margin-bottom: 5pt;
+}
+.selling-mycommunities .helper {
+    height: auto;
+    text-align: left;
+    padding: 0;
+}
+.selling-mycommunities .helper img {
+    display: none;
+}
+.selling-mycommunities .helper h3  {
+    font-size: 12pt;
+    text-align: left;
+    display: inline;
+    width: auto;
+    margin-left: -8pt;
+}
+.selling-mycommunities p  {
+    font-size: 10pt;
+    text-align: left;
+    display: inline;
+}
+.explore-communities .tile-join,
+.btn.leave-sm {
+    display: none;
+}
+.create-tile {
+    display: none !important;
+}
+#my-communities .item,
+#my-communities .tile,
+#my-communities .col-lg-3,
+#my-communities .col-md-4,
+#my-communities .col-sm-6,
+.explore-communities .item,
+.explore-communities .tile,
+.explore-communities .col-lg-3,
+.explore-communities .col-md-4,
+.explore-communities .col-sm-6
+{
+    display: inline-block;
+    max-width: 1000pt !important;
+    width: 1000pt !important;
+    height: 190pt !important;
+    border: solid 1px white;
+    border-bottom: solid 1px #ddd;
+    margin-bottom: 5pt;
+    float: none;
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+#my-communities .tile {
+    margin: 0;
+    padding: 0;
+} 
+#my-communities .thumb,
+.explore-communities .thumb {
+    float: none;
+    position: relative;
+    left: -460pt;
+    top: 0;
+    margin-top: 20pt;
+    height: 100pt;
+    width: 100pt;
+    border: 1px solid black;
+}
+#my-communities .tile h3,
+.explore-communities .tile h3 {
+    position: relative;
+    left: 110pt;
+    top: -100pt;
+    margin-top: 0;
+}
+.explore-communities .tile h3 {
+    left: 100pt;
+}
+.my-communities.list-group {
+    float: none;
+    position: relative;
+    left: 220pt;
+    width: 100pt;
+}
+.explore-communities .my-communities.list-group {
+    left: 210pt;
+}
+
+/* Community general styles */
+.jumbotron.community-hero {
+    height: auto;
+}
+.community-shares {
+    display: none;
+}
+.jumbotron.community-hero .container .thumb {
+    height: 72pt;
+    width: 72pt;
+    border: 1pt solid black;
+}
+.jumbotron.community-hero .container.community-name h1 {
+    font-size: 24pt;
+}
+.more-link {
+    display: none;
+}
+.my-communities.list-group {
+    margin-top: -80pt;
+    margin-bottom: 30pt;
+    margin-left: -110pt;
+    width: 300pt;
+}
+/* Hide sidebar stuff */
+.sidebar .form-group, .sidebar .radio, .sidebar .checkbox, .sidebar label, button.multiselect, #sidebar .form-group, #sidebar .news-categories {
+    display: none;
+}
+
+/* Community About page */
+.sidebar .my-communities.list-group {
+    margin-top: -30pt;
+    margin-bottom: 30pt;
+    margin-left: -220pt;
+    width: 300pt;
+}
+.my-communities .list-group-item {
+    padding: 1pt 15pt;
+}
+
+/* Community Members & Problems pages */
+#discoveries-list {
+    margin-top: -40pt;
+}
+.border-bottom .thumb {
+    display: block !important;
+    visibility: visible !important;
+    height: 72pt !important;
+    width: 72pt;
+    border: none;
+    float: none !important;
+    position: relative;
+    left: -210pt;
+    top: 72pt;
+    margin-top: -72pt;
+    margin-bottom: 5pt;
+}
+.border-bottom .thumb img {
+    display: block !important;
+    visibility: visible !important;
+}
+#members-list .border-bottom, #discoveries-list .border-bottom {
+    margin-left: -40pt;
+}
+#members-list h2.orgName, #discoveries-list .challenges-list h2 {
+    font-size: 16pt;
+}
+#discoveries-list .challenges-list h4 {
+    font-size: 12pt;
+}
+h3.tagline {
+    font-size: 12pt;
+}
+.sidebar.thumb {
+    height: 72pt;
+    width: 72pt;
+    border: solid 1pt black;
+    margin-bottom: 20pt;
+}
+.sidebar.thumb img {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Community Capabilities pages */
+#capabilities-posts {
+    margin-top: -40pt;
+}
+#capabilities-list, #my-capabilities, #capabilities-posts, .capability-item, .well, .tile {
+    border: none !important;
+    box-shadow: none !important;
+}
+#capabilities-posts .capability-item {
+    max-width: 800pt;
+    width: 800pt;
+    height: auto !important;
+}
+#capabilities-posts .tile {
+    margin: 0;
+    padding: 0;
+} 
+#capabilities-posts .thumb {
+    height: 72pt;
+    width: 72pt;
+    float: left;
+    margin-right: 20pt;
+    margin-bottom: 30pt;
+    margin-left: -5pt;
+    border: none;
+}
+
+/* Community News pages */
+#news-list .thumb {
+    display: none;
+}

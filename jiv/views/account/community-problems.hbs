@@ -1,0 +1,237 @@
+{{> dashboard_sidebar_header activeId="id-prob-ctr" activeSubId="id-com-probs" }}
+
+  <!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+  <div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+      <h1>Problem Center <small>Community Problems</small></h1>
+    </section>
+
+    <!-- Widgets content -->
+    <section class="content">
+
+      <div class="row">
+        <section class="col-lg-12 connectedSortable problems">
+          <div class="box box-orange" id="community_problems">
+            <div class="box-body">
+              <div class="row">
+                <div class="actions pull-right">
+                  <a href="#" data-toggle="tooltip" title="Public" class="panel-tooltip"><span class="icon icon-globe"></span></a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="pull-left">
+                  <!-- Filters -->
+                  <div class="filters">
+                    <label class="radio-inline"><input type="radio" id="id-my-communities" name="communityproblems" onclick="filterProblemTiles()" checked>My Communities</label>
+                    <label class="radio-inline"><input type="radio" id="id-all-communities" name="communityproblems" onclick="filterProblemTiles()">All of GSM</label>
+                    <label class="checkbox-inline"><input id="id-include-closed" type="checkbox" name="closed" onclick="filterProblemTiles()" checked>Include Closed Problems</label>
+                    <br class="visible-sm visible-xs" />
+                    <div class="form-group filter-dropdown pull-right">
+                      Sort by:
+                      <select class="" id="id-sel-sort">
+                        <option>Community Name</option>
+                        <option>Deadline</option>
+                        <option selected="selected">Newest</option>
+                        <option>Problem Name</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="pull-right">
+                  <form class="form-horizontal dataTables_wrapper form-inline">
+                    <div id="fileManager_filter" class="dataTables_filter"><label>Search:<input id="id-search-bar" type="search" class="form-control input-sm" placeholder="" aria-controls="fileManager"></label></div>
+                  </form>
+                </div>
+              </div>
+              <div class="row">
+                <!-- The timeline -->
+                <ul class="timeline no-line" id="id-ul-timeline">
+                  {{#each problems}}
+                    <!-- timeline item -->
+                    <li id="id-tile-{{_id}}-{{#isProblemInMyCommunities _id ../myCommunities}}member{{else}}other{{/isProblemInMyCommunities}}-{{#isDateAndTimeReached regEndDate}}closed{{else}}open{{/isDateAndTimeReached}}" class="">
+                      <div class="timeline-item">
+                         <span class="time" data-sort="{{date_created}}">
+                             {{#isDateNew date_created 14}}
+                               <span class="label bg-orange">New</span>
+                             {{/isDateNew}}
+                           {{#isDateAndTimeReached regEndDate}}
+                             <a href="#" data-toggle="tooltip" data-placement="left"
+                                title="Solution submissions are no longer being accepted."><span class="label label-default">Closed</span></a>
+                           {{else}}
+                             <a href="#" data-toggle="tooltip" data-placement="left"
+                                title="Open for submissions."><span class="label label-success">Open</span></a>
+                           {{/isDateAndTimeReached}}
+                         </span>
+                        <a href="/problems/{{_id}}">
+                          <div class="crop-wrapper">
+                            <div class="crop"><img src="{{#if thumbnail.name}}/docs/{{thumbnail.name}}{{else}}{{strings.PublicStaticContentDirectoryFullPrefixPath}}/images/logo-default.png{{/if}}" alt="" class="timeline-thumb"></div>
+                          </div>
+                        </a>
+                        <h3 id="id-name-{{_id}}" class="timeline-header no-border" data-sort="{{name}}"><a href="/problems/{{_id}}">{{name}}</a></h3>
+                        <p>Posted by: <a href="/organization/{{org.0.urlFriendlyID}}">{{org.0.orgName}}</a> in the <a href="/community/about/{{getCommunityUrlFriendlyIdProblemIsPosted _id ../communities}}#tab_problems">
+                          <span id="id-com-name" data-sort="{{getCommunityNameProblemIsPosted _id ../communities}}">{{getCommunityNameProblemIsPosted _id ../communities}}</span></a> Community</p>
+                        <p>Deadline: <span class="dates" data-sort="{{regEndDate}}">{{dateFormatter regEndDate 'short'}}</span></p>
+                        <div class="tags">
+                          {{#each categories}}
+                            <button type="button" class="btn btn-xs btn-default">{{this}}</button>
+                          {{/each}}
+                        </div>
+                        <div class="actions">
+                          {{#isDateAndTimeReached regEndDate}}
+                            <a class="btn btn-primary btn-xs" disabled><i class="fa fa-times-circle"></i> Submissions Closed</a>
+                          {{else}}
+                            <a class="btn btn-primary btn-xs" href="/problems/{{_id}}"><i class="fa fa-rocket"></i>
+                              Submit a Solution</a>
+                          {{/isDateAndTimeReached}}
+                          <a class="btn btn-info btn-xs" href="/problems/{{_id}}"><i class="fa fa-eye"></i> View</a>
+                        </div>
+                      </div>
+                    </li>
+                    <!-- END timeline item -->
+                  {{/each}}
+                </ul>
+                <!-- // END timeline -->
+              </div>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        </section><!-- ./col -->
+      </div><!-- /.row -->
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
+
+{{> dashboard_sidebar_footer }}
+
+{{#contentFor 'pageScripts'}}
+  <script>
+    var filterProblemTiles = function () {
+      // Reset visibility states for filtering
+      showAll();
+
+      // Arrange problem tiles
+      dropdownFilter();
+
+      // Hide problem tiles based on radio buttons and check box
+      radioCheckFilter();
+
+      // Hide problem tiles based on search text
+      searchBarFilter();
+    };
+
+    $(document).ready(function () {
+      // Run the filter on page load
+      filterProblemTiles();
+    });
+
+    $('#id-sel-sort').change(function () {
+      filterProblemTiles();
+    });
+
+    $('#id-search-bar').on('input', function () {
+      filterProblemTiles();
+    });
+
+    var showAll = function () {
+      var mylist = $('#id-ul-timeline');
+      var listitems = mylist.children('li').get();
+      var searchString = $('#id-search-bar').val();
+      var re = new RegExp(searchString, 'i');
+      $.each(listitems, function (idx, itm) {
+        $(itm).show();
+      });
+    };
+
+    var dropdownFilter = function () {
+      switch ($('#id-sel-sort').val()) {
+        case 'Community Name':
+          var mylist = $('#id-ul-timeline');
+          var listitems = mylist.children('li').get();
+          listitems.sort(function (a, b) {
+            return $(a).find('#id-com-name').attr('data-sort').toUpperCase().localeCompare($(b).find('#id-com-name').attr('data-sort').toUpperCase());
+          });
+          $.each(listitems, function (idx, itm) {
+            mylist.append(itm);
+          });
+          break;
+        case 'Deadline':
+          var mylist = $('#id-ul-timeline');
+          var listitems = mylist.children('li').get();
+          listitems.sort(function (a, b) {
+            if ($(a).find('.dates').attr('data-sort') === ""){
+              return 1;
+            }
+            else if ($(b).find('.dates').attr('data-sort') === ""){
+              return -1;
+            }
+            return new Date($(a).find('.dates').attr('data-sort')) < new Date($(b).find('.dates').attr('data-sort'));
+          });
+          $.each(listitems, function (idx, itm) {
+            mylist.append(itm);
+          });
+          break;
+        case 'Newest':
+          var mylist = $('#id-ul-timeline');
+          var listitems = mylist.children('li').get();
+          listitems.sort(function (a, b) {
+            return new Date($(a).find('.time').attr('data-sort')) < new Date($(b).find('.time').attr('data-sort'));
+          });
+          $.each(listitems, function (idx, itm) {
+            mylist.append(itm);
+          });
+          break;
+        case 'Problem Name':
+          var mylist = $('#id-ul-timeline');
+          var listitems = mylist.children('li').get();
+          listitems.sort(function (a, b) {
+            return $(a).find('.timeline-header').attr('data-sort').toUpperCase().localeCompare($(b).find('.timeline-header').attr('data-sort').toUpperCase());
+          });
+          $.each(listitems, function (idx, itm) {
+            mylist.append(itm);
+          });
+          break;
+      }
+    };
+
+    var radioCheckFilter = function () {
+      if ($('#id-my-communities').is(':checked')) {
+        if ($('#id-include-closed').is(':checked')) {
+          $("[id^='id-tile'][id*='-member-closed']").show();
+          $("[id^='id-tile'][id*='-other']").hide();
+        }
+        else {
+          $("[id^='id-tile'][id*='-member-closed']").hide();
+          $("[id^='id-tile'][id*='-other']").hide();
+        }
+      }
+      else if ($('#id-all-communities').is(':checked')) {
+        if ($('#id-include-closed').is(':checked')) {
+          $("[id^='id-tile'][id*='-member']").show();
+          $("[id^='id-tile'][id*='-other']").show();
+        }
+        else {
+          $("[id^='id-tile'][id*='-member-closed']").hide();
+          $("[id^='id-tile'][id*='-other-closed']").hide();
+        }
+      }
+    };
+
+    var searchBarFilter = function () {
+      var mylist = $('#id-ul-timeline');
+      var listitems = mylist.children('li').get();
+      var searchString = $('#id-search-bar').val();
+      var re = new RegExp(searchString, 'i');
+      $.each(listitems, function (idx, itm) {
+        if ($(itm).is(':visible')) {
+          if (re.test($(itm).find('.timeline-header').attr('data-sort'))) {
+            $(itm).show();
+          }
+          else {
+            $(itm).hide();
+          }
+        }
+      });
+    };
+  </script>
+{{/contentFor}}

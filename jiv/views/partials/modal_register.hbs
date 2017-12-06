@@ -1,0 +1,56 @@
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog"
+     aria-labelledby="registerlabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title" id="register_modal">Solution Submission</h3>
+      </div>
+      <div class="modal-body">
+        {{#ifIdIn community._id userinfo.userCommunities}}
+          <div id="newRegistrationMessage" style="display: none;">
+              <div class="registrationAlert">
+                  {{{cfg.registerationResponse}}}
+              </div>
+          </div>
+
+          <form name="register_form" id="registerCreate" class="form-horizontal"
+                action="/marketspace/problems/{{discovery.id}}/register"
+                enctype="multipart/form-data"
+                method="POST">
+            <div id="challengeID" style="display:none;">{{discovery.id}}</div>
+            {{#unless message}}
+              <div class="registration-modal-wrapper">
+                {{#if discovery.registrationDescription}}
+                  <div class="col-md-12">
+                    {{{discovery.registrationDescription}}}
+                  </div>
+                {{else}}
+                  <p>
+                    Thank you for choosing to submit a Solution to this Problem! Please fill out the form below and click &ldquo;Submit.&rdquo; You have up until the end of the Solution submission period to modify this information in your Dashboard after you have submitted it.
+                  </p>
+                {{/if}}
+                {{#if isAlert}}
+                  {{> register_create formData=registerFormData}}
+                {{else}}
+                  {{> register_create}}
+                {{/if}}
+              </div>
+            {{/unless}}
+          </form>
+        {{else}}
+          <h1 class="icon"><i class="fa fa-bullhorn"></i></h1>
+          <p class="text-center">{{{strings.Problems.NotMemberSolutionSubmissionAttempt}}}
+            <a href="" onclick="joinCommunityClick(this, '{{community._id}}');" class="btn btn-primary btn-xs">
+              <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Join
+            </a>
+          </p>
+        {{/ifIdIn}}
+      </div>
+    </div>
+  </div>
+</div>
+

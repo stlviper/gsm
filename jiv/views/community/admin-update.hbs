@@ -1,0 +1,250 @@
+<div class="jumbotron community-hero pickgradient about-jumbotron"
+     style="background: linear-gradient(to bottom, rgba(0, 0, 0, .05) 0%, rgba(0, 0, 0, 0.65) 100%), url({{#if community.jumbotronUrl}}{{community.jumbotronUrl}}{{else}}/images/blank.png{{/if}});background-repeat: no-repeat;
+       -webkit-background-size: cover;
+       -moz-background-size: cover;
+       -o-background-size: cover;
+       background-size: cover;"
+     data-0="height: 300px; position: static;"
+     data-15="height: 180px; position: fixed;">
+
+  <div class="container community-name"
+       data-0="margin-top: 10px;"
+       data-15="margin-top: 0px;">
+    <div class="thumb" id="communityLogoUrl"
+         data-0="height: 125px; width: 125px;"
+         data-15="height: 90px; width: 90px;"><img
+      src="{{#if community.logoUrl}}{{community.logoUrl}}{{else}}{{organization.logoUrl}}{{/if}}"
+      class="img-responsive logo" alt="{{organization.orgName}}"/>
+    </div>
+  </div>
+</div>
+
+  <div class="container communityprofile-admin-container">
+    {{#with community}}
+      <form id="community-update-form" class="form-horizontal form-padding indent check-dirty" method="post"
+            enctype="multipart/form-data">
+
+
+        <div class="form-group">
+          <div class="col-sm-2">
+            <label class="control-label" for="LogoUrl">
+              Change Logo:
+            </label>
+          </div>
+          <div class="col-sm-4">
+            <input type="hidden" class="form-control" name="logoUrl" id="logoUrl">
+
+            <div id="communityLogoUploader">
+              <button type="button" id="communityLogoUploader-crop-button" class="aui-button aui-button-primary">Confirm
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <label class="control-label" for="jumbotronUrl">
+              Upload Background Image:
+            </label>
+          </div>
+
+          <div class="col-sm-4">
+            <input type="hidden" class="form-control" name="jumbotronUrl" id="jumbotronUrl">
+
+            <div id="jumboTronUploader">
+              <button type="button" id="jumboTronUploader-crop-button" class="aui-button aui-button-primary">Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Organization</label>
+
+          <div class="col-sm-7">
+            <select class="form-control" name="owner" id="owner">
+              {{#each ../organizations}}
+                <option value="{{_id}}" {{#equalsTo _id ../owner}}selected='selected'{{/equalsTo}}>{{orgName}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Approved</label>
+
+          <div class="col-sm-7">
+            <input type="checkbox" id="approved" name="approved" {{#if approved}}checked{{/if}}>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Name</label>
+
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="name" id="name" value="{{name}}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Caption</label>
+
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="caption" id="caption" value="{{caption}}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Description</label>
+
+          <div class="col-sm-10">
+            <textarea class="form-control ckeditor" type="text" name="description" id="description">{{description}}</textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Type</label>
+
+          <div class="col-sm-10">
+            <select class="form-control" name="type" id="type">
+              <option>-</option>
+              {{#each ../communityTypes}}
+                <option value="{{@key}}" {{#equalsTo ../type @key}}selected{{/equalsTo}}>{{this}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+		
+		<div class="form-group">
+          <label class="col-sm-2 control-label">Email domain</label>
+
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="emailDomain" id="emailDomain" value="{{emailDomain}}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Categories</label>
+
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="categories" id="categories" value="{{categories}}"/>
+          </div>
+        </div>
+
+        <div class="col-sm-10" style="margin-left:-10px;">
+          <input class="btn btn-primary long-btn btn-inline" type="submit"/>
+          <a class="btn btn-default" href="/admin/communities">Cancel</a>
+        </div>
+      </form>
+    {{/with}}
+  </div>
+<br/>
+<br/>
+
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <style type="text/css">
+    #communityLogoUploader, #jumboTronUploader {
+      width: 324px;
+      margin: 0 auto;
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #communityLogoUploader-crop-button, #jumboTronUploader-crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+{{/contentFor}}
+
+{{#contentFor "pageScripts"}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.js"></script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css" media="all">
+  <!--[if lt IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie.css" media="all"><![endif]-->
+  <!--[if IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]><script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}js/libs/avatar-picker/aui/js/aui-ie.js"></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+  <script type="application/javascript">
+    $(function () {
+      $('#categories').tokenfield({
+        autocomplete: {
+          source: [
+            'Analytics', 'Collaboration', 'Cyber Security', 'GIS', 'Image Processing',
+            'Infrastructure', 'Modeling', 'Remote Sensing', 'Search', 'Visualization'
+          ],
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+      });
+
+      var $communityLogoUploader = $("#communityLogoUploader"),
+        $logoCropButton = $('#communityLogoUploader-crop-button');
+
+      $communityLogoUploader.prepend(Handlebars.templates['image-upload-and-crop']({}));
+      var logoUploadAndCrop = new ImageUploadAndCrop($communityLogoUploader.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $logoCropButton,
+          onCrop: function (croppedDataURI) {
+            $("#logoUrl").val(croppedDataURI);
+          },
+          onImageUpload: function () {
+            $logoCropButton.show();
+          },
+          onImageUploadError: function () {
+            $logoCropButton.hide();
+          }
+        });
+
+      var $jumboTronUploader = $("#jumboTronUploader"),
+        $jumbotronCropButton = $('#jumboTronUploader-crop-button');
+
+      $jumboTronUploader.prepend(Handlebars.templates['image-upload-and-crop']({}));
+      var jumboTronUploaderUploadAndCrop = new ImageUploadAndCrop($jumboTronUploader.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $jumbotronCropButton,
+          onCrop: function (croppedDataURI) {
+            $("#jumbotronUrl").val(croppedDataURI);
+          },
+          onImageUpload: function () {
+            $jumbotronCropButton.show();
+          },
+          onImageUploadError: function () {
+            $jumbotronCropButton.hide();
+          }
+        });
+
+    });
+  </script>
+{{/contentFor}}

@@ -1,0 +1,25 @@
+{
+	    "_id" : ObjectId("5980ee58fb5a481d6256de9b"),
+	    "lastName" : "User",
+	    "firstName" : "Test",
+	    "email" : "testuser@testuser.com",
+	    "orgRef" : ObjectId("54ee3070939428de1fec485a"),
+	    "password" : "$2a$10$mgwyLW3XsGWc70nTSEWB0.aXMmaoe02sypX6OWp5W4zZSKS530JhC",
+	    "username" : "test.user",
+	    "dateAdded" : ISODate("2017-08-01T20:40:20.385Z"),
+	    "verifiedAccount" : true,
+	    "approved" : true,
+	    "passwordExpired" : false,
+	    "roles" : [ 
+			"user", 
+			"organizationManager",
+			"admin",
+			"cgaAdmin"
+	    ],
+	    "phoneNumber" : "+1 555-555-5555",
+	    "__v" : 1,
+	    "resetPasswordExpires" : ISODate("2017-08-01T22:46:25.709Z"),
+	    "resetPasswordToken" : "8ab6386a28b5cb123a94ef20589e619b2013dd4c",
+	    "lastActive" : ISODate("2017-08-01T21:51:54.588Z"),
+	    "lastLogon" : ISODate("2017-08-01T21:51:53.525Z")
+}

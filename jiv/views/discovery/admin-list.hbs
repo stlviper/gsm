@@ -1,0 +1,90 @@
+<div id="main-content" class="container maincontent-container">
+  <div class="container">
+    <h1 class="pull-left">Problems Admin</h1>
+    <a class="btn btn-success pull-right" href="/admin/problems/create"><span
+      class="glyphicon glyphicon-plus"></span> Create New Problem</a>
+  </div>
+  <div class="container">
+    <table id="user-list" class="jiv-table table table-striped table-bordered table-hover">
+      <thead>
+      <tr class="table-title">
+        <td>Approved</td>
+        <td>Problem Title</td>
+        <td>Stage</td>
+        <td>Actions</td>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each challenges}}
+      {{#unless isDraft}}
+        <tr class="user-row">
+          <td>
+            <a id="approved_btn_{{_id}}" data-approved="{{approved}}"
+               class="btn {{#if approved}}btn-success approved-btn{{else}}btn-danger denied-btn{{/if}}"
+               onclick="approval_click('{{_id}}')">
+              {{#if approved}}
+                <span class="glyphicon glyphicon-check"></span>
+              {{else}}
+                <span class="glyphicon glyphicon-remove"></span>
+              {{/if}}
+            </a>
+          </td>
+          <td>{{name}}</td>
+          <td>{{getFriendlyStage stage}}</td>
+          <td>
+            <a class="btn btn-info" style="margin-bottom: 5px;"
+               href="/admin/problems/{{_id}}"><span class="glyphicon glyphicon-eye-open"></span> View
+            </a>
+            <a class="btn btn-success" style="margin-bottom: 5px;" href="/admin/problems/{{_id}}/update">
+              <span class="glyphicon glyphicon-edit"></span> Edit
+            </a>
+            <a class="btn btn-warning" href="/admin/problems/{{_id}}/solutions">
+              <span class="glyphicon glyphicon-list-alt"></span> Solution Submissions</a>
+            <a class="btn btn-danger" style="margin-bottom: 5px;" href="/admin/problems/{{_id}}/delete">
+              <span class="glyphicon glyphicon-trash"></span> Delete
+            </a>
+
+          </td>
+        </tr>
+      {{/unless}}
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+{{#contentFor 'pageCSS'}}
+  <link rel="stylesheet"
+        href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/css/jquery.dataTables.css">
+{{/contentFor}}
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript"
+          src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/datatables/js/jquery.dataTables.min.js"></script>
+  <script type="application/javascript">
+    $(function () {
+      $('#user-list').DataTable();
+    });
+    (function (exports) {
+      exports.approval_click = function (id, currentStatus) {
+        var $btn = $('#approved_btn_' + id);
+        var newStatus = !($btn.attr('data-approved') == 'true');
+        if ($btn) {
+          $.post('/admin/problems/isApproved', {id: id, approved: newStatus})
+            .done(function (data) {
+              $btn.attr('data-approved', newStatus);
+              var span = $btn.children('span');
+              if (newStatus) {
+                $btn.addClass('btn-success approved-btn').removeClass('btn-danger denied-btn');
+                span.addClass('glyphicon-check').removeClass('glyphicon-remove');
+              }
+              else {
+                $btn.addClass('btn-danger denied-btn').removeClass('btn-success approved-btn');
+                span.addClass('glyphicon-remove').removeClass('glyphicon-check');
+              }
+            })
+            .fail(function (data) {
+            });
+        }
+      };
+    })(window);
+  </script>
+{{/contentFor}}

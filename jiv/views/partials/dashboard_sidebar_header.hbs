@@ -1,0 +1,133 @@
+<body class="hold-transition skin-jiv-light sidebar-mini layout-boxed">
+
+<div class="wrapper">
+
+  <!-- Sidebar toggle bar visible on xs only -->
+  <div class="navbar navbar-fixed-top navbar-toggle">
+    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+      <div class="caret-icon"><i class="fa fa-angle-double-right"></i></div>
+    </a>
+  </div>
+
+  <!-- Left sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- sidebar menu: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu">
+        <li id="id-newsfeed" class="treeview {{#equalsTo activeId "id-newsfeed"}}active{{/equalsTo}}">
+          <a href="/dashboard">
+            <i class="fa fa-newspaper-o"></i>
+            <span>Activity Feed</span>
+          </a>
+        </li>
+        <li id="id-org-mgmnt" class="treeview {{#equalsTo activeId "id-org-mgmnt"}}active{{/equalsTo}}">
+          <a href="">
+            <i class="fa fa-institution"></i>
+            <span>Organization Management</span>
+            <i class="fa fa-angle-right pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li id="id-org-profile" {{#equalsTo activeSubId "id-org-profile"}}class="active"{{/equalsTo}}>
+              <a href="/profile/{{userinfo.username}}/org-profile">Organization Profile</a>
+            </li>
+              <li>
+              <li id="id-org-capabilities" {{#equalsTo activeSubId "id-org-capabilities"}} class="active" {{/equalsTo}}>
+                  <a href="/profile/{{userinfo.username}}/org-capabilities">Capabilities Portfolio</a>
+              </li>
+            </li>
+            <li id="id-org-users" {{#equalsTo activeSubId "id-org-users"}}class="active"{{/equalsTo}}>
+              <a href="/profile/{{userinfo.username}}/org-users">Users</a>
+            </li>
+          <li id="id-org-files" {{#equalsTo activeSubId "id-org-files"}} class="active" {{/equalsTo}}>
+              <a href="/profile/{{userinfo.username}}/org-files">File Manager</a>
+          </li>
+          </ul>
+        </li>
+        <li id="id-com-mgmnt" class="treeview {{#equalsTo activeId "id-com-mgmnt"}}active{{/equalsTo}}">
+          <a href="">
+            <i class="fa fa-users"></i>
+            <span>Community Management</span>
+            <!--<span class="label pull-right label-default">4</span>-->
+            <i class="fa fa-angle-right pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li id="id-com-memberships" {{#equalsTo activeSubId "id-com-memberships"}}class="active"{{/equalsTo}}>
+              <a href="/community-memberships">Memberships
+                <!--<span class="label pull-right bg-orange">4</span>-->
+              </a>
+            </li>
+            <!--<li id="id-com-access" {{!#equalsTo activeSubId "id-com-access"}}class="active"{{!/equalsTo}}>-->
+              <!--<a href="/community-access">Community Access</a>-->
+            <!--</li>-->
+            <li id="id-com-news" {{#equalsTo activeSubId "id-com-news"}}class="active"{{/equalsTo}}>
+              <a href="/manage-news">Manage News</a>
+            </li>
+          </ul>
+        </li>
+        <li id="id-prob-ctr" class="treeview {{#equalsTo activeId "id-prob-ctr"}}active{{/equalsTo}}">
+          <a href="">
+            <i class="fa fa-bullhorn"></i>
+            <span>Problem Center</span>
+            <!--<span class="label pull-right label-default">12</span>-->
+            <i class="fa fa-angle-right pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li id="id-com-probs" {{#equalsTo activeSubId "id-com-probs"}}class="active"{{/equalsTo}}>
+              <a href="/community-problems">Community Problems
+                <!--<span class="label pull-right bg-orange">12</span>-->
+              </a>
+            </li>
+            <li id="id-my-probs" {{#equalsTo activeSubId "id-my-probs"}}class="active"{{/equalsTo}}>
+              <a href="/my-problems">My Problems</a>
+            </li>
+              <li id="id-solution-submission" {{#equalsTo activeSubId "id-solution-submission"}} class="active" {{/equalsTo}}>
+                  <a href="/profile/{{userinfo.username}}/solution-submissions">Solution Submissions</a>
+              </li>
+          </ul>
+        </li>
+        <li id="id-profile" class="treeview {{#equalsTo activeId "id-profile"}}active{{/equalsTo}}">
+          <a href="/profile/{{userinfo.username}}/profile">
+            <i class="fa fa-cog"></i>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li id="id-demo" class="treeview {{#equalsTo activeId "id-demo"}}active{{/equalsTo}}">
+          <a href="#" class="inactive">
+            <i class="fa fa-pie-chart"></i>
+            <span>Demographics</span>
+          </a>
+        </li>
+        <li id="id-favs" class="treeview {{#equalsTo activeId "id-favs"}}active{{/equalsTo}}">
+          <a href="#" class="inactive">
+            <i class="fa fa-star"></i>
+            <span>Favorites</span>
+          </a>
+        </li>
+        <li id="id-surveys" class="treeview {{#equalsTo activeId "id-surveys"}}active{{/equalsTo}}">
+          <a href="#" class="inactive">
+            <i class="fa fa-check"></i>
+            <span>Surveys</span>
+          </a>
+        </li>
+        <!-- Sidebar toggle button-->
+        <!--
+                    <li class="hidden-xs">
+                      <div class="hover-text bg-blue hidden-xs">Community</div>
+                      <a href="#" class="sidebar-toggle" data-toggle="offcanvas">
+                          <div class="caret-icon" type="button"><a href="#" data-toggle="tooltip" data-placement="right" title="Collapse sidebar">
+                         <i class="fa fa-angle-double-left"></i></a></div>
+                      </a>
+                    </li>
+        -->
+        <li class="hidden-xs sidebar-toggle">
+          <div class="hover-text">Collapse sidebar</div>
+          <a href="#" data-toggle="offcanvas">
+            <div class="caret-icon" type="button">
+              <i class="fa fa-angle-double-left"></i></div>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>

@@ -1,0 +1,36 @@
+<!-- Modal -->
+<div class="modal fade" id="CreateCommunity" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button name="modal_close_btn" type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="myModalLabel">Create a Community</h3>
+      </div>
+
+      <form id="newCommunityData_form" role="form">
+        <div class="modal-body">
+          <div id="community_form_inputs">
+            <div class="form-group">
+              <input type="text" class="form-control" id="community_name" name="community_name" placeholder="Community Name">
+            </div>
+            <div class="form-group">
+            <textarea class="form-control" rows="8" id="community_description" name="community_description" placeholder="Community description"></textarea>
+            </div>
+          </div>
+          <div id="community_form_success" class="text-center" style="display: none;">
+          <h1><span class="icon icon-thank-you-o"></span></h1>
+            <p><span id="community_form_success_msg"></span></p>
+          </div>
+        </div>
+        <div class="modal-footer text-center">
+          <button id="createCommunity_buttonn" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Send for Approval</button>
+          <button name="modal_close_btn" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal -->

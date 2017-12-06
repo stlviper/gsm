@@ -1,0 +1,22 @@
+
+<div id="main-content" class="container maincontent-container">
+  <div class="chat-container" ng-app="jivchat">
+    <login-modal></login-modal>
+    <div class="row messages-list">
+      <left-sidebar></left-sidebar>
+      <message-body></message-body>
+      <right-sidebar></right-sidebar>
+    </div>
+    <create-conversation></create-conversation>
+  </div>
+</div>
+{{#contentFor "pageCSS"}}
+  {{#orCond config.chat.enabled isAdmin}}
+    <link rel="stylesheet" type="text/css" href="{{strings.chatClient}}/styles/application.css">
+  {{/orCond}}
+{{/contentFor}}
+{{#contentFor "pageScripts"}}
+  {{#orCond config.chat.enabled isAdmin}}
+    <script src="{{strings.chatClient}}/app/application.js?{{siteConfig.chatVersion}}"></script>
+  {{/orCond}}
+{{/contentFor}}

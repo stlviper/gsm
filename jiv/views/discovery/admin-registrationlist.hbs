@@ -1,0 +1,85 @@
+<div id="main-content" class="container maincontent-container">
+  <div class="container">
+    <h1>View Your Problem</h1>
+    <table class="jiv-table table table-striped table-bordered table-hover">
+      <thead>
+      <tr class="table-title">
+        <td>Registered Organization</td>
+        <td>Date Registered</td>
+        <td>Feedback Given?</td>
+        <td>Action</td>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each registrations}}
+        <tr>
+          <td>{{getOrgName orgRef ../orgs}} {{pocEmail}}</td>
+          <td>{{dateFormatter date_created 'short'}}</td>
+          <td class="text-center">
+            <div>
+              {{#equalsTo ../stage 'UserAssessment'}}
+                {{#greaterThan feedback.length 0}}
+                  <!-- TODO Have a count of complete and draft numbers in the table -->
+                  {{#isAFeedbackInDraft feedback}}
+                    <span class="alert alert-warning glyphicon glyphicon-edit"> <div>Draft</div></span>
+                  {{else}}
+                    <span class="alert alert-success glyphicon glyphicon-check"></span>
+                  {{/isAFeedbackInDraft}}
+                {{else}}
+                  <span class="alert alert-info glyphicon glyphicon-remove"></span>
+                {{/greaterThan}}
+              {{else}}
+                {{#equalsTo ../../stage 'Complete'}}
+                  {{#greaterThan feedback.length 0}}
+                    <!-- TODO Have a count of complete and draft numbers in the table -->
+                    {{#isAFeedbackInDraft feedback}}
+                      <span class="alert alert-warning glyphicon glyphicon-edit">
+                        <div>Draft</div>
+                      </span>
+                    {{else}}
+                      <span class="alert alert-success glyphicon glyphicon-check"></span>
+                    {{/isAFeedbackInDraft}}
+                  {{else}}
+                    <span class="alert alert-info glyphicon glyphicon-remove"></span>
+                  {{/greaterThan}}
+                {{else}}
+                  Not Applicable
+                {{/equalsTo}}
+              {{/equalsTo}}
+            </div>
+          </td>
+          <td>
+            <a href="/admin/solutions/{{id}}" class="btn btn-info">
+              <span class="glyphicon glyphicon-eye-open"></span> View
+            </a>
+            <a class="btn btn-success" href="/admin/solutions/{{id}}/update">
+              <span class="glyphicon glyphicon-edit"></span> Edit
+            </a>
+            {{#isAFeedbackInDraft feedback}}
+              <a href="/admin/solutions/{{id}}/resumefeedback" class="btn btn-warning">
+                <i class="glyphicon glyphicon-edit"></i> Edit Draft
+              </a>
+            {{else}}
+              <a href="/admin/solutions/{{id}}/leavefeedback" class="btn btn-primary">
+                <i class="fa fa-comments"></i> Add Feedback
+              </a>
+            {{/isAFeedbackInDraft}}
+            {{#greaterThan feedback.length 0}}
+              <a href="/admin/solutions/{{../id}}/feedback/"
+                 class="btn btn-warning"><span
+                class="glyphicon glyphicon-list-alt"></span> Read Feedback</a>
+            {{/greaterThan}}
+            <a class="btn btn-danger long-btn" onclick="event.preventDefault(); deleteRegistrationClick(event)"
+               data-id="{{id}}"
+               href="/admin/solutions/{{id}}/delete">
+              <span class="glyphicon glyphicon-minus-sign"></span> Delete
+            </a>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+    <a class="btn btn-info" href="/profile/{{userinfo.username}}/manage#problems"><span
+      class="glyphicon glyphicon-arrow-left"></span> Back to Dashboard</a>
+  </div>
+</div>

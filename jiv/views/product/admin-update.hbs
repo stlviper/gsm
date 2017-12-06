@@ -1,0 +1,231 @@
+<div id="main-content" class="container maincontent-container">
+  {{>message}}
+  {{#with product}}
+
+ <div class="container">
+     <div id="output" class="aui-avatar aui-avatar-standard pull-left" style="margin: 0 10px 10px 0;">
+         <div class="aui-avatar-inner thumb">
+              <img src="{{logoUrl}}"/>
+         </div>
+     </div>
+     <h4 style="font-size:18px;margin:0 0 .5em 0;">Manage Capability:</h4>
+     <h1 style="font-size:36px;margin:0 0 .5em 0;">{{name}}</h1>
+</div>
+
+    <form name="updateproduct_form" id="productUpdate" class="form-horizontal check-dirty" enctype="multipart/form-data"
+          method="POST">
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Approved</label>
+                <div class="col-sm-10">
+                <input type="checkbox" name="approved" data-on-color="success" data-on-text="Yes" data-off-text="No" {{#if approved}}checked{{/if}}>  
+                </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" name="capabilityName" id="name" value="{{name}}"/>
+            </div>
+        </div>
+
+       <div class="form-group">
+          <label class="col-sm-2 control-label">POC Name</label>
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="pocName" id="pocName" value="{{pocName}}"/>
+          </div>
+        </div>
+          
+        <div class="form-group">
+          <label class="col-sm-2 control-label">POC Email</label>
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="pocEmail" id="pocEmail" value="{{pocEmail}}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Website</label>
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="webLink" id="webLink" value="{{webLink}}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" title="Start typing any tag you wish and press 'Enter' or 'Tab' to save it. Enter as many as you like." data-placement="right"
+                 data-toggle="tooltip">Category Tags <span class="glyphicon glyphicon-question-sign"></span></label>
+          <div class="col-sm-10">
+            <input class="form-control" type="text" name="category" id="category" value="{{category}}"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="">
+            <label class="control-label col-sm-2" for="organizationLogo" title="10MB file restriction" data-placement="right" data-toggle="tooltip">
+              Upload New Logo <span class="glyphicon glyphicon-question-sign"></span></label>
+          </div>
+          <div class="col-sm-7">
+            <input type="hidden" class="form-control" name="uploadLogoURI" id="uploadLogoURI">
+
+            <div id="avatar_dealio">
+              <button type="button" id="crop-button" class="aui-button aui-button-primary">Save</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="capabilityDescription">
+            Description
+          </label>
+          <div class="col-sm-10">
+            <textarea rows="4" class="form-control" id="capabilityDescription" name="capabilityDescription"
+                      value="">{{trim description}}</textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label">Date Created</label>
+          <div class="col-sm-4">
+            <span class="form-control" readonly>{{dateFormatter date_created "short"}}</span>
+          </div>
+        </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label">Organization</label>
+        <div class="col-sm-10">
+          <select class="form-control" name="orgRef" id="organization">
+            {{#each ../organizations}}
+              <option value="{{_id}}" {{#equalsTo _id ../orgRef}}selected='selected'{{/equalsTo}}>{{orgName}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+        
+        <div class="form-group text-center" style="margin-left:-5px;">
+            <div class="col-sm-12">
+                <button class="btn btn-primary" id="submit_new_product_btn" type="submit" style="margin-left: -10px;"><span class="glyphicon glyphicon-floppy-disk"></span> Update this Capability
+          </button>
+              <a class="btn btn-default" href="/admin/capabilities"><span class="glyphicon glyphicon-arrow-left"></span> Back to Capabilities List</a>
+            </div>
+        </div>
+
+    </form>
+  {{/with}}
+<br />
+<br />
+<br />
+</div>
+
+{{#contentFor "pageCSS"}}
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-ui-1.11.2/jquery-ui.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/bootstrap-tokenfield.css"/>
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/css/tokenfield-typeahead.css"/>
+  <style type="text/css">
+    #avatar_dealio {
+      width: 324px;
+      margin: 0;
+    }
+
+    #output {
+      /*display: none;*/
+      /*margin: 20px auto 0;*/
+    }
+
+    .aui-avatar-standard,
+    .aui-avatar-standard .aui-avatar-inner {
+      height: 100px;
+      width: 100px;
+    }
+
+    #crop-button {
+      display: none;
+      float: right;
+      position: relative;
+      margin-top: -30px;
+    }
+  </style>
+<link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+{{/contentFor}}
+{{#contentFor "pageScripts"}}
+<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+<script>
+    $("[name='approved']").bootstrapSwitch();
+</script>
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/tokenfield/bootstrap-tokenfield.js"></script>
+  <link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-all.css" media="all">
+  <!--[if lt IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie.css" media="all"><![endif]-->
+  <!--[if IE 9]><link rel="stylesheet" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/css/aui-ie9.css" media="all"><![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-explorer.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/css/image-upload-and-crop.css">
+  <link rel="stylesheet" type="text/css" href="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.css">
+
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-all.js"></script>
+  <!--[if lt IE 9]><script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/aui/js/aui-ie.js"></script><![endif]-->
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/lib/fd-slider/fd-slider.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/templates/aui-message.js"></script>
+
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/canvas-cropper.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-handler.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/client-file-reader.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/drag-drop-file-target.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/upload-interceptor.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-explorer.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/image-upload-and-crop.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/avatar-picker/js/text-util.js"></script>
+  <script type="application/javascript">
+    $(window).load(function () {
+      $('#category').tokenfield({
+        autocomplete: {
+          source: [
+            'Analytics',
+            'Collaboration',
+            'Cyber Security',
+            'GIS',
+            'Image Processing',
+            'Infrastructure',
+            'Modeling',
+            'Remote Sensing',
+            'Search',
+            'Visualization'
+          ],
+          delay: 100
+        },
+        showAutocompleteOnFocus: true
+      });
+    });
+    (function ($) {
+
+      var $avatar_dealio = $("#avatar_dealio"),
+        $cropButton = $('#crop-button'),
+        $output = $("#output");
+
+      $avatar_dealio.prepend(Handlebars.templates['image-upload-and-crop']({}));
+
+      var imageUploadAndCrop = new ImageUploadAndCrop($avatar_dealio.find('.image-upload-and-crop-container'),
+        {
+          cropButton: $cropButton,
+          onCrop: function (croppedDataURI) {
+            $output.find("img").attr('src', croppedDataURI);
+            $("#uploadLogoURI").val(croppedDataURI);
+            $output.show();
+          },
+          onImageUpload: function () {
+            $cropButton.show();
+          },
+          onImageUploadError: function () {
+            $cropButton.hide();
+          }
+        }
+      );
+    })(AJS.$);
+
+    $('[data-toggle="tooltip"]').tooltip();   
+
+</script>
+{{/contentFor}}

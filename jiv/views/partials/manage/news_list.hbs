@@ -1,0 +1,74 @@
+<div class="container">
+  <table id="news-list" class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <td>Headline</td>
+      <td>Published On</td>
+	  <td>Community Published In</td>
+      <td>Summary</td>
+      <td>Action</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each newspost}}
+	{{#each news}}
+      <tr data-news-id="{{urlFriendlyID}}">
+        <td>{{headline}}</td>
+        <td>{{dateFormatter releaseDate 'short'}}</td>
+		<td>{{../this.name}}</td>
+        <td>
+          <div style="word-break: break-all;">
+            {{{onlyTakeNCharacters content 100}}}
+          </div>
+        </td>
+        <td>
+          <a class="btn btn-success" style="margin-bottom: 5px;"
+             href="/profile/{{../../userinfo.username}}/manage/{{../this.urlFriendlyID}}/news/{{urlFriendlyID}}">
+            <span class="glyphicon glyphicon-edit"></span> Manage
+          </a>
+          <a href="#" class="btn btn-danger" onclick="deleteNewsClick(this);" data-news-id="{{urlFriendlyID}}"
+             data-community-id="{{../this.urlFriendlyID}}">
+            <span class="glyphicon glyphicon-trash"></span>
+            Delete
+          </a>
+        </td>
+      </tr>
+	  {{/each}}
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-body">
+          
+<h1 class="icon"><span class="icon icon-warning-o"></span></h1>
+<p class="text-center">Are you sure you want to delete this news post?</p>
+          
+        <form id="newsDeleteForm" method="post" onsubmit="event.preventDefault(); deleteNewsPost(event);"
+              enctype="multipart/form-data"
+              action="/community/remove-news-post">
+          <input type="hidden" id="communityFriendlyURL" value=""/>
+          <input type="hidden" id="newsFriendlyURL" value=""/>
+
+          <div class="container" style="min-height: 50px;padding-top: 10px; display: none;">
+            <span id="deleteModalWarning" class="alert alert-danger"></span>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">
+              <span class="glyphicon glyphicon-trash"></span> Delete
+            </button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/manage/news-list.js"></script>
+{{/contentFor}}

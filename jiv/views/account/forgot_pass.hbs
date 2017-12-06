@@ -1,0 +1,39 @@
+<div id="main-content" class="container-fluid maincontent-container clouds-container">
+  <div class="content forgot-pass">
+      
+    {{#if info}}
+    <div class="row">
+      <div class="visible-lg col-lg-3"></div>
+      <div class="alert col-lg-6" id="updateErrorMessage">
+          <h1>Success!</h1>
+          <h1 class="icon"><span class="icon-thank-you-o"></span></h1>
+          {{info}}
+      </div>
+    </div>
+    {{/if}}   
+      
+    {{#unless info}}
+    <form method='POST' class="form-horizontal form-sign indent">
+    <h1>Forgot Your Password?</h1>
+
+    {{#if error}}
+    <div class="row">
+      <div class="visible-lg col-lg-3"></div>
+      <div class="alert col-lg-6" id="updateErrorMessage">
+        <h1 class="icon"><span class="icon-warning-o"></span></h1>
+        {{error}}
+      </div>
+    </div>
+    {{/if}}  
+          
+        <div class="visible-lg col-lg-3"></div>
+        <div class="form-group col-lg-6">
+          <label for='email' class="indent pull-left">Enter Your Email</label>
+          <input class="form-control indent" type='text' name='email' placeholder="Email" autofocus>
+            <br />
+          <button class="btn btn-primary indent" type='submit'>Reset My Password</button>
+        </div>
+      </form>
+    {{/unless}}
+  </div>
+</div>

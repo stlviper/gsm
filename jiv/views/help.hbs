@@ -1,0 +1,70 @@
+<div id="main-content" class="container maincontent-container">
+  {{#if message}}
+    <div class="row" style="margin-top:15px;">
+      <div class="col-sm-12 text-center">
+        <div class="alert {{#if isAlert}}alert-warning {{else}} alert-info{{/if}}">
+          {{message}}
+        </div>
+      </div>
+    </div>
+  {{/if}}
+  <div id="help-form" class="container">
+    <h1>{{{strings.Help.Title}}}</h1>
+    <p>
+      {{{strings.Help.Caption}}}
+    </p>
+
+    <form id="" class="form-horizontal indent" method="post"
+          enctype="application/x-www-form-urlencoded">
+
+      <div class="form-group">
+        <label class="col-sm-2 helpLabel">{{{strings.Help.Fields.Name}}}</label>
+
+        <div class="col-sm-10">
+          <input class="form-control helpInput" type="text" name="name" id="name"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 helpLabel">{{{strings.Help.Fields.Email}}}</label>
+
+        <div class="col-sm-10">
+          <input class="form-control helpInput" type="text" name="emailPhoneNumber" id="emailPhoneNumber"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 helpLabel">{{{strings.Help.Fields.Organization}}}</label>
+
+        <div class="col-sm-10">
+          <input class="form-control helpInput" type="text" name="orgName" id="orgName"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 helpLabel" for="issueDescription">{{{strings.Help.Fields.Issue}}}</label>
+
+        <div class="col-sm-10">
+          <textarea rows="4" class="form-control helpInput" id="issueDescription" name="issueDescription"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 helpLabel" for="urgency">{{{strings.Help.Fields.Severity}}}</label>
+
+        <div class="col-sm-10">
+          <select class="form-control helpInput" id="urgency" name="urgency">
+            <option class="" value="Minor"> Minor</option>
+            <option class="" value="Medium"> Medium</option>
+            <option class="" value="Major"> Major</option>
+          </select>
+        </div>
+      </div>
+
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10" style="margin-left:-10px;">
+            <input class="btn btn-primary" type="submit" id="help-submit" value="Send"/>
+        </div>
+    </form>
+  </div>
+</div>

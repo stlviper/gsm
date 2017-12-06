@@ -1,0 +1,127 @@
+<!-- Modal -->
+<div id="feedbackModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <h1 class="icon"><span class="icon icon-question-o"></span></h1>
+        <h2 class="text-center">Are you sure you want to do that?</h2>
+        <p class="text-center">The feedback comments and attachments will be sent directly to the provider.</p>
+      </div>
+      <div class="modal-footer">
+        <!--<button type="button" class="btn btn-danger" data-toggle="modal"> <span class="glyphicon glyphicon-envelope"></span> Yes. Send it!</button>-->
+        <label for="submitBtn" class="btn btn-danger"> <span class="glyphicon glyphicon-envelope"></span> Yes. Send it!</label>
+        <input type="submit" form="feedback-form" name="operation" value="Submit Feedback" class="hidden" id="submitBtn"/>
+        <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left:0;">No. Don't send it.</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="main-content" class="container maincontent-container">
+
+    {{#if modalMessage}}
+
+        <div class="modal-body indent">
+            <h1 class="icon"><i class="fa fa-bullhorn"></i></h1>
+            <p class="text-center">{{modalMessage}}</p>
+        </div>
+        <div class="modal-footer">
+            <form action='/profile/{{username}}/manage/problems/{{challengeID}}/view'>
+                <input type="submit" class="btn btn-default" data-dismiss="modal" value="{{strings.Solutions.Feedback.BackButton}}">
+            </form>
+        </div>
+
+    {{else}}
+
+      {{>message}}
+
+      <div class="container">
+        <div id="output" class="aui-avatar aui-avatar-standard pull-left" style="margin: 0 10px 10px 0;">
+          <div class="aui-avatar-inner thumb">
+            <img src="{{organization.logoUrl}}" class="img-responsive logo" alt="{{organization.orgName}}">
+          </div>
+        </div>
+        <h4>Solution Feedback for</h4>
+        <h2>{{organization.orgName}}</h2>
+        <h4>{{registration.challengeName}}</h4>
+      </div>
+
+        <div class="container">
+            <form id="feedback-form" method="post" enctype="multipart/form-data" class="form-horizontal form-padding check-dirty">
+              <br/>
+                <div class="form-group">
+                    <div class="col-sm-2 control-label">
+                        <label>Feedback Overview</label>
+                    </div>
+
+                    {{#greaterThan registration.feedback.length 0}}
+                        {{#isAFeedbackInDraft registration.feedback}}
+                            {{#each registration.feedback}}
+                                {{#if this.isDraft}}
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control ckeditor" type="text" name="summary">{{this.summary}}</textarea>
+                                    </div>
+                                {{/if}}
+                            {{/each}}
+                        {{else}}
+                            <div class="col-sm-10">
+                                <textarea class="form-control ckeditor" type="text" name="summary"></textarea>
+                            </div>
+                        {{/isAFeedbackInDraft}}
+                    {{else}}
+                        <div class="col-sm-10">
+                            <textarea class="form-control ckeditor" type="text" name="summary"></textarea>
+                        </div>
+                    {{/greaterThan}}
+                </div>
+                {{#each challenge.feedbackArea}}
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">
+                            <label>Feedback Criteria:</label>
+                        </div>
+                        <div class="col-sm-10">
+                            {{{this.description}}}
+                        </div>
+
+
+                        <div class="col-sm-2 control-label">
+                            <label>Feedback Response:</label>
+                        </div>
+                        <div class="col-sm-10">
+                            <textarea class="form-control ckeditor" type="text" name="feedbackArea-{{this._id}}"></textarea>
+                        </div>
+                    </div>
+                {{/each}}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Other Documents</label>
+
+                    <div class="col-sm-10" style="margin-bottom: 10px;">
+                        <input type="file" name="otherDocuments" id="otherDocuments" class="form-control" multiple/>
+                    </div>
+                </div>
+
+                <div class="col-sm-2 hidden-xs"></div>
+                <div class="col-sm-10">
+                    <a class="btn btn-default" href="/profile/{{userinfo.username}}/manage/problems/{{challenge.id}}/view">
+                      <span class="glyphicon glyphicon-arrow-left"></span> Back to Solutions
+                    </a>
+                    <label for="saveDraftBtn" class="btn btn-primary" style="margin-bottom: 5px;"><i class="glyphicon glyphicon-hdd"></i> Save</label>
+                    <input type="submit" name="operation" value="Save Draft" class="hidden" id="saveDraftBtn"/>
+                    <a class="btn btn-info" href="/profile/{{userinfo.username}}/manage/solutions/{{registration.id}}">
+                        <span class="glyphicon glyphicon-eye-open"></span> View Solution Details
+                    </a>
+                  {{#isIdInArray userinfo.id challenge.discoveryManagers}}
+                    <label type="button" class="btn btn-warning" data-toggle="modal" data-target="#feedbackModal" style="margin-left: 50px;"> <span class="glyphicon glyphicon-envelope"></span> Send to Provider</label>
+                    <input type="submit" name="operation" value="Submit Feedback" class="hidden" id="submitBtn"/>
+                  {{/isIdInArray}}
+                </div>
+            </form>
+        </div>
+    {{/if}}
+</div>
+
+{{#contentFor 'pageScripts'}}
+  <script type="application/javascript" src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/jquery-form-v3.51.0.js"></script>
+  <script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/ckeditor/ckeditor.js"></script>
+{{/contentFor}}

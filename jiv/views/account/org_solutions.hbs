@@ -1,0 +1,259 @@
+{{> dashboard_sidebar_header activeId="id-prob-ctr" activeSubId="id-solution-submission"}}
+<!-- Modal for Withdraw a Solution Submission Warning -->
+<div id="withdrawSolution" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1><span class="icon icon-warning-o"></span></h1>
+                <h3>Are you sure you want to withdraw your solution submission?</h3>
+            </div>
+            <div class="modal-body text-center hidden">
+            </div>
+            <div class="modal-footer actions">
+                <button id="deleteRegistration" type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-trash"></i> Withdraw Submission</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Dashboard content wrapper (contains widgets & dashboard header) -->
+<div class="content-wrapper">
+
+    <!-- Dashboard header -->
+    <section class="content-header">
+        <h1>Problem Center <small>Solution Submissions</small></h1>
+        
+    </section>
+    <!-- Widgets content -->
+    <section class="content">
+        <div class="row">
+            <section class="col-lg-12 connectedSortable problems">
+                <div class="box box-orange" id="my_solutions">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="actions pull-right">
+                                <a href="#" data-toggle="tooltip" title="Private" class="panel-tooltip"><span class="icon icon-key"></span></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="pull-left">
+                                <!-- Filters -->
+                                <div class="filters">
+                                    <label class="radio-inline"><input type="radio" name="mysolutions" onclick="showAll()" checked>Show All</label>
+                                    <label class="radio-inline"><input type="radio" name="mysolutions" id="hasFeedback" onclick="hasFeedback()">Has Feedback</label>
+                                    <br class="visible-sm visible-xs" />
+                                    <div class="form-group filter-dropdown pull-right">
+                                        <select class="" id="sel1">
+                                            <option>Sort by</option>
+                                            <option value="submitDate" onclick="sortDate()">Date Submitted</option>
+                                            <option value="problemName" onclick="sortName()">Problem Name</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div id="regSort" class="row">
+                            <!-- The timeline -->
+                            <ul id="regList" class="timeline no-line list">
+                                <!-- timeline item -->
+                                
+                                {{#each registrations}}
+                                <li id="reg_{{_id}}" class="">
+                                    <div class="timeline-item {{#greaterThan feedback.length 0}}hasFeedback{{else}}noFeedback{{/greaterThan}}">
+                                        <span class="time"></span>
+                                        <a href="">
+                                            <div class="crop-wrapper">
+                                                <div class="crop"><img src="{{getChallengeRegistrationComLogo challengeID ../communities}}" alt="" class="timeline-thumb"></div>
+                                            </div>
+                                        </a>
+                                        <h3 class="timeline-header no-border"><a href="#" class="problemName">{{challengeName}}</a></h3>
+                                        <p>Posted by: <a href="">{{getChallengeRegistrationOrgName challengeID ../challengeDocs ../organizationDocs}}</a> in the <a href="">{{getChallengeRegistrationComName challengeID ../communities}}</a> community</p>
+                                        <p>Date submitted: <span class="dates">{{dateFormatter date_created "MMMM DD, YYYY"}}</span><span style="display:none;" class="dateSubmit">{{{date_created}}}</span></p>
+                                        <div class="actions">
+                                            <a class="btn btn-primary btn-xs" href="/profile/{{../userinfo.username}}/manage/solutions/{{id}}/update"><i class="fa fa-pencil"></i> Edit</a>
+                                            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#withdrawSolution" onclick="setDeleteModal('/registration/{{id}}/delete', '{{_id}}')"><i class="fa fa-trash"></i> Withdraw Submission</a>
+                                            {{#greaterThan feedback.length 0}}
+                                            <a class="btn btn-info btn-xs hasFeedback" href="/profile/{{../../userinfo.username}}/manage/solutions/{{id}}/provider/readfeedback"><i class="fa fa-eye"></i> View Feedback</a>
+                                            {{else}}
+                                            <span class="noFeedback" href="" data-toggle="tooltip" data-placement="top" title="You have no feedback yet."><a class="btn btn-info btn-xs" disabled><i class="fa fa-eye"></i> No Feedback</a></span>
+                                            {{/greaterThan}}
+                                            
+                                        </div>
+                                    </div>
+                                </li>
+                                {{/each}}
+                                <!-- END timeline item -->
+                                
+                            </ul>
+                            <!-- // END timeline -->
+                          
+                            {{#equalsTo viewMore "argh"}}
+                            <div class="text-center">
+                                <p id="spinnerSubmissions" style="display:none;"> Processing <span class="fa fa-spinner fa-spin"></span></p>
+                                <a id="viewMore" class="btn btn-default btn-sm bg-gray" onclick="viewMore(0)">Load more</a>
+                            </div>
+                            {{/equalsTo}}
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </section><!-- ./col -->
+        </div><!-- /.row -->
+        </section>
+</div>
+<!-- /.content-wrapper -->
+{{> dashboard_sidebar_footer}}
+{{#contentFor 'postJqueryScripts'}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.2.0/list.min.js"></script>
+<script src="{{strings.PublicStaticContentDirectoryFullPrefixPath}}/js/libs/moment.js"></script>
+<script type="text/javascript">
+    
+    var options = {
+        valueNames: ['hasFeedback', 'noFeedback', 'dateSubmit', 'problemName']
+    };
+    var userList = new List('regSort', options);
+    function hasFeedback() {
+        userList.filter(function (item) {
+            if (item.values().hasFeedback) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+    function showAll() {
+        userList.filter();
+    }
+    function sortDate() {
+        userList.sort('dateSubmit', { order: "desc" });
+    }
+    function sortName() {
+        userList.sort('problemName', { order: "desc" });
+    }
+    function viewMore(offset){
+        
+        var $spinner = $('#spinnerSubmissions');
+        $spinner.show();
+        $.ajax({
+            url: "/viewMoreSubmissions/" + offset,
+            type: "GET",
+            dataType: 'json',
+            data: {},
+            success: function (data) {
+                
+                for (i = 0; i < data.regDocs.length; i++) {
+
+
+                    for (k = 0; k < data.communityDoc.length; k++) {
+                        for (j = 0; j < data.communityDoc[k].discoveries.length; j++) {
+
+                            if (data.communityDoc[k].discoveries[j] == data.regDocs[i].challengeID) {
+
+                                var comNameKey = "comName";
+                                var comName = data.communityDoc[k].name;
+                                var comLogoKey = "comLogo";
+                                var comLogo = data.communityDoc[k].logoUrl;
+                                data.regDocs[i].comName = comName;
+                                data.regDocs[i].comLogo = comLogo;
+                                data.regDocs[i].comUrl = data.communityDoc[k].urlFriendlyID;
+                                
+                            }
+                        }
+                    }
+
+
+
+
+                    for (l = 0; l < data.allChallengeDocs.length; l++) {
+                        if (data.allChallengeDocs[l]._id = data.regDocs[i].challengeID) {
+                            orgRef = data.allChallengeDocs[l].orgRef;
+                            data.regDocs[i].problemID = data.allChallengeDocs[l]._id;
+                        }
+                    }
+
+
+                    for (m = 0; m < data.orgDocs.length; m++) {
+                        if (data.orgDocs[m]._id = orgRef) {
+                            data.regDocs[i].orgName = data.orgDocs[m].orgName;
+                            data.regDocs[i].orgUrl = data.orgDocs[m].urlFriendlyID;
+                        }
+                    }
+
+                }
+                var html = "";
+                for (a = 0; a < data.regDocs.length; a++) {
+                    var withdrawSubmission = "";
+                    var feedbackClass = "";
+                    var newDate = moment(data.regDocs.date_created).format("MMMM DD, YYYY");
+                    var submitDate = new Date(data.regDocs[a].date_created);
+                    if (data.regDocs[a].feedback.length > 0) {                     
+                        withdrawSubmission = "<a class='btn btn-warning btn-xs hasFeedback' href='/profile/{{../../userinfo.username}}/manage/solutions/" + data.regDocs[a]._id + "/provider/readfeedback'><i class='fa fa-eye'></i> View Feedback</a>";
+                        feedbackClass = "hasFeedback";
+                        }else{
+                        withdrawSubmission = "<span href='' class='noFeedback' data-toggle='tooltip' data-placement='top' title='You have no feedback yet.'><a class='btn btn-warning btn-xs' disabled><i class='fa fa-eye'></i> No Feedback</a></span>";
+                        feedbackClass = "noFeedback";
+                        }
+                    html += "<li id='reg_" + data.regDocs[a]._id + "' class=''><div class='timeline-item " + feedbackClass + "'><span class='time'></span><a href='/community/about/" + data.regDocs[a].comUrl + "#tab_about'><div class='crop-wrapper'><div class='crop'><img src='" + data.regDocs[a].comLogo + "' alt='" + data.regDocs[a].comName + "' class='timeline-thumb' /></div></div></a><h3 class='timeline-header no-border'><a href='/problems/" + data.regDocs[a].problemID + "' class='problemName'>" + data.regDocs[a].challengeName + "</a></h3><p>Posted by: <a href='/organization/" + data.regDocs[a].orgUrl + "'>" + data.regDocs[a].orgName + "</a> in the <a href='/community/about/" + data.regDocs[a].comUrl + "#tab_about'>" + data.regDocs[a].comName + "</a> community</p><p>Date submitted: <span class='dates'>" + newDate + "</span><span style='display:none;' class='dateSubmit'>" + submitDate + "</span></p><div class='actions'><a class='btn btn-primary btn-xs' href='/profile/{{../userinfo.username}}/manage/solutions/" + data.regDocs[a]._id + "/update'><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-default btn-xs' data-toggle='modal' data-target='#withdrawSolution' onclick='setDeleteModal(&quot;/registration/" + data.regDocs[a]._id + "/delete&quot;, &quot;" + data.regDocs[a]._id + "&quot;)'><i class='fa fa-trash'></i> Withdraw Submission</a>" + withdrawSubmission + "</div></div></li>";
+                }
+                userList.filter();
+                $spinner.hide();
+                $('#regList').append(html);
+                userList.reIndex();
+                var ddl = document.getElementById("sel1");
+                var selectedValue = ddl.options[ddl.selectedIndex].value;
+                
+                if (document.getElementById('hasFeedback').checked) {
+                    
+                    userList.filter(function (item) {
+                        if (item.values().hasFeedback) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+                }
+                if (selectedValue == 'submitDate') {
+                    userList.sort('dateSubmit', { order: "desc" });
+                } else if (selectedValue == 'problemName') {
+                    userList.sort('problemName', { order: "desc" });
+                }
+                if (data.count > 0) {
+                    $('#viewMore').attr("onclick", "viewMore(" + data.count + ")");
+                } else {
+                    $("#viewMore").hide();
+                }
+            },
+            error: function (xhr, status, error) {
+                $spinner.hide();
+                $('#userInfoError').show();
+            }
+
+        });
+    }
+    function setDeleteModal(link, id){
+        $('#deleteRegistration').attr("onclick", "deleteReg('" + link + "', '" + id + "')");
+    }
+    function deleteReg(link, id) {
+
+        $.ajax({
+            url: link,
+            type: "POST",
+            dataType: 'json',
+            data: {},
+            success: function (data) {
+                $('#reg_' + id).remove();
+                userList.reIndex();
+            },
+            error: function (xhr, status, error) {
+              
+                $('#userInfoError').show();
+            }
+
+        });
+}
+</script>
+
+{{/contentFor}}

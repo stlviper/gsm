@@ -1,0 +1,61 @@
+<div id="main-content" class="container maincontent-container">
+  <form id="new-org-form" action="/join/neworganization" method="post" enctype="application/x-www-form-urlencoded">
+    <h2>New Organization</h2>
+    <hr>
+    <div>
+      <label>Organization Name</label>
+      <input type="text" name="new-org-name" id="new-org-name"/>
+    </div>
+
+    <div>
+      <label>Organization Address</label>
+      <input type="text" name="new-org-address" id="new-org-address"/>
+    </div>
+
+    <div>
+      <label>Organization Website</label>
+      <input type="text" name="new-org-website" id="new-org-website"/>
+    </div>
+
+    <div>
+      <label>Organization Role</label>
+      <select name="new-org-role" id="new-org-role">
+        <option value="Provider—I have a capability"> Provider — I have a capability</option>
+        <option value=" Client—I have a challenge/need"> Client — I have a challenge/need</option>
+        <option value=" Both—I have capabilities and challenges"> Both — I have capabilities and challenges</option>
+      </select>
+    </div>
+
+    <br/>
+
+    <h3>User Information</h3>
+
+    <div>
+      <label>Screen Name</label>
+      <input type="text" name="new-org-screenname" id="new-org-screenname"/>
+    </div>
+
+    <div>
+      <label>First Name</label>
+      <input type="text" name="new-org-firstname" id="new-org-firstname"/>
+    </div>
+
+    <div>
+      <label>Last Name</label>
+      <input type="text" name="new-org-lastname" id="new-org-lastname"/>
+    </div>
+
+    <div>
+      <label>Email</label>
+      <input type="text" name="new-org-email" id="new-org-email"/>
+    </div>
+
+    <div>
+      <label>Phone Number</label>
+      <input type="text" name="new-org-email" id="new-org-phonenumber"/>
+    </div>
+
+
+    <input type="submit" id="new-orgsubmit"/>
+  </form>
+</div>
