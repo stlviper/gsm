@@ -71,3 +71,8 @@ from a different directory run `sh import.sh /path/to/db/dir`
 
 The import script runs a mongo restore command looking for the output
 of the mongodump
+
+## Want to customize your GSM
+
+[local install and customization](https://github.com/stlviper/gsm/blob/master/jiv/README.md)
+
